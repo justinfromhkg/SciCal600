@@ -37,8 +37,10 @@ async function chooseMode(page, mode) {
 }
 
 async function checkLayout(page, viewport) {
-  await page.goto("/", { waitUntil: "networkidle" });
+  await page.goto("/scientific-calculator", { waitUntil: "networkidle" });
   await page.waitForFunction(() => window.SciCalApp && window.SciCalUI);
+  assert.equal(new URL(page.url()).pathname, "/scientific-calculator", `${viewport.name}: scientific calculator route`);
+  assert.equal(await page.locator('[data-view-panel="calculator"]').isVisible(), true, `${viewport.name}: calculator is visible`);
   const metrics = await page.evaluate(() => {
     const keys = [...document.querySelectorAll(".calc-key")].map((key) => key.getBoundingClientRect());
     const canvas = document.querySelector("#calculator-space").getBoundingClientRect();
@@ -127,8 +129,8 @@ async function runFunctionalChecks(page) {
   assert.equal(await page.locator("#mode-workbench").isVisible(), true, "returning to web mode should restore the program workbench");
   assert.match(await page.locator("[data-program-source]").inputValue(), /A×2\.54/);
 
-  await page.goto("/about", { waitUntil: "networkidle" });
-  assert.equal(await page.locator('[data-view-panel="about"]').isVisible(), true, "direct /about route");
+  await page.goto("/", { waitUntil: "networkidle" });
+  assert.equal(await page.locator('[data-view-panel="about"]').isVisible(), true, "root platform page");
   assert.match(await page.locator('[data-view-panel="about"] h1').textContent(), /mathematics/i);
   for (const [language, expected, direction] of [
     ["fr", /mathématiques/i, "ltr"],
@@ -141,6 +143,9 @@ async function runFunctionalChecks(page) {
     assert.equal(await page.locator("html").getAttribute("dir"), direction, `${language} writing direction`);
     assert.match(await page.locator('[data-view-panel="about"] h1').textContent(), expected, `${language} About translation`);
   }
+  await page.goto("/about", { waitUntil: "networkidle" });
+  assert.equal(new URL(page.url()).pathname, "/", "legacy /about route is canonicalized to root");
+  assert.equal(await page.locator('[data-view-panel="about"]').isVisible(), true, "legacy /about route opens platform page");
   await page.locator("#language-select").selectOption("en-GB");
   await page.locator('[data-view-target="linear-algebra"]').first().click();
   assert.equal(new URL(page.url()).pathname, "/linear-algebra", "linear algebra navigation path");

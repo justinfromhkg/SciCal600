@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body class="is-calculator-view">
+  <body class="is-about-view">
     <div class="page-glow page-glow--one" aria-hidden="true"></div>
     <div class="page-glow page-glow--two" aria-hidden="true"></div>
 
@@ -45,7 +45,7 @@
       </header>
 
       <main class="app-main">
-        <section class="app-view app-view--calculator is-active" data-view-panel="calculator" aria-label="Calculator">
+        <section class="app-view app-view--calculator" data-view-panel="calculator" aria-label="Calculator" hidden>
           <div class="calculator-viewport" id="calculator-viewport">
             <div class="calculator-space" id="calculator-space">
               <div class="calculator-canvas" id="calculator-canvas">
@@ -110,7 +110,7 @@
           </nav>
         </section>
 
-        <section class="app-view app-view--scrollable" data-view-panel="about" hidden>
+        <section class="app-view app-view--scrollable is-active" data-view-panel="about">
           <div class="content-page">
             <div class="content-page__header">
               <p class="eyebrow" data-i18n="aboutEyebrow">Smart Calculator platform</p>

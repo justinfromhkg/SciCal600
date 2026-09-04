@@ -213,7 +213,7 @@
       ["REG · Régression", ["En simulateur, saisissez x,y ou x,y,fréquence puis EXE.", "Les sept modèles et la prédiction restent disponibles dans l’établi Web."]],
       ["PRGM · Programmes", ["P1 à P4 sont enregistrés dans le navigateur.", "En simulateur, Prog change de zone ; saisissez les valeurs séparées par des virgules puis EXE."]],
       ["Formules et constantes", ["FMLA ouvre 23 formules ; SHIFT + 7 ouvre 40 constantes."]],
-      ["Navigation", ["La racine ouvre la calculatrice, /about présente la plateforme et /linear-algebra ouvre les matrices."]],
+      ["Navigation", ["La racine présente la plateforme, /scientific-calculator ouvre la calculatrice et /linear-algebra ouvre les matrices."]],
     ],
     de: [
       ["Schnellstart", ["MODE drücken und COMP für wissenschaftliche Rechnungen wählen.", "Ausdruck eingeben und EXE drücken. DEL löscht ein Zeichen, AC die aktuelle Eingabe.", "SHIFT aktiviert orange, ALPHA rote Beschriftungen."]],
@@ -225,7 +225,7 @@
       ["REG · Regression", ["Im Simulator x,y oder x,y,Häufigkeit eingeben und EXE drücken.", "Sieben Modelle und Prognosen stehen im Web-Arbeitsbereich bereit."]],
       ["PRGM · Programme", ["P1–P4 werden im Browser gespeichert.", "Prog wechselt den Bereich; Eingaben mit Kommas trennen und EXE drücken."]],
       ["Formeln und Konstanten", ["FMLA öffnet 23 Formeln; SHIFT + 7 öffnet 40 Konstanten."]],
-      ["Navigation", ["/ öffnet den Rechner, /about die Plattform und /linear-algebra die Matrizen."]],
+      ["Navigation", ["/ öffnet die Plattform, /scientific-calculator den Rechner und /linear-algebra die Matrizen."]],
     ],
     es: [
       ["Inicio rápido", ["Pulsa MODE y elige COMP para cálculos científicos.", "Introduce una expresión y pulsa EXE. DEL borra un carácter y AC la entrada actual.", "SHIFT activa las etiquetas naranjas y ALPHA las rojas."]],
@@ -237,7 +237,7 @@
       ["REG · Regresión", ["En simulador introduce x,y o x,y,frecuencia y pulsa EXE.", "Los siete modelos y la predicción siguen disponibles en el panel web."]],
       ["PRGM · Programas", ["P1–P4 se guardan en el navegador.", "Prog cambia de área; separa entradas con comas y pulsa EXE."]],
       ["Fórmulas y constantes", ["FMLA abre 23 fórmulas; SHIFT + 7 abre 40 constantes."]],
-      ["Navegación", ["/ abre la calculadora, /about la plataforma y /linear-algebra las matrices."]],
+      ["Navegación", ["/ abre la plataforma, /scientific-calculator la calculadora y /linear-algebra las matrices."]],
     ],
     ar: [
       ["بدء سريع", ["اضغط MODE واختر COMP للحسابات العلمية.", "أدخل التعبير ثم اضغط EXE. يحذف DEL رمزًا ويمسح AC الإدخال الحالي.", "يفعّل SHIFT العناوين البرتقالية وALPHA الحمراء."]],
@@ -249,7 +249,7 @@
       ["REG · الانحدار", ["أدخل x,y أو x,y,التكرار ثم EXE.", "تتوفر النماذج السبعة والتنبؤ في لوحة الويب."]],
       ["PRGM · البرامج", ["تُحفظ P1–P4 في المتصفح.", "يبدّل Prog المنطقة؛ افصل المدخلات بفواصل ثم اضغط EXE."]],
       ["الصيغ والثوابت", ["يفتح FMLA ‏23 صيغة؛ ويفتح SHIFT + 7 ‏40 ثابتًا."]],
-      ["التنقل", ["يفتح / الحاسبة و/about المنصة و/linear-algebra المصفوفات."]],
+      ["التنقل", ["يفتح / المنصة و/scientific-calculator الحاسبة و/linear-algebra المصفوفات."]],
     ],
   };
 
@@ -264,7 +264,7 @@
   const views = [...document.querySelectorAll("[data-view-panel]")];
   const allowedViews = new Set(["calculator", "about", "manual", "linear-algebra"]);
   let zoomFactor = 1;
-  let currentView = "calculator";
+  let currentView = "about";
   let batteryState = { available: false, charging: false, level: null };
 
   function readSavedLanguage() {
@@ -432,7 +432,7 @@
   }
 
   function showView(view, addHistory = true) {
-    const nextView = allowedViews.has(view) ? view : "calculator";
+    const nextView = allowedViews.has(view) ? view : "about";
     currentView = nextView;
     views.forEach((panel) => {
       const active = panel.dataset.viewPanel === nextView;
@@ -445,17 +445,24 @@
       if (active && panel.classList.contains("app-view--scrollable")) panel.scrollTop = 0;
     });
     document.body.className = `is-${nextView}-view`;
-    const targetPath = nextView === "calculator" ? "/" : `/${nextView}`;
+    const targetPath = pathForView(nextView);
     if (addHistory && location.pathname !== targetPath) history.pushState({ view: nextView }, "", targetPath);
     if (nextView === "calculator") requestAnimationFrame(updateScale);
   }
 
+  function pathForView(view) {
+    if (view === "about") return "/";
+    if (view === "calculator") return "/scientific-calculator";
+    return `/${view}`;
+  }
+
   function viewFromLocation() {
     const path = location.pathname.replace(/\/+$/, "") || "/";
-    if (path === "/about") return "about";
+    if (path === "/" || path === "/about") return "about";
+    if (path === "/scientific-calculator" || path === "/calculator") return "calculator";
     if (path === "/manual") return "manual";
     if (path === "/linear-algebra") return "linear-algebra";
-    return "calculator";
+    return "about";
   }
 
   document.addEventListener("click", (event) => {
@@ -484,7 +491,7 @@
   applyLanguage(detectedLanguage());
   setupBattery();
   showView(viewFromLocation(), false);
-  history.replaceState({ view: currentView }, "", location.pathname + location.search);
+  history.replaceState({ view: currentView }, "", pathForView(currentView) + location.search + location.hash);
 
   window.SciCalUI = Object.freeze({
     showView,

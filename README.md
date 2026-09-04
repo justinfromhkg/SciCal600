@@ -6,7 +6,7 @@ SciCal600 is a responsive Smart Calculator platform. Its current tools include a
 
 ## Run it
 
-Serve the repository root with any static HTTP server and open `/`. Direct routes include `/about`, `/manual`, and `/linear-algebra`. The project has no browser runtime dependencies.
+Serve the repository root with any static HTTP server and open `/`. The root is the Smart Calculator platform page. Direct tool routes include `/scientific-calculator`, `/linear-algebra`, and `/manual`; the former `/about` route redirects to `/`. The project has no browser runtime dependencies.
 
 To run the calculation-engine tests:
 
@@ -22,7 +22,7 @@ The repository uses Cloudflare Pages rather than a `workers.dev` site so the pro
 npm run deploy
 ```
 
-The build copies only public website files into `dist/`; source tests and project notes are not uploaded. Cloudflare Pages' SPA routing serves direct visits to `/about`, `/manual`, and `/linear-algebra`; `_redirects` only canonicalizes trailing-slash variants.
+The build copies only public website files into `dist/`; source tests and project notes are not uploaded. Cloudflare Pages' SPA routing serves direct visits to `/scientific-calculator`, `/manual`, and `/linear-algebra`; `_redirects` canonicalizes trailing-slash variants and redirects the former `/about` address to the platform root.
 
 ### GitHub Actions connection
 
