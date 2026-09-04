@@ -410,8 +410,15 @@
     const verticalGutter = viewport.clientHeight <= 620 ? 4 : 16;
     const widthScale = (viewport.clientWidth - horizontalGutter) / naturalWidth;
     const heightScale = (viewport.clientHeight - verticalGutter) / naturalHeight;
+    const phonePortrait = viewport.clientWidth <= 560 && viewport.clientHeight > viewport.clientWidth;
     const compactLandscape = viewport.clientWidth > viewport.clientHeight * 1.25 && viewport.clientHeight < 600;
-    const fitScale = compactLandscape ? Math.min(1, widthScale) : Math.min(1, widthScale, heightScale);
+    // Mobile browser chrome changes the visual viewport height while scrolling. In
+    // portrait, fitting against that transient height made the entire calculator
+    // pulse smaller and reduced its keys below a comfortable touch size. Fill the
+    // stable width instead and let the dedicated viewport scroll vertically.
+    const fitScale = phonePortrait || compactLandscape
+      ? Math.min(1, widthScale)
+      : Math.min(1, widthScale, heightScale);
     const scale = Math.max(0.35, fitScale * zoomFactor);
     const scaledWidth = Math.ceil(naturalWidth * scale);
     const scaledHeight = Math.ceil(naturalHeight * scale);
@@ -421,6 +428,7 @@
     space.style.height = `${scaledHeight}px`;
     space.style.marginInline = scaledWidth <= viewport.clientWidth - horizontalGutter ? "auto" : "0";
     const overflowing = scaledWidth > viewport.clientWidth - horizontalGutter || scaledHeight > viewport.clientHeight - verticalGutter;
+    viewport.classList.toggle("is-phone-portrait", phonePortrait);
     viewport.classList.toggle("is-overflowing", overflowing);
     if (!overflowing) {
       viewport.scrollLeft = 0;

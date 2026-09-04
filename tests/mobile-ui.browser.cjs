@@ -44,11 +44,13 @@ async function checkLayout(page, viewport) {
   const metrics = await page.evaluate(() => {
     const keys = [...document.querySelectorAll(".calc-key")].map((key) => key.getBoundingClientRect());
     const canvas = document.querySelector("#calculator-space").getBoundingClientRect();
+    const calculator = document.querySelector(".calculator").getBoundingClientRect();
     return {
       documentWidth: document.documentElement.scrollWidth,
       innerWidth: window.innerWidth,
       minKeyHeight: Math.min(...keys.map((key) => key.height)),
       minKeyWidth: Math.min(...keys.map((key) => key.width)),
+      calculatorWidth: calculator.width,
       canvasRight: canvas.right,
       canvasLeft: canvas.left,
       viewportWidth: document.querySelector("#calculator-viewport").clientWidth,
@@ -71,6 +73,20 @@ async function checkLayout(page, viewport) {
   if (viewport.landscape) {
     assert.equal(metrics.viewportOverflowing, true, `${viewport.name}: compact landscape should pan vertically`);
     assert.ok(metrics.viewportScrollHeight > metrics.viewportClientHeight, `${viewport.name}: landscape content should be scrollable`);
+  } else {
+    assert.ok(metrics.calculatorWidth >= metrics.innerWidth * 0.9, `${viewport.name}: calculator should fill the phone width`);
+    assert.ok(metrics.minKeyHeight >= 48, `${viewport.name}: portrait key height ${metrics.minKeyHeight} is too small`);
+    assert.equal(metrics.viewportOverflowing, true, `${viewport.name}: enlarged portrait calculator should scroll vertically`);
+    assert.ok(metrics.viewportScrollHeight > metrics.viewportClientHeight, `${viewport.name}: portrait calculator should have an internal vertical scroll area`);
+    await page.locator("#calculator-viewport").evaluate((element) => { element.scrollTop = element.scrollHeight; });
+    const stickyDisplay = await page.evaluate(() => {
+      const viewportBox = document.querySelector("#calculator-viewport").getBoundingClientRect();
+      const displayBox = document.querySelector(".display").getBoundingClientRect();
+      return { viewportTop: viewportBox.top, viewportBottom: viewportBox.bottom, displayTop: displayBox.top, displayBottom: displayBox.bottom };
+    });
+    assert.ok(stickyDisplay.displayTop >= stickyDisplay.viewportTop - 2, `${viewport.name}: sticky display is clipped above the viewport`);
+    assert.ok(stickyDisplay.displayBottom < stickyDisplay.viewportBottom, `${viewport.name}: sticky display is hidden by the bottom dock`);
+    await page.locator("#calculator-viewport").evaluate((element) => { element.scrollTop = 0; });
   }
   return metrics;
 }
@@ -167,11 +183,13 @@ async function runFunctionalChecks(page) {
     { name: "iPhone 13", width: 390, height: 844 },
     { name: "iPhone 15", width: 393, height: 852 },
     { name: "iPhone 16/17 Pro", width: 402, height: 874 },
+    { name: "iPhone 17 Pro browser toolbar", width: 402, height: 720 },
     { name: "iPhone 17 Pro Max", width: 440, height: 956 },
     { name: "Xiaomi 13+", width: 393, height: 873 },
     { name: "iPhone landscape", width: 844, height: 390, landscape: true },
     { name: "Xiaomi landscape", width: 873, height: 393, landscape: true },
   ];
+  let iPhone17Metrics;
   try {
     {
       const context = await browser.newContext({ baseURL: `http://127.0.0.1:${address.port}` });
@@ -195,6 +213,12 @@ async function runFunctionalChecks(page) {
       });
       const page = await context.newPage();
       const metrics = await checkLayout(page, viewport);
+      if (viewport.name === "iPhone 16/17 Pro") iPhone17Metrics = metrics;
+      if (viewport.name === "iPhone 17 Pro browser toolbar") {
+        assert.ok(iPhone17Metrics, "standard iPhone 17 Pro metrics should be available");
+        assert.ok(Math.abs(metrics.minKeyHeight - iPhone17Metrics.minKeyHeight) < 0.5, "browser toolbar height changes should not shrink calculator keys");
+        assert.ok(Math.abs(metrics.calculatorWidth - iPhone17Metrics.calculatorWidth) < 0.5, "browser toolbar height changes should not shrink the calculator body");
+      }
       console.log(`PASS ${viewport.name}: keys ${metrics.minKeyWidth.toFixed(1)} × ${metrics.minKeyHeight.toFixed(1)} CSS px`);
       if (viewport.name === "iPhone 16/17 Pro") await runFunctionalChecks(page);
       await context.close();

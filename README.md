@@ -68,13 +68,14 @@ The calculator exposes six working modes: `COMP`, `CMPLX`, `BASE`, `SD`, `REG`, 
 
 The formula and constant tables are versioned study data. They use modern values and common educational formulas; they do not claim to reproduce the exact internal table or rounding of a particular physical calculator revision.
 
-## Primary references
+## References
 
 - [Casio fx-50FH II product page](https://www.casio.com/intl/scientific-calculators/product.FX-50FHII/)
 - [Casio 2025 general calculator catalogue](https://www.casio.com/content/dam/casio/global/calculator/scientific-calculators/catalog/2025-general-catalog.pdf)
 - [Casio fx-50F PLUS English user guide](https://support.casio.com/pdf/004/fx-50F_PLUS_E.pdf) — the official guide for the closely matching fx-50F family workflow and six modes
 - [HKEAA 2026 examination notes](https://www.hkeaa.edu.hk/DocLibrary/IPE/em/EM_NotesOnExam2026.pdf) — points candidates to the current permitted-calculator list
 - [HKEAA 2019 permitted-calculator list](https://www.hkeaa.edu.hk/DocLibrary/IPE/cal/CAL2019.pdf) — explicitly includes `FX-50 F/FH/FH II`
+- [8tatTV fx-50FH II calculator walkthrough](https://www.youtube.com/watch?v=K_vaEZOcUQE&list=PLZlgLmMyC71dKgWb_p1zI9ssXf85RKdVw) — chaptered Cantonese demonstration of setup, COMP input, variables, fractions, powers, trigonometry, coordinate conversion, engineering notation, constants, rounding, and angle conversion
 
 ## Scope note
 
