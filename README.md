@@ -27,6 +27,7 @@ The build copies only the six public website files into `dist/`; source tests an
 ## Implemented
 
 - Two-line expression/result display with an editable cursor
+- Larger top controls and integrated SHIFT/ALPHA legends inside each key for easier reading
 - Calculation priority, brackets, implicit multiplication, percentage and automatic closing brackets
 - Powers, square/cube/nth roots, factorial and absolute value
 - Trigonometric, inverse trigonometric, hyperbolic, exponential and logarithmic functions

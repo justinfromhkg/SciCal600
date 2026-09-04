@@ -155,6 +155,7 @@
       const button = document.createElement("button");
       button.type = "button";
       button.className = `calc-key ${key.className || ""}`.trim();
+      if (key.shiftLabel || key.alphaLabel) button.classList.add("calc-key--layered");
       button.dataset.keyIndex = String(index);
       if (key.size) button.dataset.size = key.size;
       button.setAttribute("aria-label", describeKey(key));
@@ -171,7 +172,10 @@
         alpha.textContent = key.alphaLabel;
         button.append(alpha);
       }
-      button.append(document.createTextNode(key.label));
+      const mainLabel = document.createElement("span");
+      mainLabel.className = "calc-key__main";
+      mainLabel.textContent = key.label;
+      button.append(mainLabel);
       fragment.append(button);
     });
     elements.keypad.append(fragment);
