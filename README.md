@@ -35,8 +35,9 @@ The build copies only the six public website files into `dist/`; source tests an
 - `Ans`, independent `M` memory, replay history, decimal/fraction display and DMS conversion
 - Normal, fixed-decimal, scientific and engineering notation
 - A locked, full-screen calculator view with automatic fit and button-controlled zoom
+- Live device-battery percentage and charging state when the browser exposes the Battery Status API
 - Panning only when the enlarged calculator exceeds the available viewport
-- Dedicated About and six-language Manual views
+- A prominent fx-50FH II model identity and a six-language Manual designed for both physical-calculator and web-simulator users
 - Automatic system-language selection plus a persistent language picker for English, Traditional Chinese, Simplified Chinese, Japanese, Korean and Malay
 - Keyboard input and responsive phone/desktop layouts
 - A parser written without JavaScript `eval`

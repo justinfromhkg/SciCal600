@@ -27,7 +27,7 @@
 
         <button class="brand" type="button" data-view-target="calculator" aria-label="SciCal600 calculator">
           <span class="brand__mark" aria-hidden="true">∑</span>
-          <span>SciCal<span class="brand__accent">600</span></span>
+          <span class="brand__identity"><span class="brand__name">SciCal<span class="brand__accent">600</span></span><small>fx-50FH II</small></span>
         </button>
 
         <div class="zoom-controls" aria-label="Calculator zoom" data-i18n-aria="zoomControls">
@@ -55,8 +55,14 @@
                         <span class="maker__name">SCIENTIFIC</span>
                         <span class="maker__series">SUPER FX · WEB</span>
                       </div>
-                      <div class="solar-panel" aria-label="Decorative solar panel"><span></span><span></span><span></span><span></span></div>
-                      <div class="model"><strong>fx-50<span>FH</span> II</strong><small>inspired study model</small></div>
+                      <div class="device-battery is-unavailable" id="device-battery" role="status" aria-live="polite">
+                        <span class="device-battery__icon" aria-hidden="true">
+                          <span class="device-battery__track"><span class="device-battery__fill" id="battery-fill"></span></span>
+                          <span class="device-battery__bolt">⚡</span>
+                        </span>
+                        <span class="device-battery__text" id="battery-text">--</span>
+                      </div>
+                      <div class="model"><strong>fx-50<span>FH</span> II</strong><small>reference model · web edition</small></div>
                     </div>
 
                     <section class="display" aria-label="Calculator display">
@@ -107,6 +113,12 @@
               <button class="primary-action" type="button" data-view-target="calculator" data-i18n="openCalculator">Open calculator</button>
             </div>
 
+            <div class="reference-model-banner">
+              <span data-i18n="referenceModel">Reference model</span>
+              <strong>CASIO fx-50FH II</strong>
+              <small data-i18n="modelNotice">Independent web study simulator · not an official Casio product</small>
+            </div>
+
             <div class="feature-pills" aria-label="Current features">
               <span data-i18n="featureModes">Six calculation modes</span><span data-i18n="featureFormulas">23 formulas</span><span data-i18n="featureConstants">40 constants</span>
             </div>
@@ -133,6 +145,11 @@
             <div class="manual-hero">
               <div><p class="eyebrow" data-i18n="manualEyebrow">Six-language guide</p><h1 data-i18n="manualTitle">Calculator manual</h1><p class="content-page__lead" data-i18n="manualIntro">Learn the keys, modes, and common calculation workflows.</p></div>
               <button class="primary-action" type="button" data-view-target="calculator" data-i18n="returnCalculator">Return to calculator</button>
+            </div>
+            <div class="manual-model-banner">
+              <span data-i18n="manualAudience">For the physical calculator and web simulator</span>
+              <strong>fx-50FH II</strong>
+              <p data-i18n="manualCaveat">Follow the matching key and mode names on a physical fx-50FH II. Web-only screen controls are identified separately.</p>
             </div>
             <nav class="manual-index" id="manual-index" aria-label="Manual sections"></nav>
             <div class="manual-content" id="manual-content"></div>

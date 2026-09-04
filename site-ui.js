@@ -4,57 +4,57 @@
   const ui = {
     "en-GB": {
       aboutAria: "Open information about this project", aboutButton: "About", zoomControls: "Calculator zoom controls", zoomOut: "Zoom out", zoomIn: "Zoom in", fitButton: "Fit", readyStatus: "Ready", manualButton: "Calculator manual",
-      aboutEyebrow: "HKEAA reference model", aboutTitle: "A familiar calculator, rebuilt for the web.", aboutIntro: "A focused study simulator inspired by the fx-50FH II, recreated as a responsive web application.", openCalculator: "Open calculator",
+      aboutEyebrow: "HKEAA reference model", aboutTitle: "A familiar calculator, rebuilt for the web.", aboutIntro: "A focused study simulator inspired by the fx-50FH II, recreated as a responsive web application.", openCalculator: "Open calculator", referenceModel: "Reference model", modelNotice: "Independent web study simulator · not an official Casio product",
       featureModes: "Six calculation modes", featureFormulas: "23 formulas", featureConstants: "40 constants", examNote: "The physical fx-50FH II is HKEAA-approved. This independent simulator is a learning tool and is not approved for examinations.",
       scopeEyebrow: "Development scope", scopeTitle: "One model. A dependable core.", coreStatus: "Core mode", coreDescription: "Arithmetic, fractions, powers, roots, trigonometry, logarithms, permutation, combination, history and memory.", availableStatus: "Available now", specialistTitle: "Five specialist modes", specialistDescription: "Complex numbers, base-n logic, weighted statistics, seven regression models, and four saved program areas.", projectFooter: "SciCal600 · independent educational project", readManual: "Read the calculator manual",
-      manualEyebrow: "Six-language guide", manualTitle: "Calculator manual", manualIntro: "Learn the keys, modes, and common calculation workflows.", returnCalculator: "Return to calculator", manualFooter: "SciCal600 learning guide", languageLabel: "Language",
+      manualEyebrow: "Physical + web guide", manualTitle: "fx-50FH II calculator manual", manualIntro: "A practical guide for both the physical fx-50FH II and this web simulator.", manualAudience: "For the physical calculator and web simulator", manualCaveat: "Follow the matching key and mode names on a physical fx-50FH II. Web-only screen controls are identified separately.", returnCalculator: "Return to calculator", manualFooter: "fx-50FH II · SciCal600 learning guide", languageLabel: "Language",
       modeEyebrow: "Calculation mode", chooseMode: "Choose a mode", modeComp: "Computation", modeComplex: "Complex numbers", modeBase: "Base-n & logic", modeSd: "Single-variable stats", modeReg: "Regression", modeProgram: "Four program areas",
-      setupEyebrow: "Calculator setup", displayAngle: "Display & angle", angleUnit: "Angle unit", degrees: "Degrees", radians: "Radians", grads: "Grads", numberFormat: "Number format", done: "Done",
+      setupEyebrow: "Calculator setup", displayAngle: "Display & angle", angleUnit: "Angle unit", degrees: "Degrees", radians: "Radians", grads: "Grads", numberFormat: "Number format", done: "Done", batteryUnavailable: "Device battery unavailable", batteryLevel: "Device battery {level}%", batteryCharging: "Device battery {level}%, charging",
     },
     "zh-Hant": {
       aboutAria: "開啟本專案資訊", aboutButton: "關於", zoomControls: "計算機縮放控制", zoomOut: "縮小", zoomIn: "放大", fitButton: "適合", readyStatus: "可使用", manualButton: "計算機說明書",
-      aboutEyebrow: "HKEAA 參考型號", aboutTitle: "熟悉的計算機，重新打造為 Web 應用。", aboutIntro: "以 fx-50FH II 為靈感的學習模擬器，並針對手機及電腦提供 Responsive Design。", openCalculator: "開啟計算機",
+      aboutEyebrow: "HKEAA 參考型號", aboutTitle: "熟悉的計算機，重新打造為 Web 應用。", aboutIntro: "以 fx-50FH II 為靈感的學習模擬器，並針對手機及電腦提供 Responsive Design。", openCalculator: "開啟計算機", referenceModel: "參考型號", modelNotice: "獨立 Web 學習模擬器 · 並非 Casio 官方產品",
       featureModes: "六種 Calculation Mode", featureFormulas: "23 條 Formula", featureConstants: "40 個 Constant", examNote: "實體 fx-50FH II 獲 HKEAA 認可；本獨立模擬器只供學習，並未獲准在考試中使用。",
       scopeEyebrow: "開發範圍", scopeTitle: "一個型號，可靠的 Core。", coreStatus: "核心模式", coreDescription: "支援四則運算、分數、乘方、根式、三角函數、對數、排列組合、History 及 Memory。", availableStatus: "現已提供", specialistTitle: "五種專業模式", specialistDescription: "Complex、Base-n Logic、加權統計、七種 Regression Model，以及四個 Program Area。", projectFooter: "SciCal600 · 獨立教育專案", readManual: "閱讀計算機說明書",
-      manualEyebrow: "六語言指南", manualTitle: "計算機說明書", manualIntro: "了解按鍵、模式與常用計算流程。", returnCalculator: "返回計算機", manualFooter: "SciCal600 學習指南", languageLabel: "語言",
+      manualEyebrow: "實體機 + Web 指南", manualTitle: "fx-50FH II 計算機說明書", manualIntro: "同時適用於 fx-50FH II 實體計算機與本 Web Simulator 的實用指南。", manualAudience: "適用於實體計算機及 Web Simulator", manualCaveat: "實體 fx-50FH II 使用者可依照相同的 Key 與 Mode 名稱操作；僅限 Web 的畫面功能會另行標示。", returnCalculator: "返回計算機", manualFooter: "fx-50FH II · SciCal600 學習指南", languageLabel: "語言",
       modeEyebrow: "Calculation Mode", chooseMode: "選擇模式", modeComp: "一般計算", modeComplex: "複數", modeBase: "進制與邏輯", modeSd: "單變量統計", modeReg: "迴歸分析", modeProgram: "四個程式區域",
-      setupEyebrow: "Calculator Setup", displayAngle: "顯示及角度", angleUnit: "Angle Unit", degrees: "角度", radians: "弧度", grads: "梯度", numberFormat: "數字格式", done: "完成",
+      setupEyebrow: "Calculator Setup", displayAngle: "顯示及角度", angleUnit: "Angle Unit", degrees: "角度", radians: "弧度", grads: "梯度", numberFormat: "數字格式", done: "完成", batteryUnavailable: "無法讀取裝置電量", batteryLevel: "裝置電量 {level}%", batteryCharging: "裝置電量 {level}%，正在充電",
     },
     "zh-Hans": {
       aboutAria: "打开本项目信息", aboutButton: "关于", zoomControls: "计算器缩放控制", zoomOut: "缩小", zoomIn: "放大", fitButton: "适合", readyStatus: "可使用", manualButton: "计算器说明书",
-      aboutEyebrow: "HKEAA 参考型号", aboutTitle: "熟悉的计算器，重新构建为 Web 应用。", aboutIntro: "以 fx-50FH II 为灵感的学习模拟器，并针对手机与电脑提供 Responsive Design。", openCalculator: "打开计算器",
+      aboutEyebrow: "HKEAA 参考型号", aboutTitle: "熟悉的计算器，重新构建为 Web 应用。", aboutIntro: "以 fx-50FH II 为灵感的学习模拟器，并针对手机与电脑提供 Responsive Design。", openCalculator: "打开计算器", referenceModel: "参考型号", modelNotice: "独立 Web 学习模拟器 · 并非 Casio 官方产品",
       featureModes: "六种 Calculation Mode", featureFormulas: "23 条 Formula", featureConstants: "40 个 Constant", examNote: "实体 fx-50FH II 获 HKEAA 认可；本独立模拟器只用于学习，并未获准在考试中使用。",
       scopeEyebrow: "开发范围", scopeTitle: "一个型号，可靠的 Core。", coreStatus: "核心模式", coreDescription: "支持四则运算、分数、乘方、根式、三角函数、对数、排列组合、History 和 Memory。", availableStatus: "现已提供", specialistTitle: "五种专业模式", specialistDescription: "Complex、Base-n Logic、加权统计、七种 Regression Model，以及四个 Program Area。", projectFooter: "SciCal600 · 独立教育项目", readManual: "阅读计算器说明书",
-      manualEyebrow: "六语言指南", manualTitle: "计算器说明书", manualIntro: "了解按键、模式和常用计算流程。", returnCalculator: "返回计算器", manualFooter: "SciCal600 学习指南", languageLabel: "语言",
+      manualEyebrow: "实体机 + Web 指南", manualTitle: "fx-50FH II 计算器说明书", manualIntro: "同时适用于 fx-50FH II 实体计算器与本 Web Simulator 的实用指南。", manualAudience: "适用于实体计算器及 Web Simulator", manualCaveat: "实体 fx-50FH II 用户可以按照相同的 Key 和 Mode 名称操作；仅限 Web 的画面功能会另行标明。", returnCalculator: "返回计算器", manualFooter: "fx-50FH II · SciCal600 学习指南", languageLabel: "语言",
       modeEyebrow: "Calculation Mode", chooseMode: "选择模式", modeComp: "一般计算", modeComplex: "复数", modeBase: "进制与逻辑", modeSd: "单变量统计", modeReg: "回归分析", modeProgram: "四个程序区域",
-      setupEyebrow: "Calculator Setup", displayAngle: "显示和角度", angleUnit: "Angle Unit", degrees: "角度", radians: "弧度", grads: "梯度", numberFormat: "数字格式", done: "完成",
+      setupEyebrow: "Calculator Setup", displayAngle: "显示和角度", angleUnit: "Angle Unit", degrees: "角度", radians: "弧度", grads: "梯度", numberFormat: "数字格式", done: "完成", batteryUnavailable: "无法读取设备电量", batteryLevel: "设备电量 {level}%", batteryCharging: "设备电量 {level}%，正在充电",
     },
     ja: {
       aboutAria: "このプロジェクトの情報を開く", aboutButton: "概要", zoomControls: "電卓のズーム操作", zoomOut: "縮小", zoomIn: "拡大", fitButton: "全体", readyStatus: "使用可能", manualButton: "電卓マニュアル",
-      aboutEyebrow: "HKEAA 参照モデル", aboutTitle: "使い慣れた電卓を、Web向けに再構築。", aboutIntro: "fx-50FH IIに着想を得た、スマートフォンとPC対応の学習用シミュレーターです。", openCalculator: "電卓を開く",
+      aboutEyebrow: "HKEAA 参照モデル", aboutTitle: "使い慣れた電卓を、Web向けに再構築。", aboutIntro: "fx-50FH IIに着想を得た、スマートフォンとPC対応の学習用シミュレーターです。", openCalculator: "電卓を開く", referenceModel: "参照モデル", modelNotice: "独立したWeb学習シミュレーター · Casio公式製品ではありません",
       featureModes: "6つの計算モード", featureFormulas: "23の公式", featureConstants: "40の科学定数", examNote: "実機のfx-50FH IIはHKEAA認定モデルです。この独立シミュレーターは学習用であり、試験での使用は認められていません。",
       scopeEyebrow: "開発範囲", scopeTitle: "1つのモデル、信頼できるコア。", coreStatus: "基本モード", coreDescription: "四則演算、分数、べき乗、根、三角関数、対数、順列・組合せ、履歴、メモリーに対応。", availableStatus: "利用可能", specialistTitle: "5つの専門モード", specialistDescription: "複素数、基数と論理演算、加重統計、7種類の回帰、4つのプログラム領域。", projectFooter: "SciCal600 · 独立教育プロジェクト", readManual: "電卓マニュアルを読む",
-      manualEyebrow: "6言語ガイド", manualTitle: "電卓マニュアル", manualIntro: "キー、モード、基本的な計算手順を確認できます。", returnCalculator: "電卓に戻る", manualFooter: "SciCal600 学習ガイド", languageLabel: "言語",
+      manualEyebrow: "実機 + Webガイド", manualTitle: "fx-50FH II 電卓マニュアル", manualIntro: "fx-50FH II実機と本Webシミュレーターの両方で使える実用ガイドです。", manualAudience: "実機とWebシミュレーターに対応", manualCaveat: "fx-50FH II実機では同じキー名とモード名に従って操作できます。Web専用の画面機能は別に示します。", returnCalculator: "電卓に戻る", manualFooter: "fx-50FH II · SciCal600 学習ガイド", languageLabel: "言語",
       modeEyebrow: "計算モード", chooseMode: "モードを選択", modeComp: "一般計算", modeComplex: "複素数", modeBase: "基数・論理", modeSd: "1変数統計", modeReg: "回帰", modeProgram: "4つのプログラム領域",
-      setupEyebrow: "電卓設定", displayAngle: "表示と角度", angleUnit: "角度単位", degrees: "度", radians: "ラジアン", grads: "グラード", numberFormat: "数値形式", done: "完了",
+      setupEyebrow: "電卓設定", displayAngle: "表示と角度", angleUnit: "角度単位", degrees: "度", radians: "ラジアン", grads: "グラード", numberFormat: "数値形式", done: "完了", batteryUnavailable: "端末のバッテリー情報を取得できません", batteryLevel: "端末のバッテリー {level}%", batteryCharging: "端末のバッテリー {level}%、充電中",
     },
     ko: {
       aboutAria: "프로젝트 정보 열기", aboutButton: "소개", zoomControls: "계산기 확대/축소", zoomOut: "축소", zoomIn: "확대", fitButton: "맞춤", readyStatus: "사용 가능", manualButton: "계산기 설명서",
-      aboutEyebrow: "HKEAA 참조 모델", aboutTitle: "익숙한 계산기를 웹으로 다시 만들었습니다.", aboutIntro: "fx-50FH II에서 영감을 받아 휴대전화와 PC에 맞게 만든 학습용 시뮬레이터입니다.", openCalculator: "계산기 열기",
+      aboutEyebrow: "HKEAA 참조 모델", aboutTitle: "익숙한 계산기를 웹으로 다시 만들었습니다.", aboutIntro: "fx-50FH II에서 영감을 받아 휴대전화와 PC에 맞게 만든 학습용 시뮬레이터입니다.", openCalculator: "계산기 열기", referenceModel: "참조 모델", modelNotice: "독립 Web 학습 시뮬레이터 · Casio 공식 제품이 아닙니다",
       featureModes: "6가지 계산 모드", featureFormulas: "23개 공식", featureConstants: "40개 과학 상수", examNote: "실물 fx-50FH II는 HKEAA 승인 모델입니다. 이 독립 시뮬레이터는 학습용이며 시험 사용 승인을 받지 않았습니다.",
       scopeEyebrow: "개발 범위", scopeTitle: "하나의 모델, 신뢰할 수 있는 코어.", coreStatus: "기본 모드", coreDescription: "사칙연산, 분수, 거듭제곱, 근, 삼각함수, 로그, 순열·조합, 기록 및 메모리를 지원합니다.", availableStatus: "사용 가능", specialistTitle: "5가지 전문 모드", specialistDescription: "복소수, 진법과 논리, 가중 통계, 7가지 회귀 모델, 4개 프로그램 영역.", projectFooter: "SciCal600 · 독립 교육 프로젝트", readManual: "계산기 설명서 읽기",
-      manualEyebrow: "6개 언어 가이드", manualTitle: "계산기 설명서", manualIntro: "키, 모드 및 일반적인 계산 방법을 알아보세요.", returnCalculator: "계산기로 돌아가기", manualFooter: "SciCal600 학습 가이드", languageLabel: "언어",
+      manualEyebrow: "실물 + Web 가이드", manualTitle: "fx-50FH II 계산기 설명서", manualIntro: "fx-50FH II 실물 계산기와 이 Web 시뮬레이터에서 함께 사용할 수 있는 실용 가이드입니다.", manualAudience: "실물 계산기 및 Web 시뮬레이터용", manualCaveat: "실물 fx-50FH II에서는 같은 키와 모드 이름을 따라 사용할 수 있습니다. Web 전용 화면 기능은 별도로 표시합니다.", returnCalculator: "계산기로 돌아가기", manualFooter: "fx-50FH II · SciCal600 학습 가이드", languageLabel: "언어",
       modeEyebrow: "계산 모드", chooseMode: "모드 선택", modeComp: "일반 계산", modeComplex: "복소수", modeBase: "진법 및 논리", modeSd: "단일 변수 통계", modeReg: "회귀", modeProgram: "4개 프로그램 영역",
-      setupEyebrow: "계산기 설정", displayAngle: "표시 및 각도", angleUnit: "각도 단위", degrees: "도", radians: "라디안", grads: "그라드", numberFormat: "숫자 형식", done: "완료",
+      setupEyebrow: "계산기 설정", displayAngle: "표시 및 각도", angleUnit: "각도 단위", degrees: "도", radians: "라디안", grads: "그라드", numberFormat: "숫자 형식", done: "완료", batteryUnavailable: "기기 배터리 정보를 사용할 수 없음", batteryLevel: "기기 배터리 {level}%", batteryCharging: "기기 배터리 {level}%, 충전 중",
     },
     ms: {
       aboutAria: "Buka maklumat tentang projek ini", aboutButton: "Tentang", zoomControls: "Kawalan zum kalkulator", zoomOut: "Zum keluar", zoomIn: "Zum masuk", fitButton: "Muat", readyStatus: "Sedia", manualButton: "Manual kalkulator",
-      aboutEyebrow: "Model rujukan HKEAA", aboutTitle: "Kalkulator yang biasa, dibina semula untuk web.", aboutIntro: "Simulator pembelajaran berasaskan fx-50FH II yang responsif pada telefon dan komputer.", openCalculator: "Buka kalkulator",
+      aboutEyebrow: "Model rujukan HKEAA", aboutTitle: "Kalkulator yang biasa, dibina semula untuk web.", aboutIntro: "Simulator pembelajaran berasaskan fx-50FH II yang responsif pada telefon dan komputer.", openCalculator: "Buka kalkulator", referenceModel: "Model rujukan", modelNotice: "Simulator pembelajaran Web bebas · bukan produk rasmi Casio",
       featureModes: "Enam mod pengiraan", featureFormulas: "23 formula", featureConstants: "40 pemalar", examNote: "fx-50FH II fizikal diluluskan HKEAA. Simulator bebas ini hanya alat pembelajaran dan tidak diluluskan untuk peperiksaan.",
       scopeEyebrow: "Skop pembangunan", scopeTitle: "Satu model. Teras yang boleh dipercayai.", coreStatus: "Mod teras", coreDescription: "Aritmetik, pecahan, kuasa, punca, trigonometri, logaritma, pilih atur, gabungan, sejarah dan memori.", availableStatus: "Tersedia sekarang", specialistTitle: "Lima mod khusus", specialistDescription: "Nombor kompleks, logik asas-n, statistik berwajaran, tujuh model regresi dan empat ruang program.", projectFooter: "SciCal600 · projek pendidikan bebas", readManual: "Baca manual kalkulator",
-      manualEyebrow: "Panduan enam bahasa", manualTitle: "Manual kalkulator", manualIntro: "Pelajari kekunci, mod dan aliran kerja pengiraan biasa.", returnCalculator: "Kembali ke kalkulator", manualFooter: "Panduan pembelajaran SciCal600", languageLabel: "Bahasa",
+      manualEyebrow: "Panduan fizikal + Web", manualTitle: "Manual kalkulator fx-50FH II", manualIntro: "Panduan praktikal untuk kalkulator fizikal fx-50FH II dan simulator Web ini.", manualAudience: "Untuk kalkulator fizikal dan simulator Web", manualCaveat: "Pada fx-50FH II fizikal, ikuti nama kekunci dan mod yang sama. Kawalan skrin khusus Web ditandakan berasingan.", returnCalculator: "Kembali ke kalkulator", manualFooter: "fx-50FH II · panduan pembelajaran SciCal600", languageLabel: "Bahasa",
       modeEyebrow: "Mod pengiraan", chooseMode: "Pilih mod", modeComp: "Pengiraan", modeComplex: "Nombor kompleks", modeBase: "Asas-n dan logik", modeSd: "Statistik satu pemboleh ubah", modeReg: "Regresi", modeProgram: "Empat ruang program",
-      setupEyebrow: "Tetapan kalkulator", displayAngle: "Paparan dan sudut", angleUnit: "Unit sudut", degrees: "Darjah", radians: "Radian", grads: "Grad", numberFormat: "Format nombor", done: "Selesai",
+      setupEyebrow: "Tetapan kalkulator", displayAngle: "Paparan dan sudut", angleUnit: "Unit sudut", degrees: "Darjah", radians: "Radian", grads: "Grad", numberFormat: "Format nombor", done: "Selesai", batteryUnavailable: "Bateri peranti tidak tersedia", batteryLevel: "Bateri peranti {level}%", batteryCharging: "Bateri peranti {level}%, sedang dicas",
     },
   };
 
@@ -69,7 +69,7 @@
       ["REG · Regression", ["Add paired x and y values, with an optional frequency.", "Choose linear, logarithmic, exponential, a·bˣ, power, inverse or quadratic regression.", "Read coefficients a, b, c and r, then enter x in the prediction field to calculate y."]],
       ["PRGM · Programs", ["Four local program areas P1–P4 are saved automatically in this browser.", "Use ?→A to request an input, expression→A for assignment, and a colon or new line between statements.", "Enter prompt values separated by commas and press Run. The combined capacity meter is 680 bytes."]],
       ["Formulas and constants", ["Press FMLA to search 23 interactive study formulas and calculate from their input fields.", "Press SHIFT + 7 to search 40 scientific constants; select one to insert its numeric value.", "These are modern study values and do not claim exact table or rounding parity with every physical revision."]],
-      ["Screen controls", ["About at the top opens project information; Calculator manual at the bottom opens this guide.", "The calculator fits the screen automatically. Use − and + to zoom, and Fit to restore automatic sizing.", "Normal calculator view is locked against page swiping. Panning becomes available only when the enlarged calculator exceeds the viewport."]],
+      ["Screen controls", ["About at the top opens project information; Calculator manual at the bottom opens this guide.", "The calculator fits the screen automatically. Use − and + to zoom, and Fit to restore automatic sizing.", "Normal calculator view is locked against page swiping. Panning becomes available only when the enlarged calculator exceeds the viewport.", "The battery icon replaces the decorative solar panel and shows this device's percentage and charging state when the browser permits access."]],
     ],
     "zh-Hant": [
       ["快速開始 Quick Start", ["按 MODE 並選擇 COMP，進行一般 Scientific Calculation。", "使用鍵盤輸入算式，再按 EXE。DEL 刪除一個字元；AC 清除目前輸入。", "SHIFT 選擇按鍵上方橙色功能；ALPHA 選擇紅色字母或符號。"]],
@@ -81,7 +81,7 @@
       ["REG · 迴歸", ["加入成對 x、y 與可選 Frequency。", "可選 Linear、Logarithmic、Exponential、a·bˣ、Power、Inverse 或 Quadratic Regression。", "查看 a、b、c、r，再輸入 x 預測 y。"]],
       ["PRGM · 程式", ["P1–P4 四個 Program Area 會自動儲存在此瀏覽器。", "?→A 讀取輸入；expression→A 指派數值；冒號或換行分隔 Statement。", "以逗號分隔 Prompt Input，然後按 Run；總容量為 680 bytes。"]],
       ["Formula 與 Constant", ["按 FMLA 搜尋 23 條互動 Formula。", "按 SHIFT + 7 搜尋 40 個 Scientific Constant，點選即可插入數值。", "資料使用現代學習數值，不保證與每個實體版本完全相同。"]],
-      ["畫面控制", ["頂部「關於」顯示專案資訊；底部「計算機說明書」進入本指南。", "計算機預設自動適合屏幕；使用 −、+ 縮放，Fit 恢復自動大小。", "正常 Calculator View 鎖定頁面滑動；只有放大超出視窗後才可拖動查看。"]],
+      ["畫面控制", ["頂部「關於」顯示專案資訊；底部「計算機說明書」進入本指南。", "計算機預設自動適合屏幕；使用 −、+ 縮放，Fit 恢復自動大小。", "正常 Calculator View 鎖定頁面滑動；只有放大超出視窗後才可拖動查看。", "Battery 圖示取代裝飾性 Solar Panel；瀏覽器允許時會顯示本裝置電量及充電狀態。"]],
     ],
     "zh-Hans": [
       ["快速开始 Quick Start", ["按 MODE 并选择 COMP，进行一般 Scientific Calculation。", "使用键盘输入算式，再按 EXE。DEL 删除一个字符；AC 清除当前输入。", "SHIFT 选择按键上方橙色功能；ALPHA 选择红色字母或符号。"]],
@@ -93,7 +93,7 @@
       ["REG · 回归", ["添加成对 x、y 和可选 Frequency。", "可以选择 Linear、Logarithmic、Exponential、a·bˣ、Power、Inverse 或 Quadratic Regression。", "查看 a、b、c、r，再输入 x 预测 y。"]],
       ["PRGM · 程序", ["P1–P4 四个 Program Area 会自动保存在此浏览器。", "?→A 读取输入；expression→A 指定数值；冒号或换行分隔 Statement。", "用逗号分隔 Prompt Input，然后按 Run；总容量为 680 bytes。"]],
       ["Formula 和 Constant", ["按 FMLA 搜索 23 条交互 Formula。", "按 SHIFT + 7 搜索 40 个 Scientific Constant，点击即可插入数值。", "数据使用现代学习数值，不保证与每个实体版本完全相同。"]],
-      ["画面控制", ["顶部“关于”显示项目信息；底部“计算器说明书”进入本指南。", "计算器默认自动适合屏幕；使用 −、+ 缩放，Fit 恢复自动大小。", "正常 Calculator View 锁定页面滑动；只有放大超出视窗后才能拖动查看。"]],
+      ["画面控制", ["顶部“关于”显示项目信息；底部“计算器说明书”进入本指南。", "计算器默认自动适合屏幕；使用 −、+ 缩放，Fit 恢复自动大小。", "正常 Calculator View 锁定页面滑动；只有放大超出视窗后才能拖动查看。", "Battery 图标取代装饰性 Solar Panel；浏览器允许时会显示本设备电量和充电状态。"]],
     ],
     ja: [
       ["クイックスタート", ["MODEを押してCOMPを選ぶと、通常の科学計算を行えます。", "キーで式を入力してEXEを押します。DELは1文字削除、ACは入力を消去します。", "SHIFTはキー上のオレンジ機能、ALPHAは赤い文字・記号を選択します。"]],
@@ -105,7 +105,7 @@
       ["REG · 回帰", ["x・yの組と必要なら度数を追加します。", "線形、対数、指数、a·bˣ、べき乗、逆数、2次回帰を選べます。", "係数a・b・c・rを確認し、xを入力してyを予測します。"]],
       ["PRGM · プログラム", ["P1–P4はこのブラウザーに自動保存されます。", "?→Aは入力、expression→Aは代入、コロンまたは改行は文の区切りです。", "入力値をカンマで区切りRunを押します。合計容量は680 bytesです。"]],
       ["公式と科学定数", ["FMLAで23の対話式公式を検索できます。", "SHIFT + 7で40の科学定数を検索し、数値を式へ挿入できます。", "学習用の現代値であり、すべての実機版と完全一致するものではありません。"]],
-      ["画面操作", ["上部の概要はプロジェクト情報、下部のマニュアルはこのガイドを開きます。", "最初は画面に自動調整されます。−・+で拡大縮小し、Fitで元に戻します。", "通常時はページをスワイプできません。拡大して画面を超えた場合だけ移動できます。"]],
+      ["画面操作", ["上部の概要はプロジェクト情報、下部のマニュアルはこのガイドを開きます。", "最初は画面に自動調整されます。−・+で拡大縮小し、Fitで元に戻します。", "通常時はページをスワイプできません。拡大して画面を超えた場合だけ移動できます。", "バッテリー表示は装飾用ソーラーパネルに代わり、ブラウザーが許可すると端末の残量と充電状態を表示します。"]],
     ],
     ko: [
       ["빠른 시작", ["MODE를 누르고 COMP를 선택하면 일반 과학 계산을 할 수 있습니다.", "키패드로 식을 입력하고 EXE를 누릅니다. DEL은 한 글자 삭제, AC는 현재 입력 지우기입니다.", "SHIFT는 주황색 보조 기능, ALPHA는 빨간 문자나 기호를 선택합니다."]],
@@ -117,7 +117,7 @@
       ["REG · 회귀", ["x와 y 쌍 및 필요한 경우 빈도를 추가합니다.", "선형, 로그, 지수, a·bˣ, 거듭제곱, 역수, 이차 회귀를 선택합니다.", "계수 a·b·c·r을 확인하고 x를 입력해 y를 예측합니다."]],
       ["PRGM · 프로그램", ["P1–P4 네 영역은 이 브라우저에 자동 저장됩니다.", "?→A는 입력, expression→A는 대입, 콜론이나 줄바꿈은 명령 구분입니다.", "입력을 쉼표로 나누어 Run을 누릅니다. 전체 용량은 680 bytes입니다."]],
       ["공식과 과학 상수", ["FMLA에서 23개 대화형 공식을 검색합니다.", "SHIFT + 7에서 40개 과학 상수를 검색하고 값을 식에 넣습니다.", "현대 학습용 값이며 모든 실물 버전과 완전히 같음을 보장하지 않습니다."]],
-      ["화면 제어", ["위쪽 소개 버튼은 프로젝트 정보, 아래쪽 설명서 버튼은 이 가이드를 엽니다.", "처음에는 화면에 자동 맞춤됩니다. −·+로 조절하고 Fit으로 복원합니다.", "보통 계산기 화면에서는 스와이프가 잠깁니다. 확대한 계산기가 화면을 넘을 때만 이동할 수 있습니다."]],
+      ["화면 제어", ["위쪽 소개 버튼은 프로젝트 정보, 아래쪽 설명서 버튼은 이 가이드를 엽니다.", "처음에는 화면에 자동 맞춤됩니다. −·+로 조절하고 Fit으로 복원합니다.", "보통 계산기 화면에서는 스와이프가 잠깁니다. 확대한 계산기가 화면을 넘을 때만 이동할 수 있습니다.", "배터리 아이콘은 장식용 태양광 패널을 대체하며, 브라우저가 허용하면 기기의 잔량과 충전 상태를 표시합니다."]],
     ],
     ms: [
       ["Mula pantas", ["Tekan MODE dan pilih COMP untuk pengiraan saintifik biasa.", "Masukkan ungkapan dan tekan EXE. DEL memadam satu aksara; AC membersihkan input semasa.", "SHIFT memilih fungsi jingga; ALPHA memilih huruf atau simbol merah."]],
@@ -129,7 +129,7 @@
       ["REG · Regresi", ["Tambah pasangan x dan y serta kekerapan pilihan.", "Pilih regresi linear, logaritma, eksponen, a·bˣ, kuasa, songsang atau kuadratik.", "Lihat pekali a, b, c dan r, kemudian masukkan x untuk meramal y."]],
       ["PRGM · Program", ["Empat ruang P1–P4 disimpan automatik dalam pelayar ini.", "?→A meminta input, expression→A menetapkan nilai, titik bertindih atau baris baharu memisahkan arahan.", "Masukkan nilai dipisah koma dan tekan Run. Jumlah kapasiti ialah 680 bytes."]],
       ["Formula dan pemalar", ["Tekan FMLA untuk mencari 23 formula interaktif.", "Tekan SHIFT + 7 untuk mencari 40 pemalar saintifik dan memasukkan nilainya.", "Nilai kajian moden ini tidak menjamin padanan tepat dengan setiap versi fizikal."]],
-      ["Kawalan skrin", ["Butang Tentang di atas membuka maklumat projek; butang Manual di bawah membuka panduan ini.", "Kalkulator dimuatkan mengikut skrin secara automatik. Gunakan −, + dan Fit untuk saiz.", "Leret dikunci dalam paparan biasa. Gerakan hanya dibenarkan apabila kalkulator yang dibesarkan melebihi skrin."]],
+      ["Kawalan skrin", ["Butang Tentang di atas membuka maklumat projek; butang Manual di bawah membuka panduan ini.", "Kalkulator dimuatkan mengikut skrin secara automatik. Gunakan −, + dan Fit untuk saiz.", "Leret dikunci dalam paparan biasa. Gerakan hanya dibenarkan apabila kalkulator yang dibesarkan melebihi skrin.", "Ikon bateri menggantikan panel solar hiasan dan menunjukkan peratus serta status pengecasan apabila dibenarkan oleh pelayar."]],
     ],
   };
 
@@ -138,10 +138,14 @@
   const space = document.querySelector("#calculator-space");
   const canvas = document.querySelector("#calculator-canvas");
   const zoomLevel = document.querySelector("#zoom-level");
+  const batteryIndicator = document.querySelector("#device-battery");
+  const batteryFill = document.querySelector("#battery-fill");
+  const batteryText = document.querySelector("#battery-text");
   const views = [...document.querySelectorAll("[data-view-panel]")];
   const allowedViews = new Set(["calculator", "about", "manual"]);
   let zoomFactor = 1;
   let currentView = "calculator";
+  let batteryState = { available: false, charging: false, level: null };
 
   function readSavedLanguage() {
     try {
@@ -156,6 +160,50 @@
       window.localStorage.setItem("scical600.language", language);
     } catch (_error) {
       // Language selection still works for the current session when storage is unavailable.
+    }
+  }
+
+  function renderBattery() {
+    const language = ui[document.documentElement.lang] ? document.documentElement.lang : "en-GB";
+    const dictionary = ui[language];
+    const level = batteryState.available ? Math.round(Math.max(0, Math.min(1, batteryState.level)) * 100) : null;
+    batteryIndicator.classList.toggle("is-unavailable", !batteryState.available);
+    batteryIndicator.classList.toggle("is-charging", batteryState.available && batteryState.charging);
+    batteryIndicator.classList.toggle("is-low", batteryState.available && !batteryState.charging && level <= 20);
+
+    if (level === null) {
+      batteryFill.style.width = "0%";
+      batteryText.textContent = "--";
+      batteryIndicator.setAttribute("aria-label", dictionary.batteryUnavailable);
+      batteryIndicator.title = dictionary.batteryUnavailable;
+      return;
+    }
+
+    batteryFill.style.width = `${level}%`;
+    batteryText.textContent = `${level}%`;
+    const label = (batteryState.charging ? dictionary.batteryCharging : dictionary.batteryLevel).replace("{level}", String(level));
+    batteryIndicator.setAttribute("aria-label", label);
+    batteryIndicator.title = label;
+  }
+
+  async function setupBattery() {
+    if (typeof navigator.getBattery !== "function") {
+      renderBattery();
+      return;
+    }
+
+    try {
+      const battery = await navigator.getBattery();
+      const update = () => {
+        batteryState = { available: true, charging: Boolean(battery.charging), level: Number(battery.level) };
+        renderBattery();
+      };
+      update();
+      battery.addEventListener("levelchange", update);
+      battery.addEventListener("chargingchange", update);
+    } catch (_error) {
+      batteryState = { available: false, charging: false, level: null };
+      renderBattery();
     }
   }
 
@@ -225,6 +273,7 @@
     });
     languageSelect.value = selected;
     renderManual(selected);
+    renderBattery();
     saveLanguage(selected);
   }
 
@@ -287,6 +336,7 @@
   if ("ResizeObserver" in window) new ResizeObserver(() => updateScale()).observe(canvas);
 
   applyLanguage(detectedLanguage());
+  setupBattery();
   showView(allowedViews.has(location.hash.slice(1)) ? location.hash.slice(1) : "calculator", false);
   if (!location.hash) history.replaceState({ view: "calculator" }, "", "#calculator");
 
