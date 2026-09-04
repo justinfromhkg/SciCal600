@@ -111,35 +111,18 @@
         </section>
 
         <section class="app-view app-view--scrollable is-active" data-view-panel="about">
-          <div class="content-page">
-            <div class="content-page__header">
+          <div class="content-page content-page--home">
+            <div class="content-page__header home-hero">
               <p class="eyebrow" data-i18n="aboutEyebrow">Smart Calculator platform</p>
-              <h1 data-i18n="aboutTitle">Useful mathematics, made approachable.</h1>
-              <p class="content-page__lead" data-i18n="aboutIntro">SciCal600 is a growing smart-calculator platform built for clear, dependable calculations on phones and computers.</p>
-              <button class="primary-action" type="button" data-view-target="calculator" data-i18n="openCalculator">Open calculator</button>
+              <h1 data-i18n="aboutTitle">Maths, made simple.</h1>
+              <p class="content-page__lead" data-i18n="aboutIntro">Clear, reliable calculation tools for phones and computers.</p>
             </div>
 
-            <div class="reference-model-banner">
-              <span data-i18n="platformNow">Available today</span>
-              <strong data-i18n="smartCalculator">Smart Calculator</strong>
-              <small data-i18n="platformNotice">Independent educational platform · designed for the modern web</small>
-            </div>
-
-            <div class="feature-pills" aria-label="Current features">
-              <span data-i18n="featureScientific">Scientific calculation</span><span data-i18n="featureLinear">Linear algebra</span><span data-i18n="featureResponsive">Mobile first</span>
-            </div>
-
-            <div class="exam-note">
-              <span class="exam-note__icon" aria-hidden="true">i</span>
-              <p data-i18n="platformGoal">Our goal is one consistent home for focused calculation tools: fast to open, easy to understand, and ready to expand without sacrificing accuracy.</p>
-            </div>
-
-            <section class="scope" aria-labelledby="scope-title">
-              <div><p class="eyebrow" data-i18n="toolsEyebrow">Calculation tools</p><h2 id="scope-title" data-i18n="toolsTitle">Choose the right workspace.</h2></div>
-              <div class="scope-grid platform-tools">
-                <article class="scope-card scope-card--active tool-card"><span class="scope-card__number">01</span><div><p class="scope-card__status" data-i18n="availableStatus">Available now</p><h3 data-i18n="scientificToolTitle">Scientific calculator fx-50FH II</h3><p data-i18n="scientificToolDescription">A responsive scientific-calculator simulator with six modes, formulas, constants, memory, history, web workbenches and physical-style input.</p><button class="text-action tool-card__action" type="button" data-view-target="calculator" data-i18n="openScientific">Open scientific calculator</button></div></article>
-                <article class="scope-card scope-card--active tool-card"><span class="scope-card__number">02</span><div><p class="scope-card__status" data-i18n="availableStatus">Available now</p><h3 data-i18n="linearToolTitle">Linear Algebra</h3><p data-i18n="linearToolDescription">Add, subtract and multiply matrices; calculate inverses, transposes, adjugates, eigenvalues, eigenvectors and determinants.</p><button class="text-action tool-card__action" type="button" data-view-target="linear-algebra" data-i18n="openLinear">Open Linear Algebra</button></div></article>
-                <article class="scope-card tool-card tool-card--future"><span class="scope-card__number">03+</span><div><p class="scope-card__status" data-i18n="futureStatus">Future expansion</p><h3 data-i18n="futureToolsTitle">More focused calculators</h3><p data-i18n="futureToolsDescription">The platform structure is ready for equation solving, probability, finance, graphing and other purpose-built mathematical tools.</p></div></article>
+            <section class="home-tools" aria-labelledby="home-tools-title">
+              <h2 class="sr-only" id="home-tools-title" data-i18n="toolsTitle">Choose the right workspace.</h2>
+              <div class="home-tool-grid">
+                <article class="home-tool-card"><span class="home-tool-card__number">01</span><div><h3 data-i18n="scientificToolTitle">Scientific calculator fx-50FH II</h3><button class="primary-action" type="button" data-view-target="calculator" data-i18n="openScientific">Open scientific calculator</button></div></article>
+                <article class="home-tool-card"><span class="home-tool-card__number">02</span><div><h3 data-i18n="linearToolTitle">Linear Algebra</h3><button class="primary-action" type="button" data-view-target="linear-algebra" data-i18n="openLinear">Open Linear Algebra</button></div></article>
               </div>
             </section>
 

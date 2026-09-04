@@ -91,6 +91,31 @@ async function checkLayout(page, viewport) {
   return metrics;
 }
 
+async function checkCompactHome(page, viewport) {
+  await page.goto("/", { waitUntil: "networkidle" });
+  const metrics = await page.evaluate(() => {
+    const cards = [...document.querySelectorAll(".home-tool-card")].map((card) => card.getBoundingClientRect());
+    const buttons = [...document.querySelectorAll(".home-tool-card .primary-action")].map((button) => button.getBoundingClientRect());
+    return {
+      cardCount: cards.length,
+      buttonCount: buttons.length,
+      cardBottoms: cards.map((card) => card.bottom),
+      buttonHeights: buttons.map((button) => button.height),
+      documentWidth: document.documentElement.scrollWidth,
+      innerWidth: window.innerWidth,
+      innerHeight: window.innerHeight,
+      removedCopyCount: document.querySelectorAll(".reference-model-banner, .feature-pills, .exam-note, .tool-card--future").length,
+    };
+  });
+  assert.equal(metrics.cardCount, 2, `${viewport.name}: both calculator choices should be present`);
+  assert.equal(metrics.buttonCount, 2, `${viewport.name}: both calculator choices should have direct actions`);
+  assert.ok(metrics.cardBottoms.every((bottom) => bottom <= metrics.innerHeight), `${viewport.name}: both calculator choices should be visible without scrolling`);
+  assert.ok(metrics.buttonHeights.every((height) => height >= 44), `${viewport.name}: home actions should have mobile touch targets`);
+  assert.ok(metrics.documentWidth <= metrics.innerWidth, `${viewport.name}: home page horizontal overflow`);
+  assert.equal(metrics.removedCopyCount, 0, `${viewport.name}: redundant home-page copy should be removed`);
+  return metrics;
+}
+
 async function runFunctionalChecks(page) {
   const firstKey = page.locator(".calc-key").first();
   await firstKey.dispatchEvent("pointerdown", { pointerId: 41, pointerType: "touch", isPrimary: true, buttons: 1 });
@@ -147,9 +172,10 @@ async function runFunctionalChecks(page) {
 
   await page.goto("/", { waitUntil: "networkidle" });
   assert.equal(await page.locator('[data-view-panel="about"]').isVisible(), true, "root platform page");
-  assert.match(await page.locator('[data-view-panel="about"] h1').textContent(), /mathematics/i);
+  assert.match(await page.locator('[data-view-panel="about"] h1').textContent(), /math/i);
+  assert.equal(await page.locator(".home-tool-card").count(), 2, "home should show both calculators at equal prominence");
   for (const [language, expected, direction] of [
-    ["fr", /mathématiques/i, "ltr"],
+    ["fr", /maths/i, "ltr"],
     ["de", /Mathematik/i, "ltr"],
     ["es", /Matemáticas/i, "ltr"],
     ["ar", /رياضيات/, "rtl"],
@@ -218,6 +244,8 @@ async function runFunctionalChecks(page) {
         assert.ok(iPhone17Metrics, "standard iPhone 17 Pro metrics should be available");
         assert.ok(Math.abs(metrics.minKeyHeight - iPhone17Metrics.minKeyHeight) < 0.5, "browser toolbar height changes should not shrink calculator keys");
         assert.ok(Math.abs(metrics.calculatorWidth - iPhone17Metrics.calculatorWidth) < 0.5, "browser toolbar height changes should not shrink the calculator body");
+        const homeMetrics = await checkCompactHome(page, viewport);
+        console.log(`PASS ${viewport.name} home: ${homeMetrics.cardCount} primary calculator choices above the fold`);
       }
       console.log(`PASS ${viewport.name}: keys ${metrics.minKeyWidth.toFixed(1)} × ${metrics.minKeyHeight.toFixed(1)} CSS px`);
       if (viewport.name === "iPhone 16/17 Pro") await runFunctionalChecks(page);
