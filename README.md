@@ -22,7 +22,7 @@ The repository includes a static-assets Workers configuration. After signing in 
 npm run deploy
 ```
 
-The build copies only the five public website files into `dist/`; source tests and project notes are not uploaded. Wrangler returns a public `https://scical600.<account>.workers.dev` address after deployment.
+The build copies only the six public website files into `dist/`; source tests and project notes are not uploaded. Wrangler returns a public `https://scical600.<account>.workers.dev` address after deployment.
 
 ## Implemented
 
@@ -34,6 +34,10 @@ The build copies only the five public website files into `dist/`; source tests a
 - Permutation (`nPr`) and combination (`nCr`)
 - `Ans`, independent `M` memory, replay history, decimal/fraction display and DMS conversion
 - Normal, fixed-decimal, scientific and engineering notation
+- A locked, full-screen calculator view with automatic fit and button-controlled zoom
+- Panning only when the enlarged calculator exceeds the available viewport
+- Dedicated About and six-language Manual views
+- Automatic system-language selection plus a persistent language picker for English, Traditional Chinese, Simplified Chinese, Japanese, Korean and Malay
 - Keyboard input and responsive phone/desktop layouts
 - A parser written without JavaScript `eval`
 - Complex arithmetic in rectangular and polar form, including `arg` and conjugates

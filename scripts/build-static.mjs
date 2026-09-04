@@ -8,6 +8,7 @@ const publicFiles = [
   "calculator-core.js",
   "calculator-data.js",
   "app.js",
+  "site-ui.js",
 ];
 
 rmSync(outputDirectory, { force: true, recursive: true });
@@ -18,4 +19,3 @@ for (const file of publicFiles) {
 }
 
 console.log(`Prepared ${publicFiles.length} website files in dist/.`);
-
