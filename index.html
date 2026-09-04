@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#071019" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="description"
+      content="A browser-based scientific calculator study simulator inspired by the Casio fx-50FH II."
+    />
+    <title>Scientific 50 — Study Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-glow page-glow--one" aria-hidden="true"></div>
+    <div class="page-glow page-glow--two" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#calculator" aria-label="Scientific 50 home">
+        <span class="brand__mark" aria-hidden="true">∑</span>
+        <span>Scientific<span class="brand__accent">50</span></span>
+      </a>
+      <div class="header-meta">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span>Six-mode calculator · ready</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow">HKEAA reference model</p>
+          <h1 id="page-title">A familiar calculator,<br /><span>rebuilt for the web.</span></h1>
+          <p class="hero-copy__intro">
+            A focused study simulator inspired by the fx-50FH II. It recreates the
+            two-line workflow and essential scientific operations in a responsive,
+            keyboard-friendly interface.
+          </p>
+
+          <div class="feature-pills" aria-label="Current features">
+            <span>Six calculation modes</span>
+            <span>23 formulas</span>
+            <span>40 constants</span>
+          </div>
+
+          <div class="exam-note">
+            <span class="exam-note__icon" aria-hidden="true">i</span>
+            <p>
+              The physical fx-50FH II is HKEAA-approved. This independent web
+              simulator is a learning tool and is <strong>not approved for examinations</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="calculator-stage" id="calculator">
+          <div class="stage-label" aria-hidden="true">
+            <span>STUDY EDITION</span>
+            <span id="stage-mode">01 / COMP</span>
+          </div>
+
+          <article class="calculator" aria-label="Scientific calculator">
+            <div class="calculator__topline">
+              <div class="maker">
+                <span class="maker__name">SCIENTIFIC</span>
+                <span class="maker__series">SUPER FX · WEB</span>
+              </div>
+              <div class="solar-panel" aria-label="Decorative solar panel">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="model">
+                <strong>fx-50<span>FH</span> II</strong>
+                <small>inspired study model</small>
+              </div>
+            </div>
+
+            <section class="display" aria-label="Calculator display">
+              <div class="display__indicators" aria-hidden="true">
+                <span id="shift-indicator">S</span>
+                <span id="alpha-indicator">A</span>
+                <span id="memory-indicator">M</span>
+                <span id="angle-indicator" class="is-on">D</span>
+                <span id="format-indicator">NORM</span>
+                <span id="mode-indicator">COMP</span>
+              </div>
+              <div class="display__expression" id="expression" aria-label="Expression">0</div>
+              <output class="display__result" id="result" aria-live="polite">0</output>
+            </section>
+
+            <div class="utility-row">
+              <button class="utility-key utility-key--orange" type="button" data-action="shift">
+                SHIFT
+              </button>
+              <button class="utility-key utility-key--red" type="button" data-action="alpha">
+                ALPHA
+              </button>
+              <div class="replay-pad" aria-label="Replay and cursor controls">
+                <button type="button" data-action="history-up" aria-label="Previous calculation">▲</button>
+                <button type="button" data-action="left" aria-label="Move cursor left">◀</button>
+                <span class="replay-pad__center" aria-hidden="true">REPLAY</span>
+                <button type="button" data-action="right" aria-label="Move cursor right">▶</button>
+                <button type="button" data-action="history-down" aria-label="Next calculation">▼</button>
+              </div>
+              <button class="utility-key utility-key--dual" type="button" data-action="mode">
+                <span class="utility-key__alt">SETUP</span>MODE
+              </button>
+              <button class="utility-key" type="button" data-action="on">ON</button>
+            </div>
+
+            <div class="keypad" id="keypad" aria-label="Calculator keypad"></div>
+
+            <div class="calculator__footer">
+              <span>2-LINE DISPLAY</span>
+              <span>10 + 2 DIGITS</span>
+              <span>WEB POWER</span>
+            </div>
+          </article>
+
+          <p class="keyboard-hint"><kbd>Enter</kbd> calculate · <kbd>Backspace</kbd> delete · arrow keys replay/edit</p>
+
+          <section class="mode-workbench" id="mode-workbench" hidden aria-live="polite"></section>
+        </div>
+      </section>
+
+      <section class="scope" aria-labelledby="scope-title">
+        <div>
+          <p class="eyebrow">Development scope</p>
+          <h2 id="scope-title">One model. A dependable core.</h2>
+        </div>
+        <div class="scope-grid">
+          <article class="scope-card scope-card--active">
+            <span class="scope-card__number">01</span>
+            <div>
+              <p class="scope-card__status">Core mode</p>
+              <h3>COMP · Computation</h3>
+              <p>Arithmetic, fractions, powers, roots, trigonometry, logarithms, permutation, combination, history and memory.</p>
+            </div>
+          </article>
+          <article class="scope-card">
+            <span class="scope-card__number">02</span>
+            <div>
+              <p class="scope-card__status">Available now</p>
+              <h3>Five specialist modes</h3>
+              <p>Complex numbers, base-n logic, weighted statistics, seven regression models, and four saved program areas.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Scientific50 · independent educational project</span>
+      <span>Reference behaviour: fx-50FH II / fx-50F II family</span>
+    </footer>
+
+    <dialog id="mode-dialog" class="panel-dialog">
+      <form method="dialog">
+        <div class="panel-dialog__header">
+          <div>
+            <p class="eyebrow">Calculation mode</p>
+            <h2>Choose a mode</h2>
+          </div>
+          <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+        </div>
+        <div class="mode-grid">
+          <button type="button" data-mode="COMP" class="mode-option mode-option--active">
+            <span>01</span><strong>COMP</strong><small>Computation</small>
+          </button>
+          <button type="button" data-mode="CMPLX" class="mode-option"><span>02</span><strong>CMPLX</strong><small>Complex numbers</small></button>
+          <button type="button" data-mode="BASE" class="mode-option"><span>03</span><strong>BASE</strong><small>Base-n &amp; logic</small></button>
+          <button type="button" data-mode="SD" class="mode-option"><span>04</span><strong>SD</strong><small>Single-variable stats</small></button>
+          <button type="button" data-mode="REG" class="mode-option"><span>05</span><strong>REG</strong><small>Regression</small></button>
+          <button type="button" data-mode="PRGM" class="mode-option"><span>06</span><strong>PRGM</strong><small>Four program areas</small></button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="settings-dialog" class="panel-dialog">
+      <form method="dialog">
+        <div class="panel-dialog__header">
+          <div>
+            <p class="eyebrow">Calculator setup</p>
+            <h2>Display &amp; angle</h2>
+          </div>
+          <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+        </div>
+        <fieldset>
+          <legend>Angle unit</legend>
+          <div class="segmented-control" id="angle-control">
+            <button type="button" data-angle="DEG" class="is-selected">Degrees</button>
+            <button type="button" data-angle="RAD">Radians</button>
+            <button type="button" data-angle="GRAD">Grads</button>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Number format</legend>
+          <div class="segmented-control" id="format-control">
+            <button type="button" data-format="NORM" class="is-selected">Norm</button>
+            <button type="button" data-format="FIX">Fix 4</button>
+            <button type="button" data-format="SCI">Sci 6</button>
+          </div>
+        </fieldset>
+        <button class="done-button" value="done">Done</button>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="calculator-core.js"></script>
+    <script src="calculator-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

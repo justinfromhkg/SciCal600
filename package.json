@@ -1,0 +1,9 @@
+{
+  "name": "scientific-50-study-calculator",
+  "version": "0.2.0",
+  "private": true,
+  "description": "A browser scientific calculator inspired by the fx-50FH II workflow.",
+  "scripts": {
+    "test": "node --test tests/calculator-core.test.js"
+  }
+}

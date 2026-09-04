@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8"><title>Scientific50 UI smoke test</title></head>
+  <body>
+    <pre id="report">RUNNING</pre>
+    <iframe id="app" src="../index.html" hidden></iframe>
+    <script>
+      "use strict";
+      const report = document.querySelector("#report");
+      const frame = document.querySelector("#app");
+      const results = [];
+
+      function check(condition, label) {
+        if (!condition) throw new Error(label);
+        results.push(`PASS ${label}`);
+      }
+
+      frame.addEventListener("load", () => window.setTimeout(() => {
+        try {
+          const doc = frame.contentDocument;
+          const click = (selector) => {
+            const element = doc.querySelector(selector);
+            if (!element) throw new Error(`Missing ${selector}`);
+            element.click();
+            return element;
+          };
+          const key = (index) => click(`[data-key-index="${index}"]`);
+          const chooseMode = (mode) => {
+            click('[data-action="mode"]');
+            click(`[data-mode="${mode}"]`);
+          };
+
+          check(doc.querySelectorAll("#keypad .calc-key").length === 42, "keypad renders");
+
+          chooseMode("CMPLX");
+          key(35); click('[data-action="alpha"]'); key(19); key(37); key(36); click('[data-action="alpha"]'); key(19); key(43);
+          check(doc.querySelector("#result").textContent === "5i", "complex keypad calculation");
+          check(doc.querySelector("#mode-workbench h2").textContent === "Complex numbers", "complex workbench");
+
+          chooseMode("BASE");
+          click('[data-base="16"]');
+          key(34); click('[data-action="alpha"]'); key(17); key(37); key(34); key(43);
+          check(doc.querySelector("#result").textContent === "20", "hexadecimal calculation");
+
+          chooseMode("SD");
+          for (const [x, freq] of [[1, 1], [3, 2]]) {
+            const form = doc.querySelector("[data-sd-form]");
+            form.elements.x.value = x;
+            form.elements.freq.value = freq;
+            form.requestSubmit();
+          }
+          check(doc.querySelector(".result-grid strong").textContent === "3", "weighted statistics entry");
+
+          chooseMode("REG");
+          for (const [x, y] of [[1, 3], [2, 5], [3, 7]]) {
+            const form = doc.querySelector("[data-reg-form]");
+            form.elements.x.value = x;
+            form.elements.y.value = y;
+            form.elements.freq.value = 1;
+            form.requestSubmit();
+          }
+          const coefficients = [...doc.querySelectorAll(".result-grid strong")].map((item) => item.textContent);
+          check(coefficients[0] === "1" && coefficients[1] === "2", "linear regression fit");
+
+          chooseMode("PRGM");
+          const runner = doc.querySelector("[data-program-run]");
+          runner.elements.inputs.value = "2";
+          runner.requestSubmit();
+          check(doc.querySelector("[data-program-output]").textContent.includes("5.08"), "program runner");
+
+          key(1);
+          click('[data-formula-index="1"]');
+          const formula = doc.querySelector("[data-formula-form]");
+          formula.elements.r.value = 2;
+          formula.requestSubmit();
+          check(doc.querySelector("[data-formula-output]").textContent.startsWith("12.566"), "interactive formula");
+          check(doc.querySelectorAll("[data-formula-index]").length === 23, "formula catalogue count");
+
+          click('[data-action="shift"]'); key(24);
+          check(doc.querySelectorAll("[data-constant-index]").length === 40, "constant catalogue count");
+
+          report.textContent = results.join("\n");
+          report.dataset.status = "passed";
+          document.title = "PASS Scientific50 UI smoke test";
+        } catch (error) {
+          report.textContent = `${results.join("\n")}\nFAIL ${error.stack || error.message}`;
+          report.dataset.status = "failed";
+          document.title = "FAIL Scientific50 UI smoke test";
+        }
+      }, 100));
+    </script>
+  </body>
+</html>
