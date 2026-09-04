@@ -4,6 +4,8 @@
   "private": true,
   "description": "A browser scientific calculator inspired by the fx-50FH II workflow.",
   "scripts": {
-    "test": "node --test tests/calculator-core.test.js"
+    "build": "node scripts/build-static.mjs",
+    "test": "node --test tests/calculator-core.test.js",
+    "deploy": "npm run build && npx --yes wrangler@latest deploy"
   }
 }

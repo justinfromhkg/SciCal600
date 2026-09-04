@@ -14,6 +14,16 @@ To run the calculation-engine tests:
 npm test
 ```
 
+## Publish with Cloudflare Workers
+
+The repository includes a static-assets Workers configuration. After signing in to Cloudflare, publish the current version with:
+
+```text
+npm run deploy
+```
+
+The build copies only the five public website files into `dist/`; source tests and project notes are not uploaded. Wrangler returns a public `https://scical600.<account>.workers.dev` address after deployment.
+
 ## Implemented
 
 - Two-line expression/result display with an editable cursor
