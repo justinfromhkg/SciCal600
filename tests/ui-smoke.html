@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head><meta charset="utf-8"><title>Scientific50 UI smoke test</title></head>
+  <head><meta charset="utf-8"><title>SciCal600 UI smoke test</title></head>
   <body>
     <pre id="report">RUNNING</pre>
     <iframe id="app" src="../index.html" hidden></iframe>
@@ -81,11 +81,11 @@
 
           report.textContent = results.join("\n");
           report.dataset.status = "passed";
-          document.title = "PASS Scientific50 UI smoke test";
+          document.title = "PASS SciCal600 UI smoke test";
         } catch (error) {
           report.textContent = `${results.join("\n")}\nFAIL ${error.stack || error.message}`;
           report.dataset.status = "failed";
-          document.title = "FAIL Scientific50 UI smoke test";
+          document.title = "FAIL SciCal600 UI smoke test";
         }
       }, 100));
     </script>

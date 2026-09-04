@@ -1,6 +1,6 @@
-# Scientific50
+# SciCal600
 
-Scientific50 is a responsive browser calculator inspired by the interaction model and key grouping of the Casio fx-50FH II. It combines a dependable scientific-expression parser with six calculation modes, searchable study catalogues, and responsive data-entry workbenches.
+SciCal600 is a responsive browser calculator inspired by the interaction model and key grouping of the Casio fx-50FH II. It combines a dependable scientific-expression parser with six calculation modes, searchable study catalogues, and responsive data-entry workbenches.
 
 > The physical Casio fx-50FH II is listed by Casio as HKEAA-approved. This independent web simulator is not a Casio product and is not approved for use in examinations.
 

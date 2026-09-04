@@ -120,7 +120,11 @@
   let toastTimer;
 
   try {
-    const savedPrograms = JSON.parse(window.localStorage.getItem("scientific50.programs") || "null");
+    const savedPrograms = JSON.parse(
+      window.localStorage.getItem("scical600.programs")
+      || window.localStorage.getItem("scientific50.programs")
+      || "null",
+    );
     if (Array.isArray(savedPrograms) && savedPrograms.length === 4) {
       savedPrograms.forEach((source, index) => {
         if (typeof source === "string") state.programs[index].source = source;
@@ -132,7 +136,7 @@
 
   function savePrograms() {
     try {
-      window.localStorage.setItem("scientific50.programs", JSON.stringify(state.programs.map((program) => program.source)));
+      window.localStorage.setItem("scical600.programs", JSON.stringify(state.programs.map((program) => program.source)));
     } catch (_error) {
       // Keep the current session usable even when persistent storage is unavailable.
     }
