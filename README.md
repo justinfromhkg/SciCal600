@@ -48,11 +48,11 @@ Create the API token in Cloudflare with the minimum **Account / Cloudflare Pages
 - Live device-battery percentage and charging state when the browser exposes the Battery Status API
 - Panning only when the enlarged calculator exceeds the available viewport
 - A prominent fx-50FH II model identity and a ten-language Manual designed for both physical-calculator and web-simulator users
-- Automatic system-language selection plus a persistent language picker for English, Traditional Chinese, Simplified Chinese, Japanese, Korean and Malay
+- Automatic system-language selection plus a persistent ten-language picker, including French, German, Spanish and Arabic
 - Keyboard input and responsive phone/desktop layouts
 - A parser written without JavaScript `eval`
 - Complex arithmetic in rectangular and polar form, including `arg` and conjugates
-- Binary, octal, decimal, and hexadecimal arithmetic with 32-bit logical operations
+- Reference-style BASE-N arithmetic: 10-bit BIN, 30-bit OCT, 32-bit DEC/HEX, A–F digits, mixed-base prefixes, and AND/OR/XOR/XNOR/Not/Neg logic
 - Weighted single-variable statistics and seven regression models
 - Four persistent program areas with prompt input, assignment, byte accounting, and safe execution
 - Searchable catalogues containing 23 interactive formulas and 40 scientific constants
@@ -64,7 +64,7 @@ Create the API token in Cloudflare with the minimum **Account / Cloudflare Pages
 
 Casio describes the fx-50FH II as a programmable, non-graphing model with 406 functions, a 10+2 digit two-line dot-matrix display, four program areas and 680 bytes of program memory. Its published functions include complex calculations, 23 built-in formulas, 40 scientific constants, fraction calculations, standard-deviation and regression statistics, base-n conversion, logical operations, combination/permutation, coordinate conversion, random numbers and summation.
 
-The calculator exposes six working modes: `COMP`, `CMPLX`, `BASE`, `SD`, `REG`, and `PRGM`. Select a mode with the `MODE` button. Specialist modes open a workbench beneath the calculator for shortcuts, sample entry, regression output, or program editing. `FMLA` opens the interactive formula catalogue; `SHIFT` + `7` opens scientific constants.
+The calculator exposes six working modes: `COMP`, `CMPLX`, `BASE`, `SD`, `REG`, and `PRGM`. Web mode keeps the direct mode dialog and specialist workbenches. Simulator mode reproduces the two-page numbered MODE menu on the LCD; BASE uses the green `DEC`, `HEX`, `BIN`, `OCT`, `LOGIC`, and `A`–`F` markings on their shared physical keys. `FMLA` opens the interactive formula catalogue; `SHIFT` + `7` opens scientific constants.
 
 The formula and constant tables are versioned study data. They use modern values and common educational formulas; they do not claim to reproduce the exact internal table or rounding of a particular physical calculator revision.
 

@@ -93,6 +93,14 @@ test("performs base-n arithmetic, conversion and logic", () => {
   assert.equal(core.formatBase(30, 2), "11110");
   assert.equal(core.formatBase(30, 8), "36");
   assert.equal(core.formatBase(30, 16), "1E");
+  assert.equal(core.evaluateBase("1111111111", 2), -1);
+  assert.equal(core.evaluateBase("7777777777", 8), -1);
+  assert.equal(core.evaluateBase("FFFFFFFF", 16), -1);
+  assert.equal(core.formatBase(-1, 2), "1111111111");
+  assert.equal(core.formatBase(-1, 8), "7777777777");
+  assert.equal(core.evaluateBase("hF + d1", 2), 16);
+  assert.equal(core.evaluateBase("101 XNOR 11", 2), -7);
+  assert.throws(() => core.evaluateBase("10000000000", 2), core.CalculatorError);
 });
 
 test("calculates weighted single-variable statistics", () => {

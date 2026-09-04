@@ -33,7 +33,14 @@ function startServer() {
 
 async function chooseMode(page, mode) {
   await page.locator('.utility-key[data-action="mode"]').click();
-  await page.locator(`[data-mode="${mode}"]`).click();
+  const simulator = await page.evaluate(() => window.SciCalApp.getState().interfaceMode === "simulator");
+  if (!simulator) {
+    await page.locator(`[data-mode="${mode}"]`).click();
+    return;
+  }
+  const number = { COMP: 1, CMPLX: 2, BASE: 3, SD: 4, REG: 5, PRGM: 6 }[mode];
+  if (number > 3) await page.locator('.utility-key[data-action="mode"]').click();
+  await page.locator(`.calc-key[data-key-label="${number}"]`).click();
 }
 
 async function checkLayout(page, viewport) {
@@ -43,6 +50,15 @@ async function checkLayout(page, viewport) {
   assert.equal(await page.locator('[data-view-panel="calculator"]').isVisible(), true, `${viewport.name}: calculator is visible`);
   const metrics = await page.evaluate(() => {
     const keys = [...document.querySelectorAll(".calc-key")].map((key) => key.getBoundingClientRect());
+    const legendMetrics = [...document.querySelectorAll(".calc-key")].map((key) => {
+      const legends = [...key.querySelectorAll(".calc-key__shift, .calc-key__alpha, .calc-key__context")]
+        .map((legend) => ({ box: legend.getBoundingClientRect(), fontSize: parseFloat(getComputedStyle(legend).fontSize) }))
+        .sort((a, b) => a.box.left - b.box.left);
+      return {
+        fontSizes: legends.map((legend) => legend.fontSize),
+        overlaps: legends.slice(1).filter((legend, index) => legends[index].box.right > legend.box.left + 0.5).length,
+      };
+    });
     const canvas = document.querySelector("#calculator-space").getBoundingClientRect();
     const calculator = document.querySelector(".calculator").getBoundingClientRect();
     return {
@@ -50,6 +66,8 @@ async function checkLayout(page, viewport) {
       innerWidth: window.innerWidth,
       minKeyHeight: Math.min(...keys.map((key) => key.height)),
       minKeyWidth: Math.min(...keys.map((key) => key.width)),
+      minLegendFontSize: Math.min(...legendMetrics.flatMap((item) => item.fontSizes)),
+      legendOverlapCount: legendMetrics.reduce((total, item) => total + item.overlaps, 0),
       calculatorWidth: calculator.width,
       canvasRight: canvas.right,
       canvasLeft: canvas.left,
@@ -68,6 +86,7 @@ async function checkLayout(page, viewport) {
   assert.ok(metrics.canvasRight <= metrics.innerWidth + 1, `${viewport.name}: canvas is clipped on the right`);
   assert.ok(metrics.minKeyWidth >= 40, `${viewport.name}: key width ${metrics.minKeyWidth} is too small`);
   assert.ok(metrics.minKeyHeight >= 40, `${viewport.name}: key height ${metrics.minKeyHeight} is too small`);
+  assert.equal(metrics.legendOverlapCount, 0, `${viewport.name}: upper key legends should not overlap`);
   assert.equal(metrics.hasViewportFit, true, `${viewport.name}: viewport-fit is missing`);
   assert.equal(metrics.usesSafeArea, true, `${viewport.name}: safe-area CSS is missing`);
   if (viewport.landscape) {
@@ -76,6 +95,7 @@ async function checkLayout(page, viewport) {
   } else {
     assert.ok(metrics.calculatorWidth >= metrics.innerWidth * 0.9, `${viewport.name}: calculator should fill the phone width`);
     assert.ok(metrics.minKeyHeight >= 48, `${viewport.name}: portrait key height ${metrics.minKeyHeight} is too small`);
+    assert.ok(metrics.minLegendFontSize >= 9.5, `${viewport.name}: upper key labels should remain readable`);
     assert.equal(metrics.viewportOverflowing, true, `${viewport.name}: enlarged portrait calculator should scroll vertically`);
     assert.ok(metrics.viewportScrollHeight > metrics.viewportClientHeight, `${viewport.name}: portrait calculator should have an internal vertical scroll area`);
     await page.locator("#calculator-viewport").evaluate((element) => { element.scrollTop = element.scrollHeight; });
@@ -135,10 +155,66 @@ async function runFunctionalChecks(page) {
   await page.keyboard.press("Enter");
   assert.equal(await page.locator("#result").textContent(), "6 − 2i", "complex simulator calculation");
 
+  await page.locator('.calc-key[data-key-label="AC"]').click();
+  await page.locator('.calc-key[data-key-label="ENG"]').click();
+  assert.equal(await page.evaluate(() => window.SciCalApp.getState().expression), "i", "ENG should input i directly in CMPLX mode");
+
   await chooseMode(page, "BASE");
-  await page.keyboard.type("10+1");
+  const baseLegends = await page.locator(".calc-key__context--base").allTextContents();
+  for (const label of ["LOGIC", "DEC", "HEX", "BIN", "OCT", "E", "F"]) {
+    assert.ok(baseLegends.includes(label), `physical BASE legend ${label} should be visible`);
+  }
+  await page.locator('.calc-key[data-key-label="ln"]').click();
+  assert.equal(await page.evaluate(() => window.SciCalApp.getState().base), 8, "OCT key should select octal directly");
+  await page.locator('.calc-key[data-key-label="x²"]').click();
+  assert.equal(await page.evaluate(() => window.SciCalApp.getState().base), 10, "DEC key should select decimal directly");
+  await page.locator('.calc-key[data-key-label="log"]').click();
+  assert.equal(await page.evaluate(() => window.SciCalApp.getState().base), 2, "BIN key should select binary directly");
+  await page.keyboard.type("1+1");
   await page.keyboard.press("Enter");
-  assert.equal(await page.locator("#result").textContent(), "11", "base simulator calculation");
+  assert.equal(await page.locator("#result").textContent(), "10", "binary simulator calculation");
+
+  await page.locator('.calc-key[data-key-label="^"]').click();
+  assert.equal(await page.evaluate(() => window.SciCalApp.getState().base), 16, "HEX key should select hexadecimal directly");
+  await page.locator('.calc-key[data-key-label="AC"]').click();
+  await page.locator('.calc-key[data-key-label="1"]').click();
+  await page.locator('.calc-key[data-key-label="tan"]').click();
+  await page.locator('.calc-key[data-key-label="+"]').click();
+  await page.locator('.calc-key[data-key-label="1"]').click();
+  await page.locator('.calc-key[data-key-label="EXE"]').click();
+  assert.equal(await page.locator("#result").textContent(), "20", "A-F should be direct BASE digits without Alpha");
+
+  await page.locator('.calc-key[data-key-label="log"]').click();
+  await page.locator('.calc-key[data-key-label="AC"]').click();
+  await page.keyboard.type("101");
+  await page.locator('.calc-key[data-key-label="x⁻¹"]').click();
+  assert.equal(await page.evaluate(() => window.SciCalApp.getState().screenMenu?.type), "logic", "LOGIC should open its LCD menu");
+  await page.locator('.calc-key[data-key-label="1"]').click();
+  await page.keyboard.type("11");
+  await page.keyboard.press("Enter");
+  assert.equal(await page.locator("#result").textContent(), "1", "LOGIC menu AND calculation");
+
+  await page.locator('.calc-key[data-key-label="AC"]').click();
+  await page.locator('.calc-key[data-key-label="x⁻¹"]').click();
+  await page.locator('.replay-pad [data-action="right"]').evaluate((button) => button.click());
+  await page.locator('.replay-pad [data-action="right"]').evaluate((button) => button.click());
+  assert.equal(await page.evaluate(() => window.SciCalApp.getState().screenMenu?.page), 2, "LOGIC should expose its third prefix page");
+  await page.locator('.calc-key[data-key-label="2"]').click();
+  await page.locator('.calc-key[data-key-label="tan"]').click();
+  await page.locator('.calc-key[data-key-label="+"]').click();
+  await page.locator('.calc-key[data-key-label="x⁻¹"]').click();
+  await page.locator('.replay-pad [data-action="left"]').evaluate((button) => button.click());
+  await page.locator('.calc-key[data-key-label="1"]').click();
+  await page.locator('.calc-key[data-key-label="1"]').click();
+  await page.locator('.calc-key[data-key-label="EXE"]').click();
+  assert.equal(await page.locator("#result").textContent(), "10000", "mixed h/d LOGIC prefixes should calculate in BIN output");
+
+  await chooseMode(page, "COMP");
+  await page.locator('.calc-key[data-key-label="5"]').click();
+  await page.locator('.utility-key[data-action="shift"]').evaluate((button) => button.click());
+  await page.locator('.calc-key[data-key-label="x⁻¹"]').click();
+  await page.locator('.calc-key[data-key-label="EXE"]').click();
+  assert.equal(await page.locator("#result").textContent(), "120", "Shift x reciprocal should be factorial");
 
   await chooseMode(page, "SD");
   await page.keyboard.type("12");
@@ -152,6 +228,12 @@ async function runFunctionalChecks(page) {
   await page.keyboard.press("Enter");
   assert.equal(await page.evaluate(() => window.SciCalApp.getState().sdEntries), 2, "SD continuous sample entry");
   assert.match(await page.locator("#result").textContent(), /n=3\s+x̄=2\.333/);
+  await page.keyboard.type("5");
+  await page.locator('.calc-key[data-key-label="M+"]').click();
+  assert.equal(await page.evaluate(() => window.SciCalApp.getState().sdEntries), 3, "DT should register statistical data directly");
+  await page.locator('.utility-key[data-action="shift"]').evaluate((button) => button.click());
+  await page.locator('.calc-key[data-key-label="M+"]').click();
+  assert.equal(await page.evaluate(() => window.SciCalApp.getState().sdEntries), 0, "Shift CL should clear statistical data");
 
   await chooseMode(page, "REG");
   for (const sample of ["1,3", "2,5", "3,7"]) {

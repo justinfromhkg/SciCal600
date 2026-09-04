@@ -673,7 +673,16 @@
       while (/\s/.test(this.source[this.index] || "")) this.index += 1;
       if (this.index >= this.source.length) return { type: "eof", value: "" };
       const rest = this.source.slice(this.index);
-      const keyword = rest.match(/^(AND|OR|XOR|NOT|NEG)\b/i);
+      const prefixedNumber = rest.match(/^([dhbo])([0-9A-F]+)/);
+      if (prefixedNumber) {
+        this.index += prefixedNumber[0].length;
+        return {
+          type: "number",
+          value: prefixedNumber[2].toUpperCase(),
+          base: ({ d: 10, h: 16, b: 2, o: 8 })[prefixedNumber[1]],
+        };
+      }
+      const keyword = rest.match(/^(AND|OR|XNOR|XOR|NOT|NEG)\b/i);
       if (keyword) {
         this.index += keyword[0].length;
         return { type: "keyword", value: keyword[0].toUpperCase() };
@@ -711,8 +720,21 @@
     parse() {
       const result = this.parseOr();
       if (!this.tokens.is("eof")) throw new CalculatorError("Unexpected BASE input", "Syntax ERROR");
-      if (result < -2147483648 || result > 2147483647) throw new CalculatorError("BASE result is outside the 32-bit range");
+      const limits = BaseParser.limitsFor(this.base);
+      if (!Number.isInteger(result) || result < limits.minimum || result > limits.maximum) {
+        throw new CalculatorError(`BASE result is outside the ${limits.bits}-bit ${this.base === 10 ? "decimal" : "display"} range`);
+      }
       return result | 0;
+    }
+
+    static limitsFor(base) {
+      const bits = base === 2 ? 10 : base === 8 ? 30 : 32;
+      return {
+        bits,
+        minimum: -(2 ** (bits - 1)),
+        maximum: 2 ** (bits - 1) - 1,
+        maximumUnsigned: 2 ** bits - 1,
+      };
     }
 
     parseOr() {
@@ -726,9 +748,10 @@
 
     parseXor() {
       let value = this.parseAnd();
-      while (this.tokens.is("keyword", "XOR")) {
-        this.tokens.advance();
-        value = value ^ this.parseAnd();
+      while (this.tokens.is("keyword", "XOR") || this.tokens.is("keyword", "XNOR")) {
+        const operator = this.tokens.advance().value;
+        const right = this.parseAnd();
+        value = operator === "XOR" ? value ^ right : ~(value ^ right);
       }
       return value;
     }
@@ -781,12 +804,21 @@
 
     parsePrimary() {
       if (this.tokens.is("number")) {
-        const raw = this.tokens.advance().value;
-        const allowed = "0123456789ABCDEF".slice(0, this.base);
+        const token = this.tokens.advance();
+        const raw = token.value;
+        const literalBase = token.base || this.base;
+        const allowed = "0123456789ABCDEF".slice(0, literalBase);
         if ([...raw].some((character) => !allowed.includes(character))) {
-          throw new CalculatorError(`Digit is invalid in base ${this.base}`, "Syntax ERROR");
+          throw new CalculatorError(`Digit is invalid in base ${literalBase}`, "Syntax ERROR");
         }
-        return parseInt(raw, this.base);
+        const value = parseInt(raw, literalBase);
+        const limits = BaseParser.limitsFor(literalBase);
+        const largestLiteral = literalBase === 10 ? 2 ** 31 : limits.maximumUnsigned;
+        if (!Number.isSafeInteger(value) || value > largestLiteral) {
+          throw new CalculatorError(`Value is outside the supported base-${literalBase} range`, "Math ERROR");
+        }
+        if (literalBase !== 10 && value > limits.maximum) return value - 2 ** limits.bits;
+        return value;
       }
       if (this.tokens.is("operator", "(")) {
         this.tokens.advance();
@@ -800,9 +832,13 @@
   }
 
   function formatBase(value, base) {
-    value |= 0;
+    if (!Number.isInteger(value)) throw new CalculatorError("BASE results must be integers");
+    const limits = BaseParser.limitsFor(base);
+    if (value < limits.minimum || value > limits.maximum) {
+      throw new CalculatorError(`Value is outside the supported base-${base} range`);
+    }
     if (base === 10) return String(value);
-    const unsigned = value < 0 ? value >>> 0 : value;
+    const unsigned = value < 0 ? value + 2 ** limits.bits : value;
     return unsigned.toString(base).toUpperCase();
   }
 

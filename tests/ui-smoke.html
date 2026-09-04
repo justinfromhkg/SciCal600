@@ -33,13 +33,13 @@
           check(doc.querySelectorAll("#keypad .calc-key").length === 42, "keypad renders");
 
           chooseMode("CMPLX");
-          key(35); click('[data-action="alpha"]'); key(19); key(37); key(36); click('[data-action="alpha"]'); key(19); key(43);
+          key(35); key(19); key(37); key(36); key(19); key(43);
           check(doc.querySelector("#result").textContent === "5i", "complex keypad calculation");
           check(doc.querySelector("#mode-workbench h2").textContent === "Complex numbers", "complex workbench");
 
           chooseMode("BASE");
           click('[data-base="16"]');
-          key(34); click('[data-action="alpha"]'); key(17); key(37); key(34); key(43);
+          key(34); key(17); key(37); key(34); key(43);
           check(doc.querySelector("#result").textContent === "20", "hexadecimal calculation");
 
           chooseMode("SD");

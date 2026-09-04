@@ -615,7 +615,8 @@ h1 span {
 }
 
 .calc-key__shift,
-.calc-key__alpha {
+.calc-key__alpha,
+.calc-key__context {
   position: absolute;
   top: -11px;
   max-width: 100%;
@@ -635,6 +636,20 @@ h1 span {
 .calc-key__alpha {
   right: 2px;
   color: #bf3b49;
+}
+
+.calc-key__context {
+  left: 50%;
+  color: #287b61;
+  transform: translateX(-50%);
+}
+
+.calc-key__context--stat {
+  color: #376a8b;
+}
+
+.calc-key__context--complex {
+  color: #76517f;
 }
 
 .calc-key--orange {
@@ -2112,8 +2127,8 @@ body.is-calculator-view {
 
 .calc-key {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: 10px minmax(0, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: 15px minmax(0, 1fr);
   height: 43px;
   padding: 4px 6px 5px;
 }
@@ -2135,11 +2150,13 @@ body.is-calculator-view {
 }
 
 .calc-key__shift,
-.calc-key__alpha {
+.calc-key__alpha,
+.calc-key__context {
   position: static;
   top: auto;
-  max-width: 100%;
+  max-width: none;
   align-self: center;
+  overflow: visible;
   font-size: 8px;
   font-weight: 800;
   line-height: 1;
@@ -2152,9 +2169,37 @@ body.is-calculator-view {
 }
 
 .calc-key__alpha {
-  grid-column: 2;
+  grid-column: 3;
   grid-row: 1;
   justify-self: end;
+}
+
+.calc-key__context {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  left: auto;
+  transform: none;
+}
+
+.calc-key__context--stat {
+  grid-column: 2;
+  justify-self: center;
+  font-size: 9.5px;
+  line-height: 0.72;
+  text-align: center;
+  white-space: pre-line;
+}
+
+.calc-key__alpha--base {
+  padding-bottom: 1px;
+  border-bottom: 1px solid #287b61;
+  text-shadow: 0 0 5px rgba(40, 123, 97, 0.35);
+}
+
+.calc-key[data-key-label="x⁻¹"] .calc-key__context--base {
+  font-size: 9.5px;
+  letter-spacing: -0.04em;
 }
 
 .calc-key--orange .calc-key__main {
@@ -2737,7 +2782,8 @@ html[dir="rtl"] .app-nav-button {
   }
 
   .calc-key__shift,
-  .calc-key__alpha {
+  .calc-key__alpha,
+  .calc-key__context {
     font-size: 10.5px;
   }
 
@@ -2843,7 +2889,8 @@ html[dir="rtl"] .app-nav-button {
   }
 
   .calc-key__shift,
-  .calc-key__alpha {
+  .calc-key__alpha,
+  .calc-key__context {
     font-size: 9.5px;
   }
 

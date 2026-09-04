@@ -56,7 +56,8 @@
     selectedFormula: 0,
     workbenchMessage: "",
     complexPart: "RE",
-    variables: { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, X: 0, Y: 0 },
+    variables: { A: 0, B: 0, C: 0, D: 0, X: 0, Y: 0 },
+    screenMenu: null,
     programSlot: 0,
     statisticsResultIndex: 0,
     regressionResultIndex: 0,
@@ -69,33 +70,33 @@
   };
 
   const keyDefinitions = [
-    { label: "Prog", className: "calc-key--orange", action: "set-mode", targetMode: "PRGM" },
+    { label: "Prog", shiftLabel: "EXIT", className: "calc-key--orange", action: "set-mode", shiftAction: "program-exit", targetMode: "PRGM" },
     { label: "FMLA", className: "calc-key--orange", action: "catalogue", catalogue: "formulas" },
     { spacer: true },
     { spacer: true },
-    { label: "x⁻¹", shiftLabel: "LOGIC", action: "reciprocal", shiftAction: "show-workbench" },
+    { label: "x⁻¹", shiftLabel: "x!", baseLabel: "LOGIC", action: "reciprocal", shiftInput: "!", baseAction: "logic-menu" },
     { label: "x³", shiftLabel: "³√", input: "^3", shiftInput: "cbrt(" },
 
     { label: "a b/c", shiftLabel: "d/c", action: "fraction", shiftAction: "fraction" },
     { label: "√", input: "sqrt(" },
-    { label: "x²", shiftLabel: "DEC", input: "^2", shiftAction: "base-select", targetBase: 10 },
-    { label: "^", shiftLabel: "ˣ√", input: "^(", shiftInput: "root(" },
-    { label: "log", shiftLabel: "10ˣ", input: "log(", shiftInput: "pow10(" },
-    { label: "ln", shiftLabel: "eˣ", input: "ln(", shiftInput: "exp(" },
+    { label: "x²", baseLabel: "DEC", input: "^2", baseAction: "base-select", targetBase: 10 },
+    { label: "^", shiftLabel: "ˣ√", baseLabel: "HEX", input: "^(", shiftInput: "root(", baseAction: "base-select", targetBase: 16 },
+    { label: "log", shiftLabel: "10ˣ", baseLabel: "BIN", input: "log(", shiftInput: "pow10(", baseAction: "base-select", targetBase: 2 },
+    { label: "ln", shiftLabel: "eˣ", baseLabel: "OCT", input: "ln(", shiftInput: "exp(", baseAction: "base-select", targetBase: 8 },
 
-    { label: "(−)", alphaLabel: "A", input: "-", alphaAction: "variable", variable: "A" },
-    { label: "°′″", alphaLabel: "B", action: "dms", alphaAction: "variable", variable: "B" },
-    { label: "hyp", alphaLabel: "C", action: "hyp", alphaAction: "variable", variable: "C" },
-    { label: "sin", shiftLabel: "sin⁻¹", alphaLabel: "D", action: "sin", shiftAction: "asin", alphaAction: "variable", variable: "D" },
-    { label: "cos", shiftLabel: "cos⁻¹", alphaLabel: "E", action: "cos", shiftAction: "acos", alphaAction: "variable", variable: "E" },
-    { label: "tan", shiftLabel: "tan⁻¹", alphaLabel: "F", action: "tan", shiftAction: "atan", alphaAction: "variable", variable: "F" },
+    { label: "(−)", shiftLabel: "∠", alphaLabel: "A", baseLabel: "A", input: "-", shiftAction: "complex-angle", alphaAction: "variable", variable: "A", baseInput: "A" },
+    { label: "°′″", alphaLabel: "B", baseLabel: "B", action: "dms", alphaAction: "variable", variable: "B", baseInput: "B" },
+    { label: "hyp", alphaLabel: "C", baseLabel: "C", action: "hyp", alphaAction: "variable", variable: "C", baseInput: "C" },
+    { label: "sin", shiftLabel: "sin⁻¹", alphaLabel: "D", baseLabel: "D", action: "sin", shiftAction: "asin", alphaAction: "variable", variable: "D", baseInput: "D" },
+    { label: "cos", shiftLabel: "cos⁻¹", baseLabel: "E", action: "cos", shiftAction: "acos", baseInput: "E" },
+    { label: "tan", shiftLabel: "tan⁻¹", baseLabel: "F", action: "tan", shiftAction: "atan", baseInput: "F" },
 
     { label: "RCL", shiftLabel: "STO", action: "memory-recall", shiftAction: "memory-store" },
-    { label: "ENG", alphaLabel: "i", action: "engineering", alphaInput: "i" },
+    { label: "ENG", shiftLabel: "←", complexLabel: "i", action: "engineering", shiftAction: "engineering-back", complexInput: "i" },
     { label: "(", shiftLabel: "%", input: "(", shiftInput: "%" },
     { label: ")", shiftLabel: "Abs", alphaLabel: "X", input: ")", shiftInput: "abs(", alphaAction: "variable", variable: "X" },
     { label: ",", alphaLabel: "Y", input: ",", alphaAction: "variable", variable: "Y" },
-    { label: "M+", shiftLabel: "M−", alphaLabel: "M", action: "memory-add", shiftAction: "memory-subtract", alphaAction: "memory-recall" },
+    { label: "M+", shiftLabel: "M−", alphaLabel: "M", statLabel: "DT", statShiftLabel: "CL", action: "memory-add", shiftAction: "memory-subtract", alphaAction: "memory-recall", statAction: "stat-data", statShiftAction: "stat-clear" },
 
     { label: "7", shiftLabel: "CONST", input: "7", shiftAction: "catalogue", catalogue: "constants", size: "number" },
     { label: "8", input: "8", size: "number" },
@@ -160,8 +161,9 @@
       const button = document.createElement("button");
       button.type = "button";
       button.className = `calc-key ${key.className || ""}`.trim();
-      if (key.shiftLabel || key.alphaLabel) button.classList.add("calc-key--layered");
+      if (key.shiftLabel || key.alphaLabel || key.baseLabel || key.complexLabel || key.statLabel) button.classList.add("calc-key--layered");
       button.dataset.keyIndex = String(index);
+      button.dataset.keyLabel = key.label;
       if (key.size) button.dataset.size = key.size;
       button.setAttribute("aria-label", describeKey(key));
 
@@ -173,9 +175,27 @@
       }
       if (key.alphaLabel) {
         const alpha = document.createElement("span");
-        alpha.className = "calc-key__alpha";
+        alpha.className = `calc-key__alpha${key.baseLabel === key.alphaLabel ? " calc-key__alpha--base" : ""}`;
         alpha.textContent = key.alphaLabel;
         button.append(alpha);
+      }
+      if (key.baseLabel && key.baseLabel !== key.alphaLabel) {
+        const base = document.createElement("span");
+        base.className = "calc-key__context calc-key__context--base";
+        base.textContent = key.baseLabel;
+        button.append(base);
+      }
+      if (key.complexLabel) {
+        const complex = document.createElement("span");
+        complex.className = "calc-key__context calc-key__context--complex";
+        complex.textContent = key.complexLabel;
+        button.append(complex);
+      }
+      if (key.statLabel) {
+        const stat = document.createElement("span");
+        stat.className = "calc-key__context calc-key__context--stat";
+        stat.textContent = key.statShiftLabel ? `${key.statLabel}\n${key.statShiftLabel}` : key.statLabel;
+        button.append(stat);
       }
       const mainLabel = document.createElement("span");
       mainLabel.className = "calc-key__main";
@@ -190,7 +210,24 @@
     const extras = [];
     if (key.shiftLabel) extras.push(`Shift: ${key.shiftLabel}`);
     if (key.alphaLabel) extras.push(`Alpha: ${key.alphaLabel}`);
+    if (key.baseLabel) extras.push(`BASE: ${key.baseLabel}`);
+    if (key.complexLabel) extras.push(`CMPLX: ${key.complexLabel}`);
+    if (key.statLabel) extras.push(`SD/REG: ${key.statLabel}${key.statShiftLabel ? `; Shift: ${key.statShiftLabel}` : ""}`);
     return extras.length ? `${key.label}. ${extras.join(". ")}` : key.label;
+  }
+
+  function screenMenuContent() {
+    if (!state.screenMenu) return null;
+    const { type, page } = state.screenMenu;
+    if (type === "mode") return page === 0
+      ? { expression: "1:COMP  2:CMPLX", result: "3:BASE        ▶" }
+      : { expression: "4:SD    5:REG", result: "6:PRGM        ◀" };
+    const pages = [
+      { expression: "1:and   2:or", result: "3:xnor        ▶" },
+      { expression: "1:xor   2:Not", result: "3:Neg       ◀▶" },
+      { expression: "1:d  2:h  3:b  4:o", result: "BASE PREFIX   ◀" },
+    ];
+    return pages[page] || pages[0];
   }
 
   function escapeHtml(value) {
@@ -209,20 +246,25 @@
       return;
     }
 
-    const beforeCursor = escapeHtml(state.expression.slice(0, state.cursor));
-    const afterCursor = escapeHtml(state.expression.slice(state.cursor));
-    const shownExpression = state.expression
-      ? `${beforeCursor}<span class="cursor" aria-hidden="true"></span>${afterCursor}`
-      : '<span class="cursor" aria-hidden="true"></span>';
-
-    elements.expression.innerHTML = shownExpression;
-    elements.result.textContent = state.resultText;
+    const menu = screenMenuContent();
+    if (menu) {
+      elements.expression.textContent = menu.expression;
+      elements.result.textContent = menu.result;
+    } else {
+      const beforeCursor = escapeHtml(state.expression.slice(0, state.cursor));
+      const afterCursor = escapeHtml(state.expression.slice(state.cursor));
+      const shownExpression = state.expression
+        ? `${beforeCursor}<span class="cursor" aria-hidden="true"></span>${afterCursor}`
+        : '<span class="cursor" aria-hidden="true"></span>';
+      elements.expression.innerHTML = shownExpression;
+      elements.result.textContent = state.resultText;
+    }
     elements.shift.classList.toggle("is-on", state.shift);
     elements.alpha.classList.toggle("is-on", state.alpha);
     elements.memory.classList.toggle("is-on", state.memory !== 0);
     elements.angle.classList.add("is-on");
     elements.angle.textContent = state.angle === "DEG" ? "D" : state.angle === "RAD" ? "R" : "G";
-    elements.format.textContent = state.mode === "BASE" ? ({ 2: "BIN", 8: "OCT", 10: "DEC", 16: "HEX" })[state.base] : state.format;
+    elements.format.textContent = state.mode === "BASE" ? ({ 2: "b", 8: "o", 10: "d", 16: "H" })[state.base] : state.format;
     elements.mode.textContent = state.mode;
     elements.stageMode.textContent = `${String(["COMP", "CMPLX", "BASE", "SD", "REG", "PRGM"].indexOf(state.mode) + 1).padStart(2, "0")} / ${state.mode}`;
     document.body.dataset.interfaceMode = state.interfaceMode;
@@ -248,6 +290,46 @@
     toastTimer = window.setTimeout(() => elements.toast.classList.remove("is-visible"), 2400);
   }
 
+  function openScreenMenu(type, page = 0) {
+    state.screenMenu = { type, page };
+    state.shift = false;
+    state.alpha = false;
+    render();
+  }
+
+  function moveScreenMenu(direction) {
+    if (!state.screenMenu) return false;
+    const pageCount = state.screenMenu.type === "logic" ? 3 : 2;
+    state.screenMenu.page = (state.screenMenu.page + direction + pageCount) % pageCount;
+    render();
+    return true;
+  }
+
+  function selectScreenMenu(selection) {
+    if (!state.screenMenu || !/^\d$/.test(String(selection))) return false;
+    const choice = Number(selection);
+    if (state.screenMenu.type === "mode") {
+      const modes = state.screenMenu.page === 0
+        ? { 1: "COMP", 2: "CMPLX", 3: "BASE" }
+        : { 4: "SD", 5: "REG", 6: "PRGM" };
+      if (!modes[choice]) return false;
+      state.screenMenu = null;
+      setMode(modes[choice]);
+      return true;
+    }
+
+    const logicPages = [
+      { 1: " AND ", 2: " OR ", 3: " XNOR " },
+      { 1: " XOR ", 2: "NOT ", 3: "NEG " },
+      { 1: "d", 2: "h", 3: "b", 4: "o" },
+    ];
+    const input = logicPages[state.screenMenu.page]?.[choice];
+    if (!input) return false;
+    state.screenMenu = null;
+    appendInput(input);
+    return true;
+  }
+
   function wakeIfNeeded() {
     if (state.powered) return false;
     state.powered = true;
@@ -260,6 +342,7 @@
 
   function appendInput(input) {
     if (wakeIfNeeded()) return;
+    state.screenMenu = null;
     const isOperator = /^[+\-×÷^]/.test(input.trim()) || input.trim() === "nPr" || input.trim() === "nCr";
 
     if (state.justEvaluated) {
@@ -432,6 +515,11 @@
   }
 
   function deleteCharacter() {
+    if (state.screenMenu) {
+      state.screenMenu = null;
+      render();
+      return;
+    }
     if (state.cursor === 0 || !state.expression) return;
     state.expression = state.expression.slice(0, state.cursor - 1) + state.expression.slice(state.cursor);
     state.cursor -= 1;
@@ -440,6 +528,13 @@
   }
 
   function clearEntry() {
+    if (state.screenMenu) {
+      state.screenMenu = null;
+      state.shift = false;
+      state.alpha = false;
+      render();
+      return;
+    }
     state.expression = "";
     state.cursor = 0;
     state.resultText = "0";
@@ -479,6 +574,7 @@
     }
     state.historyIndex = Math.max(0, Math.min(state.history.length - 1, state.historyIndex + direction));
     const item = state.history[state.historyIndex];
+    state.screenMenu = null;
     state.mode = item.mode || "COMP";
     if (item.base) state.base = item.base;
     state.expression = item.expression;
@@ -554,12 +650,44 @@
     else appendInput("^(-1)");
   }
 
-  function engineeringNotation() {
+  function engineeringNotation(exponentStep = 0) {
     const value = currentRealValue("Engineering notation");
     if (value === null || value === 0) return;
-    const exponent = Math.floor(Math.log10(Math.abs(value)) / 3) * 3;
+    const exponent = Math.floor(Math.log10(Math.abs(value)) / 3) * 3 + exponentStep * 3;
     const coefficient = value / 10 ** exponent;
     state.resultText = `${core.formatResult(coefficient)}×10^${exponent}`;
+    render();
+  }
+
+  function selectBase(base) {
+    if (state.mode !== "BASE") {
+      showToast("DEC, HEX, BIN and OCT are available in BASE mode");
+      return;
+    }
+    if (state.expression && !state.justEvaluated && calculate({ silent: true }) === null) return;
+    state.base = base;
+    state.expression = "";
+    state.cursor = 0;
+    state.justEvaluated = true;
+    try {
+      state.resultText = core.formatBase(state.lastResult, state.base);
+    } catch (error) {
+      state.resultText = error.displayMessage || "Math ERROR";
+      state.justEvaluated = false;
+    }
+    if (state.interfaceMode === "web") renderWorkbench("mode");
+    render();
+    showToast(`Input base: ${({ 2: "BIN", 8: "OCT", 10: "DEC", 16: "HEX" })[state.base]}`);
+  }
+
+  function clearStatisticsData() {
+    if (state.mode === "SD") state.sdData = [];
+    if (state.mode === "REG") state.regData = [];
+    state.expression = "";
+    state.cursor = 0;
+    state.justEvaluated = false;
+    state.resultText = "CLEARED";
+    if (state.interfaceMode === "web") renderWorkbench("mode");
     render();
   }
 
@@ -596,6 +724,7 @@
       showToast(`Regression model: ${state.regressionType}`);
       return;
     }
+    state.screenMenu = null;
     state.mode = mode;
     state.expression = "";
     state.cursor = 0;
@@ -668,10 +797,10 @@
       <div class="workbench__group"><span>Input and output base</span><div class="workbench__toolbar">
         ${[[2, "BIN"], [8, "OCT"], [10, "DEC"], [16, "HEX"]].map(([base, label]) => `<button type="button" data-base="${base}" class="${state.base === base ? "is-selected" : ""}">${label}</button>`).join("")}
       </div></div>
-      <div class="workbench__group"><span>Digits and 32-bit logical operators</span><div class="workbench__toolbar">
-        ${["A", "B", "C", "D", "E", "F", " AND ", " OR ", " XOR ", "NOT ", "NEG "].map((token) => `<button type="button" data-insert="${token}">${token.trim()}</button>`).join("")}
+      <div class="workbench__group"><span>Digits, logic and per-value prefixes</span><div class="workbench__toolbar">
+        ${["A", "B", "C", "D", "E", "F", " AND ", " OR ", " XNOR ", " XOR ", "NOT ", "NEG ", "d", "h", "b", "o"].map((token) => `<button type="button" data-insert="${token}">${token.trim()}</button>`).join("")}
       </div></div>
-      <p class="workbench__tip">BASE arithmetic uses signed 32-bit integers. Negative BIN/OCT/HEX results are displayed in two's-complement form.</p>`;
+      <p class="workbench__tip">Like the reference calculator: BIN uses 10-bit, OCT 30-bit, and DEC/HEX 32-bit signed ranges. Negative BIN/OCT/HEX values use two's-complement display.</p>`;
     elements.workbench.innerHTML = workbenchShell("Base-n & logic", "Convert and calculate in binary, octal, decimal, or hexadecimal.", body);
   }
 
@@ -802,6 +931,7 @@
       case "memory-store": useMemory("store"); break;
       case "memory-recall": appendInput("M"); break;
       case "engineering": engineeringNotation(); break;
+      case "engineering-back": engineeringNotation(1); break;
       case "exponent": appendInput("×10^("); break;
       case "round":
         state.lastResult = Math.round(currentRealValue("Rounding") ?? 0);
@@ -815,6 +945,20 @@
         else appendInput(key.variable);
         break;
       case "insert-info": showToast("Use the arrow keys to position the cursor, then type to insert"); break;
+      case "complex-angle":
+        if (state.mode === "CMPLX") appendInput("∠");
+        else showToast("∠ is available in CMPLX mode");
+        break;
+      case "program-exit": setMode("COMP"); break;
+      case "stat-data":
+        if (!["SD", "REG"].includes(state.mode)) useMemory("add");
+        else if (state.interfaceMode === "web") renderWorkbench("mode");
+        else calculate();
+        break;
+      case "stat-clear":
+        if (!["SD", "REG"].includes(state.mode)) useMemory("subtract");
+        else clearStatisticsData();
+        break;
       case "set-mode":
         if (state.interfaceMode === "simulator" && state.mode === "PRGM" && key.targetMode === "PRGM") {
           state.programSlot = (state.programSlot + 1) % state.programs.length;
@@ -824,40 +968,13 @@
           showToast(`Program area ${state.programs[state.programSlot].name}`);
         } else setMode(key.targetMode);
         break;
-      case "show-workbench":
-        if (state.interfaceMode === "simulator" && state.mode === "BASE") {
-          const operators = ["AND", "OR", "XOR"];
-          const trailing = state.expression.match(/\s(AND|OR|XOR)\s*$/);
-          if (trailing) {
-            const next = operators[(operators.indexOf(trailing[1]) + 1) % operators.length];
-            state.expression = state.expression.replace(/\s(AND|OR|XOR)\s*$/, ` ${next} `);
-            state.cursor = state.expression.length;
-            render();
-            showToast(`Logic operator: ${next}`);
-          } else {
-            appendInput(" AND ");
-            showToast("Logic operator: AND · press LOGIC again for OR or XOR");
-          }
-        } else if (state.interfaceMode === "web") renderWorkbench("mode");
-        else showToast("Switch to Web mode for the specialist workbench");
+      case "logic-menu":
+        if (state.mode !== "BASE") showToast("LOGIC is available in BASE mode");
+        else if (state.interfaceMode === "simulator") openScreenMenu("logic");
+        else renderWorkbench("mode");
         break;
       case "base-select":
-        if (state.mode !== "BASE") showToast("Base selection is available in BASE mode");
-        else if (state.interfaceMode === "simulator") {
-          const bases = [10, 2, 8, 16];
-          state.base = bases[(bases.indexOf(state.base) + 1) % bases.length];
-          state.expression = "";
-          state.cursor = 0;
-          state.resultText = `BASE ${({ 2: "BIN", 8: "OCT", 10: "DEC", 16: "HEX" })[state.base]}`;
-          showToast(`Input base: ${({ 2: "BIN", 8: "OCT", 10: "DEC", 16: "HEX" })[state.base]}`);
-        }
-        else {
-          state.base = key.targetBase;
-          state.expression = "";
-          state.cursor = 0;
-          state.resultText = core.formatBase(state.lastResult, state.base);
-          renderWorkbench("mode");
-        }
+        selectBase(key.targetBase);
         break;
       case "catalogue":
         state.workbenchMessage = "";
@@ -873,7 +990,7 @@
             const summary = core.statistics(state.sdData);
             const values = [
               ["n", summary.n], ["Σx", summary.sum], ["Σx²", summary.sumSquares], ["x̄", summary.mean],
-              ["σx", summary.populationStandardDeviation], ["sx", summary.sampleStandardDeviation], ["min", summary.min], ["max", summary.max],
+              ["σx", summary.populationSd], ["sx", summary.sampleSd], ["min", summary.min], ["max", summary.max],
             ];
             const [label, value] = values[state.statisticsResultIndex % values.length];
             state.statisticsResultIndex += 1;
@@ -928,23 +1045,32 @@
   function pressCalculatorKey(key) {
     if (wakeIfNeeded()) return;
 
+    if (state.screenMenu) {
+      if (key.input !== undefined && selectScreenMenu(key.input)) return;
+      if (key.action === "clear" || key.action === "delete") executeNamedAction(key.action, key);
+      return;
+    }
+
     let action = key.action;
     let input = key.input;
-    if (state.interfaceMode === "simulator" && state.mode === "BASE" && !state.shift && !state.alpha) {
-      if (key.label === "(−)") {
-        action = undefined;
-        input = "NEG ";
-      } else if (key.action === "reciprocal") {
-        action = undefined;
-        input = "NOT ";
-      }
-    }
-    if (state.alpha && (key.alphaAction || key.alphaInput)) {
+    if (state.shift && ["SD", "REG"].includes(state.mode) && key.statShiftAction) {
+      action = key.statShiftAction;
+      input = undefined;
+    } else if (state.alpha && (key.alphaAction || key.alphaInput)) {
       action = key.alphaAction;
       input = key.alphaInput;
     } else if (state.shift && (key.shiftAction || key.shiftInput)) {
       action = key.shiftAction;
       input = key.shiftInput;
+    } else if (!state.shift && !state.alpha && state.mode === "BASE" && (key.baseAction || key.baseInput !== undefined)) {
+      action = key.baseAction;
+      input = key.baseInput;
+    } else if (!state.shift && !state.alpha && state.mode === "CMPLX" && (key.complexAction || key.complexInput !== undefined)) {
+      action = key.complexAction;
+      input = key.complexInput;
+    } else if (!state.shift && !state.alpha && ["SD", "REG"].includes(state.mode) && key.statAction) {
+      action = key.statAction;
+      input = undefined;
     }
 
     if (input !== undefined) appendInput(input);
@@ -976,6 +1102,7 @@
   });
 
   function setInterfaceMode(mode) {
+    state.screenMenu = null;
     state.interfaceMode = mode === "simulator" ? "simulator" : "web";
     if (state.interfaceMode === "web") renderWorkbench("mode");
     else {
@@ -1194,13 +1321,20 @@
         state.shift = false;
         syncSettingControls();
         elements.settingsDialog.showModal();
+      } else if (state.interfaceMode === "simulator") {
+        if (state.screenMenu?.type === "mode") moveScreenMenu(1);
+        else openScreenMenu("mode");
       } else {
         elements.modeDialog.showModal();
       }
     } else if (action === "on") {
       if (!wakeIfNeeded()) clearEntry();
-    } else if (action === "left") moveCursor(-1);
-    else if (action === "right") moveCursor(1);
+    } else if (action === "left") {
+      if (!moveScreenMenu(-1)) moveCursor(-1);
+    }
+    else if (action === "right") {
+      if (!moveScreenMenu(1)) moveCursor(1);
+    }
     else if (action === "history-up") navigateHistory(-1);
     else if (action === "history-down") navigateHistory(1);
     render();
@@ -1241,15 +1375,20 @@
       ",": ",",
     };
 
-    if (/^\d$/.test(event.key)) appendInput(event.key);
+    if (state.screenMenu && /^\d$/.test(event.key)) selectScreenMenu(event.key);
+    else if (/^\d$/.test(event.key)) appendInput(event.key);
     else if (state.mode === "BASE" && /^[a-f]$/i.test(event.key)) appendInput(event.key.toUpperCase());
     else if (state.mode === "CMPLX" && event.key.toLowerCase() === "i") appendInput("i");
     else if (event.key in keyMap) appendInput(keyMap[event.key]);
     else if (event.key === "Enter" || event.key === "=") calculate();
     else if (event.key === "Backspace" || event.key === "Delete") deleteCharacter();
     else if (event.key === "Escape") clearEntry();
-    else if (event.key === "ArrowLeft") moveCursor(-1);
-    else if (event.key === "ArrowRight") moveCursor(1);
+    else if (event.key === "ArrowLeft") {
+      if (!moveScreenMenu(-1)) moveCursor(-1);
+    }
+    else if (event.key === "ArrowRight") {
+      if (!moveScreenMenu(1)) moveCursor(1);
+    }
     else if (event.key === "ArrowUp") navigateHistory(-1);
     else if (event.key === "ArrowDown") navigateHistory(1);
     else return;
@@ -1306,6 +1445,8 @@
       interfaceMode: state.interfaceMode,
       expression: state.expression,
       resultText: state.resultText,
+      base: state.base,
+      screenMenu: state.screenMenu ? { ...state.screenMenu } : null,
       sdEntries: state.sdData.length,
       regEntries: state.regData.length,
       programSlot: state.programSlot,
