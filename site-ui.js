@@ -58,6 +58,78 @@
     },
   };
 
+  const addedLanguages = {
+    ja: {
+      webMode: "Webモード", simulatorMode: "シミュレーターモード", interfaceModeAria: "Webモードとシミュレーターモードを切り替える", aboutEyebrow: "スマート電卓プラットフォーム", aboutTitle: "役立つ数学を、わかりやすく。", aboutIntro: "SciCal600は、スマートフォンとPCで明快かつ信頼できる計算を提供する、拡張可能なスマート電卓プラットフォームです。", platformNow: "現在利用可能", smartCalculator: "スマート電卓", platformNotice: "独立した教育プラットフォーム · モダンWeb向け", featureScientific: "科学計算", featureLinear: "線形代数", featureResponsive: "モバイル優先", platformGoal: "すぐに開けて理解しやすく、精度を保ったまま拡張できる専門計算ツールの共通ホームを目指します。", toolsEyebrow: "計算ツール", toolsTitle: "目的に合うワークスペースを選択。", scientificToolTitle: "科学電卓 fx-50FH II", scientificToolDescription: "6モード、公式、定数、メモリー、履歴、Webワークベンチと実機風入力を備えたレスポンシブシミュレーター。", openScientific: "科学電卓を開く", linearToolTitle: "線形代数", linearToolDescription: "行列の加減乗、逆行列、転置、随伴、固有値、固有ベクトル、行列式を計算します。", openLinear: "線形代数を開く", futureStatus: "今後の拡張", futureToolsTitle: "さらに多くの専門電卓", futureToolsDescription: "方程式、確率、金融、グラフなどのツールを追加できる構造です。", linearEyebrow: "スマート電卓 · 線形代数", linearTitle: "行列計算を、ひとつの明快な画面で。", linearIntro: "1行に1行分を入力し、空白またはコンマで値を区切ります。最大6×6の実行列に対応。", backToTools: "ツールへ戻る", matrixOperation: "演算", matrixInverse: "Aの逆行列", matrixTranspose: "Aの転置", matrixAdjugate: "Aの随伴行列", matrixEigen: "Aの固有値と固有ベクトル", matrixDeterminant: "Aの行列式", calculateMatrix: "計算", matrixResult: "結果", matrixReady: "演算を選んで計算してください。", matrixNote: "実数2×2行列と最大6×6の実対称行列で固有ベクトルを求められます。",
+    },
+    ko: {
+      webMode: "웹 모드", simulatorMode: "시뮬레이터 모드", interfaceModeAria: "웹 모드와 시뮬레이터 모드 전환", aboutEyebrow: "스마트 계산기 플랫폼", aboutTitle: "유용한 수학을 더 쉽게.", aboutIntro: "SciCal600은 휴대전화와 컴퓨터에서 명확하고 신뢰할 수 있는 계산을 제공하는 확장형 스마트 계산기 플랫폼입니다.", platformNow: "현재 제공", smartCalculator: "스마트 계산기", platformNotice: "독립 교육 플랫폼 · 현대 웹용", featureScientific: "과학 계산", featureLinear: "선형대수", featureResponsive: "모바일 우선", platformGoal: "빠르고 이해하기 쉬우며 정확성을 유지하면서 확장되는 전문 계산 도구의 일관된 공간을 목표로 합니다.", toolsEyebrow: "계산 도구", toolsTitle: "알맞은 작업 공간을 선택하세요.", scientificToolTitle: "과학 계산기 fx-50FH II", scientificToolDescription: "6개 모드, 공식, 상수, 메모리, 기록, 웹 작업대와 실물 방식 입력을 갖춘 반응형 시뮬레이터입니다.", openScientific: "과학 계산기 열기", linearToolTitle: "선형대수", linearToolDescription: "행렬 덧셈·뺄셈·곱셈, 역행렬, 전치, 수반, 고윳값, 고유벡터와 행렬식을 계산합니다.", openLinear: "선형대수 열기", futureStatus: "향후 확장", futureToolsTitle: "더 많은 전문 계산기", futureToolsDescription: "방정식, 확률, 금융, 그래프 등 다양한 도구를 추가할 구조입니다.", linearEyebrow: "스마트 계산기 · 선형대수", linearTitle: "행렬 계산을 하나의 명확한 공간에서.", linearIntro: "한 줄에 한 행을 입력하고 값을 공백이나 쉼표로 구분하세요. 최대 6×6 실수 행렬을 지원합니다.", backToTools: "도구로 돌아가기", matrixOperation: "연산", matrixInverse: "A의 역행렬", matrixTranspose: "A의 전치", matrixAdjugate: "A의 수반행렬", matrixEigen: "A의 고윳값과 고유벡터", matrixDeterminant: "A의 행렬식", calculateMatrix: "계산", matrixResult: "결과", matrixReady: "연산을 선택하고 계산하세요.", matrixNote: "모든 실수 2×2 행렬과 최대 6×6 실대칭 행렬의 고유벡터를 지원합니다.",
+    },
+    ms: {
+      webMode: "Mod Web", simulatorMode: "Mod simulator", interfaceModeAria: "Tukar antara mod Web dan simulator", aboutEyebrow: "Platform Kalkulator Pintar", aboutTitle: "Matematik berguna, lebih mudah difahami.", aboutIntro: "SciCal600 ialah platform kalkulator pintar yang berkembang untuk pengiraan jelas dan boleh dipercayai pada telefon dan komputer.", platformNow: "Tersedia hari ini", smartCalculator: "Kalkulator Pintar", platformNotice: "Platform pendidikan bebas · direka untuk Web moden", featureScientific: "Pengiraan saintifik", featureLinear: "Algebra linear", featureResponsive: "Utamakan mudah alih", platformGoal: "Matlamat kami ialah satu tempat konsisten untuk alat khusus yang pantas, mudah difahami dan boleh berkembang tanpa mengorbankan ketepatan.", toolsEyebrow: "Alat pengiraan", toolsTitle: "Pilih ruang kerja yang sesuai.", scientificToolTitle: "Kalkulator saintifik fx-50FH II", scientificToolDescription: "Simulator responsif dengan enam mod, formula, pemalar, memori, sejarah, meja kerja Web dan input gaya fizikal.", openScientific: "Buka kalkulator saintifik", linearToolTitle: "Algebra Linear", linearToolDescription: "Tambah, tolak dan darab matriks; hitung songsang, transpose, adjugat, nilai eigen, vektor eigen dan penentu.", openLinear: "Buka Algebra Linear", futureStatus: "Peluasan masa depan", futureToolsTitle: "Lebih banyak kalkulator khusus", futureToolsDescription: "Struktur platform sedia untuk persamaan, kebarangkalian, kewangan, graf dan alat lain.", linearEyebrow: "Kalkulator Pintar · Algebra Linear", linearTitle: "Pengiraan matriks dalam satu ruang yang jelas.", linearIntro: "Masukkan satu baris setiap baris teks dan pisahkan nilai dengan ruang atau koma. Matriks nyata sehingga 6×6.", backToTools: "Kembali ke alat", matrixOperation: "Operasi", matrixInverse: "Songsang A", matrixTranspose: "Transpose A", matrixAdjugate: "Adjugat A", matrixEigen: "Nilai & vektor eigen A", matrixDeterminant: "Penentu A", calculateMatrix: "Kira", matrixResult: "Hasil", matrixReady: "Pilih operasi dan kira.", matrixNote: "Vektor eigen tersedia untuk matriks nyata 2×2 dan matriks simetri nyata sehingga 6×6.",
+    },
+    fr: {
+      aboutAria: "Ouvrir les informations du projet", aboutButton: "À propos", zoomControls: "Contrôles de zoom", zoomOut: "Réduire", zoomIn: "Agrandir", fitButton: "Ajuster", readyStatus: "Prêt", manualButton: "Manuel de la calculatrice",
+      openCalculator: "Ouvrir la calculatrice", availableStatus: "Disponible", projectFooter: "SciCal600 · projet éducatif indépendant", readManual: "Lire le manuel", returnCalculator: "Retour à la calculatrice", languageLabel: "Langue",
+      modeEyebrow: "Mode de calcul", chooseMode: "Choisir un mode", modeComp: "Calcul", modeComplex: "Nombres complexes", modeBase: "Bases et logique", modeSd: "Statistiques à une variable", modeReg: "Régression", modeProgram: "Quatre zones de programme",
+      setupEyebrow: "Réglages", displayAngle: "Affichage et angle", angleUnit: "Unité d’angle", degrees: "Degrés", radians: "Radians", grads: "Grades", numberFormat: "Format numérique", done: "Terminé", batteryUnavailable: "Batterie indisponible", batteryLevel: "Batterie {level} %", batteryCharging: "Batterie {level} %, en charge",
+      manualEyebrow: "Guide physique + Web", manualTitle: "Manuel fx-50FH II", manualIntro: "Guide pratique pour la calculatrice physique et le simulateur Web.", manualAudience: "Pour la calculatrice physique et le simulateur Web", manualCaveat: "Suivez les mêmes noms de touches et de modes ; les contrôles propres au Web sont signalés.", manualFooter: "fx-50FH II · guide SciCal600",
+    },
+    de: {
+      aboutAria: "Projektinformationen öffnen", aboutButton: "Über", zoomControls: "Rechner-Zoom", zoomOut: "Verkleinern", zoomIn: "Vergrößern", fitButton: "Einpassen", readyStatus: "Bereit", manualButton: "Rechnerhandbuch",
+      openCalculator: "Rechner öffnen", availableStatus: "Jetzt verfügbar", projectFooter: "SciCal600 · unabhängiges Bildungsprojekt", readManual: "Handbuch lesen", returnCalculator: "Zurück zum Rechner", languageLabel: "Sprache",
+      modeEyebrow: "Rechenmodus", chooseMode: "Modus wählen", modeComp: "Berechnung", modeComplex: "Komplexe Zahlen", modeBase: "Zahlensysteme & Logik", modeSd: "Eindimensionale Statistik", modeReg: "Regression", modeProgram: "Vier Programmbereiche",
+      setupEyebrow: "Rechnereinstellungen", displayAngle: "Anzeige & Winkel", angleUnit: "Winkeleinheit", degrees: "Grad", radians: "Radiant", grads: "Gon", numberFormat: "Zahlenformat", done: "Fertig", batteryUnavailable: "Geräteakku nicht verfügbar", batteryLevel: "Geräteakku {level} %", batteryCharging: "Geräteakku {level} %, lädt",
+      manualEyebrow: "Gerät + Web", manualTitle: "fx-50FH II Handbuch", manualIntro: "Praktischer Leitfaden für den physischen Rechner und den Web-Simulator.", manualAudience: "Für physischen Rechner und Web-Simulator", manualCaveat: "Verwenden Sie dieselben Tasten- und Modusnamen; reine Web-Steuerungen sind gekennzeichnet.", manualFooter: "fx-50FH II · SciCal600 Lernhilfe",
+    },
+    es: {
+      aboutAria: "Abrir información del proyecto", aboutButton: "Acerca de", zoomControls: "Controles de zoom", zoomOut: "Alejar", zoomIn: "Acercar", fitButton: "Ajustar", readyStatus: "Listo", manualButton: "Manual de la calculadora",
+      openCalculator: "Abrir calculadora", availableStatus: "Disponible", projectFooter: "SciCal600 · proyecto educativo independiente", readManual: "Leer el manual", returnCalculator: "Volver a la calculadora", languageLabel: "Idioma",
+      modeEyebrow: "Modo de cálculo", chooseMode: "Elegir un modo", modeComp: "Cálculo", modeComplex: "Números complejos", modeBase: "Bases y lógica", modeSd: "Estadística de una variable", modeReg: "Regresión", modeProgram: "Cuatro áreas de programa",
+      setupEyebrow: "Configuración", displayAngle: "Pantalla y ángulo", angleUnit: "Unidad angular", degrees: "Grados", radians: "Radianes", grads: "Gradianes", numberFormat: "Formato numérico", done: "Listo", batteryUnavailable: "Batería no disponible", batteryLevel: "Batería {level} %", batteryCharging: "Batería {level} %, cargando",
+      manualEyebrow: "Guía física + Web", manualTitle: "Manual de fx-50FH II", manualIntro: "Guía práctica para la calculadora física y el simulador web.", manualAudience: "Para la calculadora física y el simulador web", manualCaveat: "Siga los mismos nombres de teclas y modos; los controles exclusivos de la web están identificados.", manualFooter: "fx-50FH II · guía SciCal600",
+    },
+    ar: {
+      aboutAria: "فتح معلومات المشروع", aboutButton: "حول", zoomControls: "عناصر تكبير الحاسبة", zoomOut: "تصغير", zoomIn: "تكبير", fitButton: "ملاءمة", readyStatus: "جاهز", manualButton: "دليل الحاسبة",
+      openCalculator: "فتح الحاسبة", availableStatus: "متاح الآن", projectFooter: "SciCal600 · مشروع تعليمي مستقل", readManual: "قراءة الدليل", returnCalculator: "العودة إلى الحاسبة", languageLabel: "اللغة",
+      modeEyebrow: "وضع الحساب", chooseMode: "اختر وضعًا", modeComp: "الحساب", modeComplex: "الأعداد المركبة", modeBase: "الأنظمة والمنطق", modeSd: "إحصاء متغير واحد", modeReg: "الانحدار", modeProgram: "أربع مساحات برامج",
+      setupEyebrow: "إعداد الحاسبة", displayAngle: "العرض والزاوية", angleUnit: "وحدة الزاوية", degrees: "درجات", radians: "راديان", grads: "غراد", numberFormat: "تنسيق العدد", done: "تم", batteryUnavailable: "بطارية الجهاز غير متاحة", batteryLevel: "بطارية الجهاز {level}٪", batteryCharging: "بطارية الجهاز {level}٪، قيد الشحن",
+      manualEyebrow: "دليل الجهاز والويب", manualTitle: "دليل fx-50FH II", manualIntro: "دليل عملي للحاسبة الفعلية ومحاكي الويب.", manualAudience: "للحاسبة الفعلية ومحاكي الويب", manualCaveat: "اتبع أسماء المفاتيح والأوضاع نفسها؛ عناصر الويب فقط موضحة بشكل منفصل.", manualFooter: "fx-50FH II · دليل SciCal600",
+    },
+  };
+
+  Object.entries(addedLanguages).forEach(([language, dictionary]) => {
+    ui[language] = { ...ui["en-GB"], ...(ui[language] || {}), ...dictionary };
+  });
+
+  const platformTranslations = {
+    "en-GB": {
+      webMode: "Web mode", simulatorMode: "Simulator mode", interfaceModeAria: "Switch between web and simulator interaction modes", aboutEyebrow: "Smart Calculator platform", aboutTitle: "Useful mathematics, made approachable.", aboutIntro: "SciCal600 is a growing smart-calculator platform built for clear, dependable calculations on phones and computers.", platformNow: "Available today", smartCalculator: "Smart Calculator", platformNotice: "Independent educational platform · designed for the modern web", featureScientific: "Scientific calculation", featureLinear: "Linear algebra", featureResponsive: "Mobile first", platformGoal: "Our goal is one consistent home for focused calculation tools: fast to open, easy to understand, and ready to expand without sacrificing accuracy.", toolsEyebrow: "Calculation tools", toolsTitle: "Choose the right workspace.", scientificToolTitle: "Scientific calculator fx-50FH II", scientificToolDescription: "A responsive scientific-calculator simulator with six modes, formulas, constants, memory, history, web workbenches and physical-style input.", openScientific: "Open scientific calculator", linearToolTitle: "Linear Algebra", linearToolDescription: "Add, subtract and multiply matrices; calculate inverses, transposes, adjugates, eigenvalues, eigenvectors and determinants.", openLinear: "Open Linear Algebra", futureStatus: "Future expansion", futureToolsTitle: "More focused calculators", futureToolsDescription: "The platform structure is ready for equation solving, probability, finance, graphing and other purpose-built mathematical tools.", linearEyebrow: "Smart Calculator · Linear Algebra", linearTitle: "Matrix calculations, in one clear workspace.", linearIntro: "Enter rows on separate lines and values with spaces or commas. Real matrices up to 6 × 6 are supported.", backToTools: "Back to tools", matrixOperation: "Operation", matrixAdd: "A + B", matrixSubtract: "A − B", matrixMultiply: "A × B", matrixInverse: "Inverse of A", matrixTranspose: "Transpose of A", matrixAdjugate: "Adjugate of A", matrixEigen: "Eigenvalues & eigenvectors of A", matrixDeterminant: "Determinant of A", calculateMatrix: "Calculate", matrixResult: "Result", matrixReady: "Choose an operation and calculate.", matrixNote: "Eigenvectors are available for all real 2 × 2 matrices and for real symmetric matrices up to 6 × 6. Complex 2 × 2 eigenpairs are displayed symbolically.",
+    },
+    "zh-Hant": {
+      webMode: "網頁模式", simulatorMode: "模擬模式", interfaceModeAria: "切換網頁模式與模擬模式", aboutEyebrow: "智能計算器平台", aboutTitle: "讓實用數學更易理解。", aboutIntro: "SciCal600 是持續擴展的智能計算器平台，為手機及電腦提供清晰、可靠的計算工具。", platformNow: "現已提供", smartCalculator: "智能計算器", platformNotice: "獨立教育平台 · 為現代 Web 設計", featureScientific: "科學計算", featureLinear: "線性代數", featureResponsive: "手機優先", platformGoal: "我們希望建立一致的專門計算工具入口：快速開啟、容易理解，並在不犧牲準確度下持續擴展。", toolsEyebrow: "計算工具", toolsTitle: "選擇合適的工作空間。", scientificToolTitle: "科學計算器 fx-50FH II", scientificToolDescription: "具六種模式、公式、常數、記憶、歷史、網頁工作台及實體式輸入的響應式科學計算器。", openScientific: "開啟科學計算器", linearToolTitle: "線性代數", linearToolDescription: "矩陣加減乘、逆矩陣、轉置矩陣、伴隨矩陣、特徵值、特徵向量及行列式。", openLinear: "開啟線性代數", futureStatus: "未來擴展", futureToolsTitle: "更多專門計算器", futureToolsDescription: "平台已為方程、概率、金融、繪圖及更多數學工具預留結構。", linearEyebrow: "智能計算器 · 線性代數", linearTitle: "在同一個清晰空間完成矩陣計算。", linearIntro: "每行輸入一列，以空格或逗號分隔數值；支援最大 6 × 6 實數矩陣。", backToTools: "返回工具", matrixOperation: "運算", matrixInverse: "A 的逆矩陣", matrixTranspose: "A 的轉置矩陣", matrixAdjugate: "A 的伴隨矩陣", matrixEigen: "A 的特徵值與特徵向量", matrixDeterminant: "A 的行列式", calculateMatrix: "計算", matrixResult: "結果", matrixReady: "選擇運算後開始計算。", matrixNote: "所有實數 2 × 2 矩陣及最大 6 × 6 的實對稱矩陣均可求特徵向量；複數 2 × 2 特徵對以符號顯示。",
+    },
+    "zh-Hans": {
+      webMode: "网页模式", simulatorMode: "模拟模式", interfaceModeAria: "切换网页模式和模拟模式", aboutEyebrow: "智能计算器平台", aboutTitle: "让实用数学更易理解。", aboutIntro: "SciCal600 是持续扩展的智能计算器平台，为手机和电脑提供清晰、可靠的计算工具。", platformNow: "现已提供", smartCalculator: "智能计算器", platformNotice: "独立教育平台 · 为现代 Web 设计", featureScientific: "科学计算", featureLinear: "线性代数", featureResponsive: "移动优先", platformGoal: "我们的目标是建立统一的专用计算工具入口：快速打开、易于理解，并在不牺牲准确度的情况下持续扩展。", toolsEyebrow: "计算工具", toolsTitle: "选择合适的工作空间。", scientificToolTitle: "科学计算器 fx-50FH II", scientificToolDescription: "具备六种模式、公式、常数、记忆、历史、网页工作台和实体式输入的响应式科学计算器。", openScientific: "打开科学计算器", linearToolTitle: "线性代数", linearToolDescription: "矩阵加减乘、逆矩阵、转置矩阵、伴随矩阵、特征值、特征向量和行列式。", openLinear: "打开线性代数", futureStatus: "未来扩展", futureToolsTitle: "更多专用计算器", futureToolsDescription: "平台已为方程、概率、金融、绘图和更多数学工具预留结构。", linearEyebrow: "智能计算器 · 线性代数", linearTitle: "在一个清晰空间完成矩阵计算。", linearIntro: "每行输入一行，以空格或逗号分隔数值；支持最大 6 × 6 实数矩阵。", backToTools: "返回工具", matrixOperation: "运算", matrixInverse: "A 的逆矩阵", matrixTranspose: "A 的转置矩阵", matrixAdjugate: "A 的伴随矩阵", matrixEigen: "A 的特征值和特征向量", matrixDeterminant: "A 的行列式", calculateMatrix: "计算", matrixResult: "结果", matrixReady: "选择运算后开始计算。", matrixNote: "所有实数 2 × 2 矩阵及最大 6 × 6 的实对称矩阵均可求特征向量；复数 2 × 2 特征对以符号显示。",
+    },
+    fr: {
+      webMode: "Mode Web", simulatorMode: "Mode simulateur", interfaceModeAria: "Basculer entre le mode Web et le mode simulateur", aboutEyebrow: "Plateforme Smart Calculator", aboutTitle: "Des mathématiques utiles et accessibles.", aboutIntro: "SciCal600 est une plateforme évolutive de calculateurs intelligents, claire et fiable sur mobile comme sur ordinateur.", platformNow: "Disponible aujourd’hui", smartCalculator: "Smart Calculator", platformNotice: "Plateforme éducative indépendante · conçue pour le Web moderne", featureScientific: "Calcul scientifique", featureLinear: "Algèbre linéaire", featureResponsive: "Priorité au mobile", platformGoal: "Notre objectif : réunir des outils spécialisés, rapides à ouvrir, faciles à comprendre et extensibles sans sacrifier la précision.", toolsEyebrow: "Outils de calcul", toolsTitle: "Choisissez le bon espace.", scientificToolTitle: "Calculatrice scientifique fx-50FH II", scientificToolDescription: "Simulateur adaptatif avec six modes, formules, constantes, mémoire, historique et saisie physique.", openScientific: "Ouvrir la calculatrice scientifique", linearToolTitle: "Algèbre linéaire", linearToolDescription: "Addition, soustraction, produit, inverse, transposée, adjointe, valeurs propres, vecteurs propres et déterminant.", openLinear: "Ouvrir l’algèbre linéaire", futureStatus: "Évolutions futures", futureToolsTitle: "D’autres calculateurs spécialisés", futureToolsDescription: "La plateforme est prête pour les équations, probabilités, finances, graphiques et d’autres outils.", linearEyebrow: "Smart Calculator · Algèbre linéaire", linearTitle: "Tous les calculs matriciels dans un espace clair.", linearIntro: "Une ligne par rangée, valeurs séparées par des espaces ou virgules. Matrices réelles jusqu’à 6 × 6.", backToTools: "Retour aux outils", matrixOperation: "Opération", matrixInverse: "Inverse de A", matrixTranspose: "Transposée de A", matrixAdjugate: "Adjointe de A", matrixEigen: "Valeurs et vecteurs propres de A", matrixDeterminant: "Déterminant de A", calculateMatrix: "Calculer", matrixResult: "Résultat", matrixReady: "Choisissez une opération puis calculez.", matrixNote: "Les vecteurs propres sont disponibles pour les matrices réelles 2 × 2 et les matrices symétriques réelles jusqu’à 6 × 6.",
+    },
+    de: {
+      webMode: "Webmodus", simulatorMode: "Simulatormodus", interfaceModeAria: "Zwischen Web- und Simulatormodus wechseln", aboutEyebrow: "Smart-Calculator-Plattform", aboutTitle: "Nützliche Mathematik, verständlich gemacht.", aboutIntro: "SciCal600 ist eine wachsende Plattform für klare, zuverlässige Berechnungen auf Smartphone und Computer.", platformNow: "Heute verfügbar", smartCalculator: "Smart Calculator", platformNotice: "Unabhängige Lernplattform · für das moderne Web", featureScientific: "Wissenschaftliches Rechnen", featureLinear: "Lineare Algebra", featureResponsive: "Mobile zuerst", platformGoal: "Unser Ziel ist ein einheitlicher Ort für spezialisierte Werkzeuge: schnell, verständlich und präzise erweiterbar.", toolsEyebrow: "Rechenwerkzeuge", toolsTitle: "Den passenden Arbeitsbereich wählen.", scientificToolTitle: "Wissenschaftlicher Rechner fx-50FH II", scientificToolDescription: "Responsiver Simulator mit sechs Modi, Formeln, Konstanten, Speicher, Verlauf und physischer Eingabe.", openScientific: "Wissenschaftlichen Rechner öffnen", linearToolTitle: "Lineare Algebra", linearToolDescription: "Matrizen addieren, subtrahieren und multiplizieren sowie Inverse, Transponierte, Adjunkte, Eigenwerte, Eigenvektoren und Determinanten berechnen.", openLinear: "Lineare Algebra öffnen", futureStatus: "Künftige Erweiterung", futureToolsTitle: "Weitere spezialisierte Rechner", futureToolsDescription: "Die Plattform ist für Gleichungen, Wahrscheinlichkeit, Finanzen, Graphen und weitere Werkzeuge vorbereitet.", linearEyebrow: "Smart Calculator · Lineare Algebra", linearTitle: "Matrizen übersichtlich berechnen.", linearIntro: "Eine Zeile pro Matrixzeile; Werte mit Leerzeichen oder Kommas trennen. Reelle Matrizen bis 6 × 6.", backToTools: "Zurück zu den Werkzeugen", matrixOperation: "Operation", matrixInverse: "Inverse von A", matrixTranspose: "Transponierte von A", matrixAdjugate: "Adjunkte von A", matrixEigen: "Eigenwerte & Eigenvektoren von A", matrixDeterminant: "Determinante von A", calculateMatrix: "Berechnen", matrixResult: "Ergebnis", matrixReady: "Operation wählen und berechnen.", matrixNote: "Eigenvektoren sind für reelle 2 × 2-Matrizen und reelle symmetrische Matrizen bis 6 × 6 verfügbar.",
+    },
+    es: {
+      webMode: "Modo web", simulatorMode: "Modo simulador", interfaceModeAria: "Cambiar entre los modos web y simulador", aboutEyebrow: "Plataforma Smart Calculator", aboutTitle: "Matemáticas útiles y accesibles.", aboutIntro: "SciCal600 es una plataforma de calculadoras inteligentes, clara y fiable en móviles y ordenadores.", platformNow: "Disponible hoy", smartCalculator: "Smart Calculator", platformNotice: "Plataforma educativa independiente · diseñada para la web moderna", featureScientific: "Cálculo científico", featureLinear: "Álgebra lineal", featureResponsive: "Prioridad móvil", platformGoal: "Nuestro objetivo es reunir herramientas especializadas, rápidas, comprensibles y ampliables sin perder precisión.", toolsEyebrow: "Herramientas de cálculo", toolsTitle: "Elige el espacio adecuado.", scientificToolTitle: "Calculadora científica fx-50FH II", scientificToolDescription: "Simulador adaptable con seis modos, fórmulas, constantes, memoria, historial y entrada física.", openScientific: "Abrir calculadora científica", linearToolTitle: "Álgebra lineal", linearToolDescription: "Suma, resta, multiplicación, inversa, transpuesta, adjunta, valores propios, vectores propios y determinante.", openLinear: "Abrir Álgebra Lineal", futureStatus: "Expansión futura", futureToolsTitle: "Más calculadoras especializadas", futureToolsDescription: "La plataforma está preparada para ecuaciones, probabilidad, finanzas, gráficos y otras herramientas.", linearEyebrow: "Smart Calculator · Álgebra lineal", linearTitle: "Cálculos matriciales en un espacio claro.", linearIntro: "Una fila por línea y valores separados por espacios o comas. Matrices reales de hasta 6 × 6.", backToTools: "Volver a herramientas", matrixOperation: "Operación", matrixInverse: "Inversa de A", matrixTranspose: "Transpuesta de A", matrixAdjugate: "Adjunta de A", matrixEigen: "Valores y vectores propios de A", matrixDeterminant: "Determinante de A", calculateMatrix: "Calcular", matrixResult: "Resultado", matrixReady: "Elige una operación y calcula.", matrixNote: "Los vectores propios están disponibles para matrices reales 2 × 2 y matrices simétricas reales de hasta 6 × 6.",
+    },
+    ar: {
+      webMode: "وضع الويب", simulatorMode: "وضع المحاكاة", interfaceModeAria: "التبديل بين وضع الويب ووضع المحاكاة", aboutEyebrow: "منصة الحاسبة الذكية", aboutTitle: "رياضيات مفيدة بطريقة واضحة.", aboutIntro: "SciCal600 منصة متنامية للحاسبات الذكية توفر حسابات واضحة وموثوقة على الهاتف والحاسوب.", platformNow: "متاح اليوم", smartCalculator: "الحاسبة الذكية", platformNotice: "منصة تعليمية مستقلة · مصممة للويب الحديث", featureScientific: "الحساب العلمي", featureLinear: "الجبر الخطي", featureResponsive: "الهاتف أولًا", platformGoal: "هدفنا مكان موحّد لأدوات حساب متخصصة: سريعة وسهلة الفهم وقابلة للتوسع مع الحفاظ على الدقة.", toolsEyebrow: "أدوات الحساب", toolsTitle: "اختر مساحة العمل المناسبة.", scientificToolTitle: "الحاسبة العلمية fx-50FH II", scientificToolDescription: "محاكي متجاوب بستة أوضاع وصيغ وثوابت وذاكرة وسجل وإدخال يحاكي الجهاز.", openScientific: "فتح الحاسبة العلمية", linearToolTitle: "الجبر الخطي", linearToolDescription: "جمع المصفوفات وطرحها وضربها وحساب المعكوس والمنقول والمرافق والقيم والمتجهات الذاتية والمحدد.", openLinear: "فتح الجبر الخطي", futureStatus: "توسعات مستقبلية", futureToolsTitle: "حاسبات متخصصة إضافية", futureToolsDescription: "المنصة جاهزة للمعادلات والاحتمالات والتمويل والرسوم وأدوات رياضية أخرى.", linearEyebrow: "الحاسبة الذكية · الجبر الخطي", linearTitle: "حسابات المصفوفات في مساحة واضحة.", linearIntro: "أدخل كل صف في سطر وافصل القيم بمسافات أو فواصل. مصفوفات حقيقية حتى 6 × 6.", backToTools: "العودة إلى الأدوات", matrixOperation: "العملية", matrixInverse: "معكوس A", matrixTranspose: "منقول A", matrixAdjugate: "مرافق A", matrixEigen: "القيم والمتجهات الذاتية لـ A", matrixDeterminant: "محدد A", calculateMatrix: "احسب", matrixResult: "النتيجة", matrixReady: "اختر عملية ثم احسب.", matrixNote: "تتوفر المتجهات الذاتية لكل مصفوفة حقيقية 2 × 2 وللمصفوفات الحقيقية المتناظرة حتى 6 × 6.",
+    },
+  };
+
+  Object.entries(platformTranslations).forEach(([language, dictionary]) => {
+    Object.assign(ui[language], dictionary);
+  });
+
   const manuals = {
     "en-GB": [
       ["Quick start", ["Press MODE and choose COMP for ordinary scientific calculations.", "Enter an expression with the keypad, then press EXE. Use DEL to remove one character and AC to clear the current entry.", "SHIFT selects the orange label above a key; ALPHA selects the red letter or symbol."]],
@@ -131,6 +203,54 @@
       ["Formula dan pemalar", ["Tekan FMLA untuk mencari 23 formula interaktif.", "Tekan SHIFT + 7 untuk mencari 40 pemalar saintifik dan memasukkan nilainya.", "Nilai kajian moden ini tidak menjamin padanan tepat dengan setiap versi fizikal."]],
       ["Kawalan skrin", ["Butang Tentang di atas membuka maklumat projek; butang Manual di bawah membuka panduan ini.", "Kalkulator dimuatkan mengikut skrin secara automatik. Gunakan −, + dan Fit untuk saiz.", "Leret dikunci dalam paparan biasa. Gerakan hanya dibenarkan apabila kalkulator yang dibesarkan melebihi skrin.", "Ikon bateri menggantikan panel solar hiasan dan menunjukkan peratus serta status pengecasan apabila dibenarkan oleh pelayar."]],
     ],
+    fr: [
+      ["Démarrage rapide", ["Appuyez sur MODE et choisissez COMP pour les calculs scientifiques.", "Saisissez une expression puis appuyez sur EXE. DEL efface un caractère et AC efface la saisie.", "SHIFT active les libellés orange et ALPHA les lettres rouges."]],
+      ["Affichage et modes", ["La ligne supérieure affiche la saisie, la ligne inférieure le résultat.", "Le mode Web ouvre les établis détaillés ; le mode simulateur utilise uniquement l’écran et les touches.", "SHIFT + MODE ouvre les unités d’angle et le format numérique."]],
+      ["COMP · Calcul", ["Arithmétique, fractions, puissances, racines, logarithmes, trigonométrie, nPr et nCr.", "Ans rappelle le résultat précédent et RCL la mémoire M."]],
+      ["CMPLX · Complexes", ["Saisissez i avec ALPHA + ENG.", "Les formes a+bi et r∠θ, le conjugué et l’argument sont pris en charge."]],
+      ["BASE · Bases", ["Choisissez BIN, OCT, DEC ou HEX dans l’établi Web.", "Le mode simulateur accepte l’arithmétique entière et les chiffres hexadécimaux."]],
+      ["SD · Statistiques", ["En simulateur, saisissez x ou x,fréquence puis EXE.", "SHIFT + 1 ou 2 parcourt les résultats ; SHIFT + 9 efface les données."]],
+      ["REG · Régression", ["En simulateur, saisissez x,y ou x,y,fréquence puis EXE.", "Les sept modèles et la prédiction restent disponibles dans l’établi Web."]],
+      ["PRGM · Programmes", ["P1 à P4 sont enregistrés dans le navigateur.", "En simulateur, Prog change de zone ; saisissez les valeurs séparées par des virgules puis EXE."]],
+      ["Formules et constantes", ["FMLA ouvre 23 formules ; SHIFT + 7 ouvre 40 constantes."]],
+      ["Navigation", ["La racine ouvre la calculatrice, /about présente la plateforme et /linear-algebra ouvre les matrices."]],
+    ],
+    de: [
+      ["Schnellstart", ["MODE drücken und COMP für wissenschaftliche Rechnungen wählen.", "Ausdruck eingeben und EXE drücken. DEL löscht ein Zeichen, AC die aktuelle Eingabe.", "SHIFT aktiviert orange, ALPHA rote Beschriftungen."]],
+      ["Anzeige und Modi", ["Oben steht die Eingabe, unten das Ergebnis.", "Der Webmodus öffnet Arbeitsbereiche; der Simulatormodus nutzt Display und Tasten.", "SHIFT + MODE öffnet Winkel- und Zahlenformat."]],
+      ["COMP · Berechnung", ["Arithmetik, Brüche, Potenzen, Wurzeln, Logarithmen, Trigonometrie, nPr und nCr.", "Ans übernimmt das letzte Ergebnis, RCL den Speicher M."]],
+      ["CMPLX · Komplex", ["i wird mit ALPHA + ENG eingegeben.", "a+bi, r∠θ, Konjugation und Argument werden unterstützt."]],
+      ["BASE · Zahlensysteme", ["BIN, OCT, DEC oder HEX im Web-Arbeitsbereich wählen.", "Der Simulator verarbeitet Ganzzahlarithmetik und Hex-Ziffern."]],
+      ["SD · Statistik", ["Im Simulator x oder x,Häufigkeit eingeben und EXE drücken.", "SHIFT + 1/2 blättert Ergebnisse; SHIFT + 9 löscht Daten."]],
+      ["REG · Regression", ["Im Simulator x,y oder x,y,Häufigkeit eingeben und EXE drücken.", "Sieben Modelle und Prognosen stehen im Web-Arbeitsbereich bereit."]],
+      ["PRGM · Programme", ["P1–P4 werden im Browser gespeichert.", "Prog wechselt den Bereich; Eingaben mit Kommas trennen und EXE drücken."]],
+      ["Formeln und Konstanten", ["FMLA öffnet 23 Formeln; SHIFT + 7 öffnet 40 Konstanten."]],
+      ["Navigation", ["/ öffnet den Rechner, /about die Plattform und /linear-algebra die Matrizen."]],
+    ],
+    es: [
+      ["Inicio rápido", ["Pulsa MODE y elige COMP para cálculos científicos.", "Introduce una expresión y pulsa EXE. DEL borra un carácter y AC la entrada actual.", "SHIFT activa las etiquetas naranjas y ALPHA las rojas."]],
+      ["Pantalla y modos", ["La línea superior muestra la entrada y la inferior el resultado.", "El modo web abre paneles detallados; el simulador usa pantalla y teclas.", "SHIFT + MODE abre unidades angulares y formato numérico."]],
+      ["COMP · Cálculo", ["Aritmética, fracciones, potencias, raíces, logaritmos, trigonometría, nPr y nCr.", "Ans recupera el último resultado y RCL la memoria M."]],
+      ["CMPLX · Complejos", ["Introduce i con ALPHA + ENG.", "Admite a+bi, r∠θ, conjugado y argumento."]],
+      ["BASE · Bases", ["Elige BIN, OCT, DEC o HEX en el panel web.", "El simulador admite aritmética entera y dígitos hexadecimales."]],
+      ["SD · Estadística", ["En simulador introduce x o x,frecuencia y pulsa EXE.", "SHIFT + 1/2 recorre resultados; SHIFT + 9 borra los datos."]],
+      ["REG · Regresión", ["En simulador introduce x,y o x,y,frecuencia y pulsa EXE.", "Los siete modelos y la predicción siguen disponibles en el panel web."]],
+      ["PRGM · Programas", ["P1–P4 se guardan en el navegador.", "Prog cambia de área; separa entradas con comas y pulsa EXE."]],
+      ["Fórmulas y constantes", ["FMLA abre 23 fórmulas; SHIFT + 7 abre 40 constantes."]],
+      ["Navegación", ["/ abre la calculadora, /about la plataforma y /linear-algebra las matrices."]],
+    ],
+    ar: [
+      ["بدء سريع", ["اضغط MODE واختر COMP للحسابات العلمية.", "أدخل التعبير ثم اضغط EXE. يحذف DEL رمزًا ويمسح AC الإدخال الحالي.", "يفعّل SHIFT العناوين البرتقالية وALPHA الحمراء."]],
+      ["الشاشة والأوضاع", ["يعرض السطر العلوي الإدخال والسفلي النتيجة.", "يفتح وضع الويب لوحات مفصلة؛ ويستخدم وضع المحاكاة الشاشة والمفاتيح.", "يفتح SHIFT + MODE إعدادات الزاوية والأرقام."]],
+      ["COMP · الحساب", ["الحساب والكسور والقوى والجذور واللوغاريتمات والمثلثات والتباديل والتوافيق.", "يستدعي Ans الجواب السابق وRCL الذاكرة M."]],
+      ["CMPLX · المركبة", ["أدخل i بواسطة ALPHA + ENG.", "يدعم a+bi وr∠θ والمرافق والسعة."]],
+      ["BASE · الأنظمة", ["اختر BIN أو OCT أو DEC أو HEX في لوحة الويب.", "يدعم المحاكي حساب الأعداد الصحيحة وأرقام النظام الست عشري."]],
+      ["SD · الإحصاء", ["في المحاكي أدخل x أو x,التكرار ثم EXE.", "يعرض SHIFT + 1/2 النتائج ويمسح SHIFT + 9 البيانات."]],
+      ["REG · الانحدار", ["أدخل x,y أو x,y,التكرار ثم EXE.", "تتوفر النماذج السبعة والتنبؤ في لوحة الويب."]],
+      ["PRGM · البرامج", ["تُحفظ P1–P4 في المتصفح.", "يبدّل Prog المنطقة؛ افصل المدخلات بفواصل ثم اضغط EXE."]],
+      ["الصيغ والثوابت", ["يفتح FMLA ‏23 صيغة؛ ويفتح SHIFT + 7 ‏40 ثابتًا."]],
+      ["التنقل", ["يفتح / الحاسبة و/about المنصة و/linear-algebra المصفوفات."]],
+    ],
   };
 
   const languageSelect = document.querySelector("#language-select");
@@ -142,7 +262,7 @@
   const batteryFill = document.querySelector("#battery-fill");
   const batteryText = document.querySelector("#battery-text");
   const views = [...document.querySelectorAll("[data-view-panel]")];
-  const allowedViews = new Set(["calculator", "about", "manual"]);
+  const allowedViews = new Set(["calculator", "about", "manual", "linear-algebra"]);
   let zoomFactor = 1;
   let currentView = "calculator";
   let batteryState = { available: false, charging: false, level: null };
@@ -217,6 +337,10 @@
       if (language.startsWith("ja")) return "ja";
       if (language.startsWith("ko")) return "ko";
       if (language.startsWith("ms")) return "ms";
+      if (language.startsWith("fr")) return "fr";
+      if (language.startsWith("de")) return "de";
+      if (language.startsWith("es")) return "es";
+      if (language.startsWith("ar")) return "ar";
       if (language.startsWith("en")) return "en-GB";
     }
     return "en-GB";
@@ -263,6 +387,7 @@
     const selected = ui[language] ? language : "en-GB";
     const dictionary = ui[selected];
     document.documentElement.lang = selected;
+    document.documentElement.dir = selected === "ar" ? "rtl" : "ltr";
     document.querySelectorAll("[data-i18n]").forEach((element) => {
       const key = element.dataset.i18n;
       element.textContent = dictionary[key] || ui["en-GB"][key] || element.textContent;
@@ -281,7 +406,12 @@
     if (!canvas || !viewport.clientWidth || !viewport.clientHeight) return;
     const naturalWidth = canvas.offsetWidth;
     const naturalHeight = canvas.scrollHeight;
-    const fitScale = Math.min(1, (viewport.clientWidth - 24) / naturalWidth, (viewport.clientHeight - 16) / naturalHeight);
+    const horizontalGutter = viewport.clientWidth <= 560 ? 8 : 24;
+    const verticalGutter = viewport.clientHeight <= 620 ? 4 : 16;
+    const widthScale = (viewport.clientWidth - horizontalGutter) / naturalWidth;
+    const heightScale = (viewport.clientHeight - verticalGutter) / naturalHeight;
+    const compactLandscape = viewport.clientWidth > viewport.clientHeight * 1.25 && viewport.clientHeight < 600;
+    const fitScale = compactLandscape ? Math.min(1, widthScale) : Math.min(1, widthScale, heightScale);
     const scale = Math.max(0.35, fitScale * zoomFactor);
     const scaledWidth = Math.ceil(naturalWidth * scale);
     const scaledHeight = Math.ceil(naturalHeight * scale);
@@ -289,7 +419,8 @@
     canvas.style.transform = `scale(${scale})`;
     space.style.width = `${scaledWidth}px`;
     space.style.height = `${scaledHeight}px`;
-    const overflowing = scaledWidth > viewport.clientWidth - 24 || scaledHeight > viewport.clientHeight - 16;
+    space.style.marginInline = scaledWidth <= viewport.clientWidth - horizontalGutter ? "auto" : "0";
+    const overflowing = scaledWidth > viewport.clientWidth - horizontalGutter || scaledHeight > viewport.clientHeight - verticalGutter;
     viewport.classList.toggle("is-overflowing", overflowing);
     if (!overflowing) {
       viewport.scrollLeft = 0;
@@ -307,11 +438,24 @@
       const active = panel.dataset.viewPanel === nextView;
       panel.hidden = !active;
       panel.classList.toggle("is-active", active);
+      if (active) {
+        panel.classList.remove("is-entering");
+        requestAnimationFrame(() => panel.classList.add("is-entering"));
+      }
       if (active && panel.classList.contains("app-view--scrollable")) panel.scrollTop = 0;
     });
     document.body.className = `is-${nextView}-view`;
-    if (addHistory) history.pushState({ view: nextView }, "", `#${nextView}`);
+    const targetPath = nextView === "calculator" ? "/" : `/${nextView}`;
+    if (addHistory && location.pathname !== targetPath) history.pushState({ view: nextView }, "", targetPath);
     if (nextView === "calculator") requestAnimationFrame(updateScale);
+  }
+
+  function viewFromLocation() {
+    const path = location.pathname.replace(/\/+$/, "") || "/";
+    if (path === "/about") return "about";
+    if (path === "/manual") return "manual";
+    if (path === "/linear-algebra") return "linear-algebra";
+    return "calculator";
   }
 
   document.addEventListener("click", (event) => {
@@ -332,13 +476,21 @@
   }, { passive: false });
 
   window.addEventListener("resize", updateScale);
-  window.addEventListener("popstate", () => showView(location.hash.slice(1), false));
+  window.visualViewport?.addEventListener("resize", updateScale);
+  window.visualViewport?.addEventListener("scroll", updateScale);
+  window.addEventListener("popstate", () => showView(viewFromLocation(), false));
   if ("ResizeObserver" in window) new ResizeObserver(() => updateScale()).observe(canvas);
 
   applyLanguage(detectedLanguage());
   setupBattery();
-  showView(allowedViews.has(location.hash.slice(1)) ? location.hash.slice(1) : "calculator", false);
-  if (!location.hash) history.replaceState({ view: "calculator" }, "", "#calculator");
+  showView(viewFromLocation(), false);
+  history.replaceState({ view: currentView }, "", location.pathname + location.search);
 
-  window.SciCalUI = Object.freeze({ showView, applyLanguage, updateScale, get view() { return currentView; } });
+  window.SciCalUI = Object.freeze({
+    showView,
+    applyLanguage,
+    updateScale,
+    translate: (key) => ui[document.documentElement.lang]?.[key] || ui["en-GB"][key] || key,
+    get view() { return currentView; },
+  });
 })();

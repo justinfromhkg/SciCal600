@@ -1,12 +1,12 @@
 # SciCal600
 
-SciCal600 is a responsive browser calculator inspired by the interaction model and key grouping of the Casio fx-50FH II. It combines a dependable scientific-expression parser with six calculation modes, searchable study catalogues, and responsive data-entry workbenches.
+SciCal600 is a responsive Smart Calculator platform. Its current tools include a scientific calculator inspired by the interaction model and key grouping of the Casio fx-50FH II, plus a Linear Algebra workspace for common matrix calculations.
 
 > The physical Casio fx-50FH II is listed by Casio as HKEAA-approved. This independent web simulator is not a Casio product and is not approved for use in examinations.
 
 ## Run it
 
-Open `index.html` in a modern browser. The project has no runtime dependencies and does not need a build step.
+Serve the repository root with any static HTTP server and open `/`. Direct routes include `/about`, `/manual`, and `/linear-algebra`. The project has no browser runtime dependencies.
 
 To run the calculation-engine tests:
 
@@ -14,15 +14,15 @@ To run the calculation-engine tests:
 npm test
 ```
 
-## Publish with Cloudflare Workers
+## Publish with Cloudflare Pages
 
-The repository includes a static-assets Workers configuration. After signing in to Cloudflare, publish the current version with:
+The repository uses Cloudflare Pages rather than a `workers.dev` site so the production hostname is under `pages.dev`. After signing in to Cloudflare, publish the current version with:
 
 ```text
 npm run deploy
 ```
 
-The build copies only the six public website files into `dist/`; source tests and project notes are not uploaded. Wrangler returns a public `https://scical600.<account>.workers.dev` address after deployment.
+The build copies only public website files into `dist/`; source tests and project notes are not uploaded. Cloudflare Pages' SPA routing serves direct visits to `/about`, `/manual`, and `/linear-algebra`; `_redirects` only canonicalizes trailing-slash variants.
 
 ## Implemented
 
@@ -38,7 +38,7 @@ The build copies only the six public website files into `dist/`; source tests an
 - A locked, full-screen calculator view with automatic fit and button-controlled zoom
 - Live device-battery percentage and charging state when the browser exposes the Battery Status API
 - Panning only when the enlarged calculator exceeds the available viewport
-- A prominent fx-50FH II model identity and a six-language Manual designed for both physical-calculator and web-simulator users
+- A prominent fx-50FH II model identity and a ten-language Manual designed for both physical-calculator and web-simulator users
 - Automatic system-language selection plus a persistent language picker for English, Traditional Chinese, Simplified Chinese, Japanese, Korean and Malay
 - Keyboard input and responsive phone/desktop layouts
 - A parser written without JavaScript `eval`
@@ -47,6 +47,9 @@ The build copies only the six public website files into `dist/`; source tests an
 - Weighted single-variable statistics and seven regression models
 - Four persistent program areas with prompt input, assignment, byte accounting, and safe execution
 - Searchable catalogues containing 23 interactive formulas and 40 scientific constants
+- Web and simulator interaction modes for calculation modes 02–06
+- Linear Algebra matrix addition, subtraction, multiplication, inverse, transpose, adjugate, determinant, eigenvalue, and eigenvector tools
+- English, Traditional Chinese, Simplified Chinese, Japanese, Korean, Malay, French, German, Spanish, and Arabic interface support
 
 ## Verified reference feature set
 

@@ -7,8 +7,8 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="description" content="A browser-based scientific calculator study simulator inspired by the Casio fx-50FH II." />
-    <title>SciCal600 — Study Calculator</title>
+    <meta name="description" content="SciCal600 Smart Calculator — scientific and linear algebra calculation tools for the web." />
+    <title>SciCal600 — Smart Calculator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet" />
@@ -30,11 +30,17 @@
           <span class="brand__identity"><span class="brand__name">SciCal<span class="brand__accent">600</span></span><small>fx-50FH II</small></span>
         </button>
 
-        <div class="zoom-controls" aria-label="Calculator zoom" data-i18n-aria="zoomControls">
-          <button type="button" data-zoom="out" data-i18n-aria="zoomOut" aria-label="Zoom out">−</button>
-          <output id="zoom-level" aria-live="polite">100%</output>
-          <button type="button" data-zoom="in" data-i18n-aria="zoomIn" aria-label="Zoom in">+</button>
-          <button class="zoom-controls__fit" type="button" data-zoom="fit" data-i18n="fitButton">Fit</button>
+        <div class="app-bar__actions">
+          <button class="interface-mode-toggle" id="interface-mode-toggle" type="button" aria-pressed="false" data-i18n-aria="interfaceModeAria">
+            <span class="interface-mode-toggle__dot" aria-hidden="true"></span>
+            <span data-interface-mode-label data-i18n="webMode">Web mode</span>
+          </button>
+          <div class="zoom-controls" aria-label="Calculator zoom" data-i18n-aria="zoomControls">
+            <button type="button" data-zoom="out" data-i18n-aria="zoomOut" aria-label="Zoom out">−</button>
+            <output id="zoom-level" aria-live="polite">100%</output>
+            <button type="button" data-zoom="in" data-i18n-aria="zoomIn" aria-label="Zoom in">+</button>
+            <button class="zoom-controls__fit" type="button" data-zoom="fit" data-i18n="fitButton">Fit</button>
+          </div>
         </div>
       </header>
 
@@ -107,32 +113,33 @@
         <section class="app-view app-view--scrollable" data-view-panel="about" hidden>
           <div class="content-page">
             <div class="content-page__header">
-              <p class="eyebrow" data-i18n="aboutEyebrow">HKEAA reference model</p>
-              <h1 data-i18n="aboutTitle">A familiar calculator, rebuilt for the web.</h1>
-              <p class="content-page__lead" data-i18n="aboutIntro">A focused study simulator inspired by the fx-50FH II, recreated as a responsive web application.</p>
+              <p class="eyebrow" data-i18n="aboutEyebrow">Smart Calculator platform</p>
+              <h1 data-i18n="aboutTitle">Useful mathematics, made approachable.</h1>
+              <p class="content-page__lead" data-i18n="aboutIntro">SciCal600 is a growing smart-calculator platform built for clear, dependable calculations on phones and computers.</p>
               <button class="primary-action" type="button" data-view-target="calculator" data-i18n="openCalculator">Open calculator</button>
             </div>
 
             <div class="reference-model-banner">
-              <span data-i18n="referenceModel">Reference model</span>
-              <strong>CASIO fx-50FH II</strong>
-              <small data-i18n="modelNotice">Independent web study simulator · not an official Casio product</small>
+              <span data-i18n="platformNow">Available today</span>
+              <strong data-i18n="smartCalculator">Smart Calculator</strong>
+              <small data-i18n="platformNotice">Independent educational platform · designed for the modern web</small>
             </div>
 
             <div class="feature-pills" aria-label="Current features">
-              <span data-i18n="featureModes">Six calculation modes</span><span data-i18n="featureFormulas">23 formulas</span><span data-i18n="featureConstants">40 constants</span>
+              <span data-i18n="featureScientific">Scientific calculation</span><span data-i18n="featureLinear">Linear algebra</span><span data-i18n="featureResponsive">Mobile first</span>
             </div>
 
             <div class="exam-note">
               <span class="exam-note__icon" aria-hidden="true">i</span>
-              <p data-i18n="examNote">The physical fx-50FH II is HKEAA-approved. This independent simulator is a learning tool and is not approved for examinations.</p>
+              <p data-i18n="platformGoal">Our goal is one consistent home for focused calculation tools: fast to open, easy to understand, and ready to expand without sacrificing accuracy.</p>
             </div>
 
             <section class="scope" aria-labelledby="scope-title">
-              <div><p class="eyebrow" data-i18n="scopeEyebrow">Development scope</p><h2 id="scope-title" data-i18n="scopeTitle">One model. A dependable core.</h2></div>
-              <div class="scope-grid">
-                <article class="scope-card scope-card--active"><span class="scope-card__number">01</span><div><p class="scope-card__status" data-i18n="coreStatus">Core mode</p><h3>COMP · Computation</h3><p data-i18n="coreDescription">Arithmetic, fractions, powers, roots, trigonometry, logarithms, permutation, combination, history and memory.</p></div></article>
-                <article class="scope-card"><span class="scope-card__number">02</span><div><p class="scope-card__status" data-i18n="availableStatus">Available now</p><h3 data-i18n="specialistTitle">Five specialist modes</h3><p data-i18n="specialistDescription">Complex numbers, base-n logic, weighted statistics, seven regression models, and four saved program areas.</p></div></article>
+              <div><p class="eyebrow" data-i18n="toolsEyebrow">Calculation tools</p><h2 id="scope-title" data-i18n="toolsTitle">Choose the right workspace.</h2></div>
+              <div class="scope-grid platform-tools">
+                <article class="scope-card scope-card--active tool-card"><span class="scope-card__number">01</span><div><p class="scope-card__status" data-i18n="availableStatus">Available now</p><h3 data-i18n="scientificToolTitle">Scientific calculator fx-50FH II</h3><p data-i18n="scientificToolDescription">A responsive scientific-calculator simulator with six modes, formulas, constants, memory, history, web workbenches and physical-style input.</p><button class="text-action tool-card__action" type="button" data-view-target="calculator" data-i18n="openScientific">Open scientific calculator</button></div></article>
+                <article class="scope-card scope-card--active tool-card"><span class="scope-card__number">02</span><div><p class="scope-card__status" data-i18n="availableStatus">Available now</p><h3 data-i18n="linearToolTitle">Linear Algebra</h3><p data-i18n="linearToolDescription">Add, subtract and multiply matrices; calculate inverses, transposes, adjugates, eigenvalues, eigenvectors and determinants.</p><button class="text-action tool-card__action" type="button" data-view-target="linear-algebra" data-i18n="openLinear">Open Linear Algebra</button></div></article>
+                <article class="scope-card tool-card tool-card--future"><span class="scope-card__number">03+</span><div><p class="scope-card__status" data-i18n="futureStatus">Future expansion</p><h3 data-i18n="futureToolsTitle">More focused calculators</h3><p data-i18n="futureToolsDescription">The platform structure is ready for equation solving, probability, finance, graphing and other purpose-built mathematical tools.</p></div></article>
               </div>
             </section>
 
@@ -140,10 +147,45 @@
           </div>
         </section>
 
+        <section class="app-view app-view--scrollable" data-view-panel="linear-algebra" hidden>
+          <div class="content-page content-page--linear">
+            <div class="linear-hero">
+              <div><p class="eyebrow" data-i18n="linearEyebrow">Smart Calculator · Linear Algebra</p><h1 data-i18n="linearTitle">Matrix calculations, in one clear workspace.</h1><p class="content-page__lead" data-i18n="linearIntro">Enter rows on separate lines and values with spaces or commas. Real matrices up to 6 × 6 are supported.</p></div>
+              <button class="primary-action" type="button" data-view-target="about" data-i18n="backToTools">Back to tools</button>
+            </div>
+
+            <div class="matrix-workspace" id="matrix-workspace">
+              <div class="matrix-inputs">
+                <label class="matrix-card"><span>Matrix A</span><textarea id="matrix-a" rows="5" spellcheck="false" inputmode="decimal">1 2
+3 4</textarea></label>
+                <label class="matrix-card" id="matrix-b-card"><span>Matrix B</span><textarea id="matrix-b" rows="5" spellcheck="false" inputmode="decimal">5 6
+7 8</textarea></label>
+              </div>
+              <div class="matrix-controls">
+                <label><span data-i18n="matrixOperation">Operation</span><select id="matrix-operation">
+                  <option value="add" data-i18n="matrixAdd">A + B</option>
+                  <option value="subtract" data-i18n="matrixSubtract">A − B</option>
+                  <option value="multiply" data-i18n="matrixMultiply">A × B</option>
+                  <option value="inverse" data-i18n="matrixInverse">Inverse of A</option>
+                  <option value="transpose" data-i18n="matrixTranspose">Transpose of A</option>
+                  <option value="adjugate" data-i18n="matrixAdjugate">Adjugate of A</option>
+                  <option value="eigen" data-i18n="matrixEigen">Eigenvalues &amp; eigenvectors of A</option>
+                  <option value="determinant" data-i18n="matrixDeterminant">Determinant of A</option>
+                </select></label>
+                <button class="primary-action matrix-calculate" id="matrix-calculate" type="button" data-i18n="calculateMatrix">Calculate</button>
+              </div>
+              <section class="matrix-result" aria-live="polite" aria-atomic="true"><p class="eyebrow" data-i18n="matrixResult">Result</p><div id="matrix-result"><span class="empty-state" data-i18n="matrixReady">Choose an operation and calculate.</span></div></section>
+              <p class="matrix-note" data-i18n="matrixNote">Eigenvectors are available for all real 2 × 2 matrices and for real symmetric matrices up to 6 × 6. Complex 2 × 2 eigenpairs are displayed symbolically.</p>
+            </div>
+
+            <footer class="content-footer"><span data-i18n="projectFooter">SciCal600 · independent educational project</span><button type="button" class="text-action" data-view-target="calculator" data-i18n="openScientific">Open scientific calculator</button></footer>
+          </div>
+        </section>
+
         <section class="app-view app-view--scrollable" data-view-panel="manual" hidden>
           <div class="content-page content-page--manual">
             <div class="manual-hero">
-              <div><p class="eyebrow" data-i18n="manualEyebrow">Six-language guide</p><h1 data-i18n="manualTitle">Calculator manual</h1><p class="content-page__lead" data-i18n="manualIntro">Learn the keys, modes, and common calculation workflows.</p></div>
+              <div><p class="eyebrow" data-i18n="manualEyebrow">Ten-language guide</p><h1 data-i18n="manualTitle">Calculator manual</h1><p class="content-page__lead" data-i18n="manualIntro">Learn the keys, modes, and common calculation workflows.</p></div>
               <button class="primary-action" type="button" data-view-target="calculator" data-i18n="returnCalculator">Return to calculator</button>
             </div>
             <div class="manual-model-banner">
@@ -164,6 +206,7 @@
       <select id="language-select" aria-label="Language">
         <option value="en-GB">🇬🇧 English</option><option value="zh-Hant">🇹🇼 繁體中文</option><option value="zh-Hans">🇨🇳 简体中文</option>
         <option value="ja">🇯🇵 日本語</option><option value="ko">🇰🇷 한국어</option><option value="ms">🇲🇾 Bahasa Melayu</option>
+        <option value="fr">🇫🇷 Français</option><option value="de">🇩🇪 Deutsch</option><option value="es">🇪🇸 Español</option><option value="ar">🇸🇦 العربية</option>
       </select>
     </label>
 
@@ -193,6 +236,6 @@
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="calculator-core.js"></script><script src="calculator-data.js"></script><script src="app.js"></script><script src="site-ui.js"></script>
+    <script src="calculator-core.js"></script><script src="calculator-data.js"></script><script src="linear-algebra-core.js"></script><script src="app.js"></script><script src="linear-algebra.js"></script><script src="site-ui.js"></script>
   </body>
 </html>

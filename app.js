@@ -21,6 +21,8 @@
     workbench: document.querySelector("#mode-workbench"),
     toast: document.querySelector("#toast"),
     stageMode: document.querySelector("#stage-mode"),
+    interfaceToggle: document.querySelector("#interface-mode-toggle"),
+    interfaceModeLabel: document.querySelector("[data-interface-mode-label]"),
   };
 
   const state = {
@@ -42,6 +44,7 @@
     justEvaluated: false,
     powered: true,
     mode: "COMP",
+    interfaceMode: "web",
     base: 10,
     complexForm: "RECT",
     lastComplex: new core.Complex(0, 0),
@@ -55,6 +58,8 @@
     complexPart: "RE",
     variables: { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, X: 0, Y: 0 },
     programSlot: 0,
+    statisticsResultIndex: 0,
+    regressionResultIndex: 0,
     programs: [
       { name: "P1", source: "?→A : A×2.54" },
       { name: "P2", source: "" },
@@ -220,6 +225,13 @@
     elements.format.textContent = state.mode === "BASE" ? ({ 2: "BIN", 8: "OCT", 10: "DEC", 16: "HEX" })[state.base] : state.format;
     elements.mode.textContent = state.mode;
     elements.stageMode.textContent = `${String(["COMP", "CMPLX", "BASE", "SD", "REG", "PRGM"].indexOf(state.mode) + 1).padStart(2, "0")} / ${state.mode}`;
+    document.body.dataset.interfaceMode = state.interfaceMode;
+    elements.interfaceToggle?.setAttribute("aria-pressed", String(state.interfaceMode === "simulator"));
+    if (elements.interfaceModeLabel) {
+      const key = state.interfaceMode === "simulator" ? "simulatorMode" : "webMode";
+      elements.interfaceModeLabel.dataset.i18n = key;
+      elements.interfaceModeLabel.textContent = window.SciCalUI?.translate?.(key) || (state.interfaceMode === "simulator" ? "Simulator mode" : "Web mode");
+    }
 
     document.querySelectorAll("[data-mode]").forEach((button) => {
       button.classList.toggle("mode-option--active", button.dataset.mode === state.mode);
@@ -275,15 +287,89 @@
     return expression + ")".repeat(balance);
   }
 
+  function evaluateRealFields(expression, expected, usage) {
+    const fields = expression.split(",").map((field) => field.trim()).filter(Boolean);
+    if (fields.length < expected[0] || fields.length > expected[1]) {
+      throw new core.CalculatorError(usage, "Input ERROR");
+    }
+    const values = fields.map((field) => core.evaluate(balancedExpression(field), {
+      angle: state.angle,
+      ans: state.ans,
+      memory: state.memory,
+      variables: state.variables,
+    }));
+    if (values.some((value) => !Number.isFinite(value))) throw new core.CalculatorError("Values must be finite", "Input ERROR");
+    return values;
+  }
+
+  function commitSimulatorResult(value, text) {
+    state.lastResult = value;
+    state.ans = value;
+    state.ansComplex = new core.Complex(value, 0);
+    state.expression = "";
+    state.cursor = 0;
+    state.resultText = text;
+    state.justEvaluated = false;
+    state.fractionView = false;
+    render();
+    return value;
+  }
+
+  function calculateSdSimulator(expression) {
+    const [x, frequency = 1] = evaluateRealFields(expression, [1, 2], "Enter x or x,frequency");
+    if (!(frequency > 0)) throw new core.CalculatorError("Frequency must be greater than zero", "Input ERROR");
+    state.sdData.push({ x, freq: frequency });
+    const summary = core.statistics(state.sdData);
+    return commitSimulatorResult(summary.mean, `n=${formatNumber(summary.n)}  x̄=${formatNumber(summary.mean)}`);
+  }
+
+  function calculateRegressionSimulator(expression) {
+    const [x, y, frequency = 1] = evaluateRealFields(expression, [2, 3], "Enter x,y or x,y,frequency");
+    if (!(frequency > 0)) throw new core.CalculatorError("Frequency must be greater than zero", "Input ERROR");
+    state.regData.push({ x, y, freq: frequency });
+    if (state.regData.length < 2) return commitSimulatorResult(y, "n=1  NEXT x,y");
+    const fit = core.regression(state.regData, state.regressionType);
+    return commitSimulatorResult(fit.a, `n=${state.regData.length}  a=${formatNumber(fit.a)} b=${formatNumber(fit.b)}`);
+  }
+
+  function calculateProgramSimulator(expression) {
+    const program = state.programs[state.programSlot];
+    if (!program.source.trim()) throw new core.CalculatorError(`${program.name} is empty`, "Program ERROR");
+    const inputs = expression.trim()
+      ? evaluateRealFields(expression, [1, 20], "Enter prompt values separated by commas")
+      : [];
+    const run = core.runProgram(program.source, inputs, {
+      angle: state.angle,
+      ans: state.ans,
+      memory: state.memory,
+      variables: state.variables,
+    });
+    state.variables = { ...state.variables, ...run.variables };
+    state.memory = run.variables.M;
+    state.justEvaluated = true;
+    state.lastResult = run.ans;
+    state.ans = run.ans;
+    state.ansComplex = new core.Complex(run.ans, 0);
+    state.expression = `${program.name}(${inputs.map(formatNumber).join(",")})`;
+    state.cursor = state.expression.length;
+    state.resultText = formatNumber(run.ans);
+    render();
+    return run.ans;
+  }
+
   function calculate(options = {}) {
     if (wakeIfNeeded()) return null;
     const expression = state.expression.trim() || (state.justEvaluated ? "Ans" : "0");
     try {
-      if (["SD", "REG", "PRGM"].includes(state.mode)) {
+      if (state.interfaceMode === "web" && ["SD", "REG", "PRGM"].includes(state.mode)) {
         renderWorkbench("mode");
         showToast(`${state.mode} calculations are run from the workbench`);
         return null;
       }
+
+      if (state.interfaceMode === "simulator" && state.mode === "SD") return calculateSdSimulator(state.expression.trim());
+      if (state.interfaceMode === "simulator" && state.mode === "REG") return calculateRegressionSimulator(state.expression.trim());
+      if (state.interfaceMode === "simulator" && state.mode === "PRGM") return calculateProgramSimulator(state.expression.trim());
 
       let value;
       if (state.mode === "CMPLX") {
@@ -374,6 +460,8 @@
     state.lastComplex = new core.Complex(0, 0);
     state.history = [];
     state.historyIndex = 0;
+    if (state.interfaceMode === "simulator" && state.mode === "SD") state.sdData = [];
+    if (state.interfaceMode === "simulator" && state.mode === "REG") state.regData = [];
     showToast("Memory, Ans and replay history cleared");
     render();
   }
@@ -496,6 +584,18 @@
 
   function setMode(mode) {
     if (!["COMP", "CMPLX", "BASE", "SD", "REG", "PRGM"].includes(mode)) return;
+    if (state.interfaceMode === "simulator" && state.mode === "REG" && mode === "REG") {
+      const types = ["LIN", "LOG", "EXP", "ABEXP", "PWR", "INV", "QUAD"];
+      state.regressionType = types[(types.indexOf(state.regressionType) + 1) % types.length];
+      state.expression = "";
+      state.cursor = 0;
+      state.justEvaluated = false;
+      state.resultText = `REG · ${state.regressionType} · ENTER x,y`;
+      if (elements.modeDialog.open) elements.modeDialog.close();
+      render();
+      showToast(`Regression model: ${state.regressionType}`);
+      return;
+    }
     state.mode = mode;
     state.expression = "";
     state.cursor = 0;
@@ -503,7 +603,14 @@
     state.justEvaluated = false;
     state.workbenchView = "mode";
     if (elements.modeDialog.open) elements.modeDialog.close();
-    renderWorkbench("mode");
+    if (state.interfaceMode === "web") renderWorkbench("mode");
+    else {
+      elements.workbench.hidden = true;
+      elements.workbench.innerHTML = "";
+      if (mode === "SD") state.resultText = "ENTER x[,freq]";
+      if (mode === "REG") state.resultText = `ENTER x,y · ${state.regressionType}`;
+      if (mode === "PRGM") state.resultText = `${state.programs[state.programSlot].name} · ENTER INPUTS`;
+    }
     render();
     showToast(`${mode} mode ready`);
   }
@@ -519,6 +626,11 @@
 
   function renderWorkbench(view = state.workbenchView) {
     state.workbenchView = view;
+    if (state.interfaceMode === "simulator" && view === "mode") {
+      elements.workbench.hidden = true;
+      elements.workbench.innerHTML = "";
+      return;
+    }
     if (view === "mode" && state.mode === "COMP") {
       elements.workbench.hidden = true;
       elements.workbench.innerHTML = "";
@@ -703,10 +815,42 @@
         else appendInput(key.variable);
         break;
       case "insert-info": showToast("Use the arrow keys to position the cursor, then type to insert"); break;
-      case "set-mode": setMode(key.targetMode); break;
-      case "show-workbench": renderWorkbench("mode"); break;
+      case "set-mode":
+        if (state.interfaceMode === "simulator" && state.mode === "PRGM" && key.targetMode === "PRGM") {
+          state.programSlot = (state.programSlot + 1) % state.programs.length;
+          clearEntry();
+          state.resultText = `${state.programs[state.programSlot].name} · ENTER INPUTS`;
+          render();
+          showToast(`Program area ${state.programs[state.programSlot].name}`);
+        } else setMode(key.targetMode);
+        break;
+      case "show-workbench":
+        if (state.interfaceMode === "simulator" && state.mode === "BASE") {
+          const operators = ["AND", "OR", "XOR"];
+          const trailing = state.expression.match(/\s(AND|OR|XOR)\s*$/);
+          if (trailing) {
+            const next = operators[(operators.indexOf(trailing[1]) + 1) % operators.length];
+            state.expression = state.expression.replace(/\s(AND|OR|XOR)\s*$/, ` ${next} `);
+            state.cursor = state.expression.length;
+            render();
+            showToast(`Logic operator: ${next}`);
+          } else {
+            appendInput(" AND ");
+            showToast("Logic operator: AND · press LOGIC again for OR or XOR");
+          }
+        } else if (state.interfaceMode === "web") renderWorkbench("mode");
+        else showToast("Switch to Web mode for the specialist workbench");
+        break;
       case "base-select":
         if (state.mode !== "BASE") showToast("Base selection is available in BASE mode");
+        else if (state.interfaceMode === "simulator") {
+          const bases = [10, 2, 8, 16];
+          state.base = bases[(bases.indexOf(state.base) + 1) % bases.length];
+          state.expression = "";
+          state.cursor = 0;
+          state.resultText = `BASE ${({ 2: "BIN", 8: "OCT", 10: "DEC", 16: "HEX" })[state.base]}`;
+          showToast(`Input base: ${({ 2: "BIN", 8: "OCT", 10: "DEC", 16: "HEX" })[state.base]}`);
+        }
         else {
           state.base = key.targetBase;
           state.expression = "";
@@ -722,7 +866,33 @@
       case "statistics-summary":
       case "statistics-variables":
         if (!['SD', 'REG'].includes(state.mode)) showToast("Statistical results are available in SD or REG mode");
-        else renderWorkbench("mode");
+        else if (state.interfaceMode === "web") renderWorkbench("mode");
+        else if (state.mode === "SD") {
+          if (!state.sdData.length) showToast("No statistical data yet");
+          else {
+            const summary = core.statistics(state.sdData);
+            const values = [
+              ["n", summary.n], ["Σx", summary.sum], ["Σx²", summary.sumSquares], ["x̄", summary.mean],
+              ["σx", summary.populationStandardDeviation], ["sx", summary.sampleStandardDeviation], ["min", summary.min], ["max", summary.max],
+            ];
+            const [label, value] = values[state.statisticsResultIndex % values.length];
+            state.statisticsResultIndex += 1;
+            state.lastResult = value;
+            state.ans = value;
+            state.resultText = `${label}=${formatNumber(value)}`;
+          }
+        } else {
+          if (state.regData.length < 2) showToast("Enter at least two paired samples");
+          else {
+            const fit = core.regression(state.regData, state.regressionType);
+            const values = [["a", fit.a], ["b", fit.b], ["c", fit.c], ["r", fit.r]].filter(([, value]) => Number.isFinite(value));
+            const [label, value] = values[state.regressionResultIndex % values.length];
+            state.regressionResultIndex += 1;
+            state.lastResult = value;
+            state.ans = value;
+            state.resultText = `${label}=${formatNumber(value)}`;
+          }
+        }
         break;
       case "program-command":
         if (state.mode !== "PRGM") setMode("PRGM");
@@ -760,6 +930,15 @@
 
     let action = key.action;
     let input = key.input;
+    if (state.interfaceMode === "simulator" && state.mode === "BASE" && !state.shift && !state.alpha) {
+      if (key.label === "(−)") {
+        action = undefined;
+        input = "NEG ";
+      } else if (key.action === "reciprocal") {
+        action = undefined;
+        input = "NOT ";
+      }
+    }
     if (state.alpha && (key.alphaAction || key.alphaInput)) {
       action = key.alphaAction;
       input = key.alphaInput;
@@ -794,6 +973,25 @@
   elements.modeDialog.addEventListener("click", (event) => {
     const button = event.target.closest("[data-mode]");
     if (button) setMode(button.dataset.mode);
+  });
+
+  function setInterfaceMode(mode) {
+    state.interfaceMode = mode === "simulator" ? "simulator" : "web";
+    if (state.interfaceMode === "web") renderWorkbench("mode");
+    else {
+      elements.workbench.hidden = true;
+      elements.workbench.innerHTML = "";
+      if (state.mode === "SD") state.resultText = "ENTER x[,freq]";
+      if (state.mode === "REG") state.resultText = `ENTER x,y · ${state.regressionType}`;
+      if (state.mode === "PRGM") state.resultText = `${state.programs[state.programSlot].name} · ENTER INPUTS`;
+    }
+    render();
+    window.SciCalUI?.updateScale?.();
+    showToast(state.interfaceMode === "web" ? "Web mode: specialist workbench enabled" : "Simulator mode: use the display and calculator keys");
+  }
+
+  elements.interfaceToggle?.addEventListener("click", () => {
+    setInterfaceMode(state.interfaceMode === "web" ? "simulator" : "web");
   });
 
   elements.workbench.addEventListener("click", (event) => {
@@ -1059,7 +1257,58 @@
     event.preventDefault();
   });
 
+  function installImmediatePressFeedback() {
+    const selector = "button:not(:disabled)";
+    const clearPressed = (button) => {
+      if (!button) return;
+      button.classList.remove("is-pressed");
+      delete button.dataset.activePointer;
+    };
+
+    if ("PointerEvent" in window) {
+      document.addEventListener("pointerdown", (event) => {
+        const button = event.target.closest(selector);
+        if (!button || (event.pointerType === "mouse" && event.button !== 0)) return;
+        button.dataset.activePointer = String(event.pointerId);
+        button.classList.add("is-pressed");
+        try { button.setPointerCapture(event.pointerId); } catch (_error) { /* Capture is optional on older WebViews. */ }
+      }, { passive: true });
+      ["pointerup", "pointercancel", "lostpointercapture"].forEach((type) => {
+        document.addEventListener(type, (event) => {
+          const button = event.target.closest("button") || document.querySelector(`[data-active-pointer="${event.pointerId}"]`);
+          clearPressed(button);
+        }, { passive: true });
+      });
+    } else {
+      document.addEventListener("touchstart", (event) => event.target.closest(selector)?.classList.add("is-pressed"), { passive: true });
+      ["touchend", "touchcancel"].forEach((type) => document.addEventListener(type, () => {
+        document.querySelectorAll("button.is-pressed").forEach(clearPressed);
+      }, { passive: true }));
+    }
+
+    window.addEventListener("blur", () => document.querySelectorAll("button.is-pressed").forEach(clearPressed));
+    document.addEventListener("keydown", (event) => {
+      if ((event.key === " " || event.key === "Enter") && event.target.matches(selector)) event.target.classList.add("is-pressed");
+    });
+    document.addEventListener("keyup", (event) => {
+      if (event.target.matches("button")) clearPressed(event.target);
+    });
+  }
+
   renderKeypad();
+  installImmediatePressFeedback();
   syncSettingControls();
   render();
+  window.SciCalApp = Object.freeze({
+    setInterfaceMode,
+    getState: () => ({
+      mode: state.mode,
+      interfaceMode: state.interfaceMode,
+      expression: state.expression,
+      resultText: state.resultText,
+      sdEntries: state.sdData.length,
+      regEntries: state.regData.length,
+      programSlot: state.programSlot,
+    }),
+  });
 })();

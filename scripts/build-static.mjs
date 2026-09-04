@@ -7,8 +7,11 @@ const publicFiles = [
   "styles.css",
   "calculator-core.js",
   "calculator-data.js",
+  "linear-algebra-core.js",
   "app.js",
+  "linear-algebra.js",
   "site-ui.js",
+  "_redirects",
 ];
 
 rmSync(outputDirectory, { force: true, recursive: true });
