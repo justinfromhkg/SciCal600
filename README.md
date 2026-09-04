@@ -24,6 +24,15 @@ npm run deploy
 
 The build copies only public website files into `dist/`; source tests and project notes are not uploaded. Cloudflare Pages' SPA routing serves direct visits to `/about`, `/manual`, and `/linear-algebra`; `_redirects` only canonicalizes trailing-slash variants.
 
+### GitHub Actions connection
+
+The production deployment workflow lives at `.github/workflows/cloudflare-pages.yml`. Cloudflare credentials must never be committed to this repository. Configure these names under **GitHub repository Settings → Secrets and variables → Actions**:
+
+- Repository secrets: `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
+- Repository variable: `CLOUDFLARE_PAGES_ENABLED=true`
+
+Create the API token in Cloudflare with the minimum **Account / Cloudflare Pages / Edit** permission for the account that owns the `scical600` Pages project. Pushes to `main` deploy automatically only after the enable variable is set, so a checkout without credentials does not generate failing production runs. The workflow can also be started manually from GitHub Actions after both secrets are configured.
+
 ## Implemented
 
 - Two-line expression/result display with an editable cursor
