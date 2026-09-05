@@ -116,7 +116,7 @@
           <div class="content-page content-page--home">
             <div class="content-page__header home-hero">
               <p class="eyebrow" data-i18n="aboutEyebrow">Smart Calculator platform</p>
-              <h1 data-i18n="aboutTitle">Maths, made simple.</h1>
+              <h1 data-i18n="aboutTitle">Maths made simple</h1>
               <p class="content-page__lead" data-i18n="aboutIntro">Clear, reliable calculation tools for phones and computers.</p>
             </div>
 
@@ -137,17 +137,54 @@
         <section class="app-view app-view--scrollable" data-view-panel="linear-algebra" hidden>
           <div class="content-page content-page--linear">
             <div class="linear-hero">
-              <div><p class="eyebrow" data-i18n="linearEyebrow">Smart Calculator · Linear Algebra</p><h1 data-i18n="linearTitle">Matrix calculations, in one clear workspace.</h1><p class="content-page__lead" data-i18n="linearIntro">Enter one matrix row per line; separate columns with spaces or commas, or use semicolons for new rows. Real matrices up to 6 × 6 are supported.</p></div>
-              <button class="primary-action" type="button" data-view-target="about" data-i18n="backToTools">Back to tools</button>
+              <div><p class="eyebrow" data-i18n="linearEyebrow">Smart Calculator · Linear Algebra</p><h1 data-i18n="linearTitle">Matrix work, without the setup friction.</h1><p class="content-page__lead" data-i18n="linearIntro">Choose an operation, paste or type your matrices, and read a structured result. Real matrices up to 6 × 6 are supported.</p></div>
             </div>
 
             <div class="matrix-workspace" id="matrix-workspace">
-              <div class="matrix-inputs">
-                <label class="matrix-card"><span>Matrix A</span><textarea id="matrix-a" rows="5" spellcheck="false" inputmode="text" enterkeyhint="enter" autocapitalize="off" autocomplete="off" autocorrect="off">1 2
-3 4</textarea></label>
-                <label class="matrix-card" id="matrix-b-card"><span>Matrix B</span><textarea id="matrix-b" rows="5" spellcheck="false" inputmode="text" enterkeyhint="enter" autocapitalize="off" autocomplete="off" autocorrect="off">5 6
-7 8</textarea></label>
+              <header class="matrix-workspace__header">
+                <div><p class="eyebrow" data-i18n="matrixWorkspaceEyebrow">Matrix workspace</p><h2 data-i18n="matrixWorkspaceTitle">Choose an operation, then enter the data.</h2></div>
+                <div class="matrix-example-bar">
+                  <span data-i18n="matrixExamples">Examples</span>
+                  <div class="matrix-example-list">
+                    <button type="button" data-matrix-example="product" data-i18n="matrixExampleProduct">Rectangular product</button>
+                    <button type="button" data-matrix-example="determinant" data-i18n="matrixExampleDeterminant">3 × 3 determinant</button>
+                    <button type="button" data-matrix-example="eigen" data-i18n="matrixExampleEigen">Eigenpairs</button>
+                  </div>
+                </div>
+              </header>
+
+              <div class="matrix-operation-palette" role="toolbar" aria-label="Matrix operation shortcuts" data-i18n-aria="matrixOperationsAria">
+                <button type="button" class="is-selected" data-matrix-operation="add" aria-pressed="true"><strong>A + B</strong><span data-i18n="matrixAddition">Add</span></button>
+                <button type="button" data-matrix-operation="subtract" aria-pressed="false"><strong>A − B</strong><span data-i18n="matrixSubtraction">Subtract</span></button>
+                <button type="button" data-matrix-operation="multiply" aria-pressed="false"><strong>A × B</strong><span data-i18n="matrixMultiplication">Multiply</span></button>
+                <button type="button" data-matrix-operation="inverse" aria-pressed="false"><strong>A⁻¹</strong><span data-i18n="matrixInverseShort">Inverse</span></button>
+                <button type="button" data-matrix-operation="transpose" aria-pressed="false"><strong>Aᵀ</strong><span data-i18n="matrixTransposeShort">Transpose</span></button>
+                <button type="button" data-matrix-operation="adjugate" aria-pressed="false"><strong>adj(A)</strong><span data-i18n="matrixAdjugateShort">Adjugate</span></button>
+                <button type="button" data-matrix-operation="eigen" aria-pressed="false"><strong>eig(A)</strong><span data-i18n="matrixEigenShort">Eigenpairs</span></button>
+                <button type="button" data-matrix-operation="determinant" aria-pressed="false"><strong>det(A)</strong><span data-i18n="matrixDeterminantShort">Determinant</span></button>
               </div>
+
+              <div class="matrix-expression-preview" aria-live="polite"><span data-i18n="matrixOperation">Operation</span><strong id="matrix-expression">A + B</strong></div>
+
+              <div class="matrix-inputs">
+                <section class="matrix-card" id="matrix-a-card">
+                  <header><label for="matrix-a" data-i18n="matrixA">Matrix A</label><output id="matrix-a-shape" aria-live="polite">2 × 2</output></header>
+                  <div class="matrix-entry-shell"><textarea id="matrix-a" rows="5" spellcheck="false" inputmode="text" enterkeyhint="enter" autocapitalize="off" autocomplete="off" autocorrect="off" aria-describedby="matrix-input-hint">1 2
+3 4</textarea></div>
+                  <div class="matrix-template-row" role="group" aria-label="Matrix A templates" data-i18n-aria="matrixTemplatesAria">
+                    <button type="button" data-matrix-target="a" data-matrix-template="2">2 × 2</button><button type="button" data-matrix-target="a" data-matrix-template="3">3 × 3</button><button type="button" data-matrix-target="a" data-matrix-template="identity">I</button><button type="button" data-matrix-target="a" data-matrix-template="clear" data-i18n="matrixClear">Clear</button>
+                  </div>
+                </section>
+                <section class="matrix-card" id="matrix-b-card">
+                  <header><label for="matrix-b" data-i18n="matrixB">Matrix B</label><output id="matrix-b-shape" aria-live="polite">2 × 2</output></header>
+                  <div class="matrix-entry-shell"><textarea id="matrix-b" rows="5" spellcheck="false" inputmode="text" enterkeyhint="enter" autocapitalize="off" autocomplete="off" autocorrect="off" aria-describedby="matrix-input-hint">5 6
+7 8</textarea></div>
+                  <div class="matrix-template-row" role="group" aria-label="Matrix B templates" data-i18n-aria="matrixTemplatesAria">
+                    <button type="button" data-matrix-target="b" data-matrix-template="2">2 × 2</button><button type="button" data-matrix-target="b" data-matrix-template="3">3 × 3</button><button type="button" data-matrix-target="b" data-matrix-template="identity">I</button><button type="button" data-matrix-target="b" data-matrix-template="clear" data-i18n="matrixClear">Clear</button>
+                  </div>
+                </section>
+              </div>
+              <p class="matrix-input-hint" id="matrix-input-hint" data-i18n="matrixInputHint">One row per line · spaces or commas between values</p>
               <div class="matrix-controls">
                 <label><span data-i18n="matrixOperation">Operation</span><select id="matrix-operation">
                   <option value="add" data-i18n="matrixAdd">A + B</option>
@@ -159,9 +196,14 @@
                   <option value="eigen" data-i18n="matrixEigen">Eigenvalues &amp; eigenvectors of A</option>
                   <option value="determinant" data-i18n="matrixDeterminant">Determinant of A</option>
                 </select></label>
+                <button class="matrix-swap" id="matrix-swap" type="button"><span aria-hidden="true">⇄</span><span data-i18n="matrixSwap">Swap A and B</span></button>
                 <button class="primary-action matrix-calculate" id="matrix-calculate" type="button" data-i18n="calculateMatrix">Calculate</button>
               </div>
-              <section class="matrix-result" aria-live="polite" aria-atomic="true"><p class="eyebrow" data-i18n="matrixResult">Result</p><div id="matrix-result"><span class="empty-state" data-i18n="matrixReady">Choose an operation and calculate.</span></div></section>
+              <section class="matrix-result" aria-labelledby="matrix-result-title">
+                <header class="matrix-result__header"><div><p class="eyebrow" id="matrix-result-title" data-i18n="matrixResult">Result</p><strong id="matrix-result-expression">A + B</strong></div><output id="matrix-result-shape">—</output></header>
+                <div id="matrix-result" aria-live="polite" aria-atomic="true"><span class="empty-state" data-i18n="matrixReady">Choose an operation and calculate.</span></div>
+                <p class="matrix-result__summary" id="matrix-result-summary" data-i18n="matrixResultSummary">Input and result dimensions will appear here.</p>
+              </section>
               <p class="matrix-note" data-i18n="matrixNote">Eigenvectors are available for all real 2 × 2 matrices and for real symmetric matrices up to 6 × 6. Complex 2 × 2 eigenpairs are displayed symbolically.</p>
             </div>
 
@@ -305,6 +347,7 @@ Transport: 1500</textarea></label><button type="button" id="budget-calculate" da
         <option value="en-GB">🇬🇧 English</option><option value="zh-Hant">🇹🇼 繁體中文</option><option value="zh-Hans">🇨🇳 简体中文</option>
         <option value="ja">🇯🇵 日本語</option><option value="ko">🇰🇷 한국어</option><option value="ms">🇲🇾 Bahasa Melayu</option>
         <option value="fr">🇫🇷 Français</option><option value="de">🇩🇪 Deutsch</option><option value="es">🇪🇸 Español</option><option value="ar">🇸🇦 العربية</option>
+        <option value="th">🇹🇭 ไทย</option><option value="yue-Hant-HK">🇭🇰 粵語</option>
       </select>
     </label>
 
@@ -334,6 +377,6 @@ Transport: 1500</textarea></label><button type="button" id="budget-calculate" da
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="calculator-core.js"></script><script src="calculator-data.js"></script><script src="linear-algebra-core.js"></script><script src="computer-core.js"></script><script src="economics-core.js"></script><script src="computer-i18n.js"></script><script src="economics-i18n.js"></script><script src="app.js"></script><script src="linear-algebra.js"></script><script src="site-ui.js"></script><script src="computer-calculator.js"></script><script src="economics-calculator.js"></script>
+    <script src="calculator-core.js"></script><script src="calculator-data.js"></script><script src="linear-algebra-core.js"></script><script src="computer-core.js"></script><script src="economics-core.js"></script><script src="linear-algebra-i18n.js"></script><script src="computer-i18n.js"></script><script src="economics-i18n.js"></script><script src="additional-locales.js"></script><script src="app.js"></script><script src="site-ui.js"></script><script src="linear-algebra.js"></script><script src="computer-calculator.js"></script><script src="economics-calculator.js"></script>
   </body>
 </html>

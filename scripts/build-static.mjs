@@ -8,6 +8,8 @@ const publicFiles = [
   "calculator-core.js",
   "calculator-data.js",
   "linear-algebra-core.js",
+  "linear-algebra-i18n.js",
+  "additional-locales.js",
   "computer-core.js",
   "economics-core.js",
   "app.js",

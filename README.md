@@ -53,8 +53,8 @@ Create the API token in Cloudflare with the minimum **Account / Cloudflare Pages
 - A locked, full-screen calculator view with automatic fit and button-controlled zoom
 - Live device-battery percentage and charging state when the browser exposes the Battery Status API
 - Panning only when the enlarged calculator exceeds the available viewport
-- A prominent fx-50FH II model identity and a ten-language Manual designed for both physical-calculator and web-simulator users
-- Automatic system-language selection plus a persistent ten-language picker, including French, German, Spanish and Arabic
+- A prominent fx-50FH II model identity and a twelve-language Manual designed for both physical-calculator and web-simulator users
+- Automatic system-language selection plus a persistent twelve-language picker, including Thai and Hong Kong Cantonese
 - Keyboard input and responsive phone/desktop layouts
 - A parser written without JavaScript `eval`
 - Complex arithmetic in rectangular and polar form, including `arg` and conjugates
@@ -71,7 +71,7 @@ Create the API token in Cloudflare with the minimum **Account / Cloudflare Pages
 - Economics Calculator reference FX with Frankfurter v2 attribution, timeout/schema checks, last-success cache, stale/offline state and manual-rate fallback
 - Official HKMA public-API views for the HSBC quoted best lending rate series, HIBOR fixing tenors and Discount Window Base Rate
 - Explicit-assumption interest/EAR/savings tools, educational P-plan/H-plan mortgage scenarios, fee-aware IRR/APR estimates, amortization, budget and real-return tools
-- English, Traditional Chinese, Simplified Chinese, Japanese, Korean, Malay, French, German, Spanish, and Arabic interface support
+- English, Traditional Chinese, Simplified Chinese, Japanese, Korean, Malay, French, German, Spanish, Arabic, Thai, and Hong Kong Cantonese interface support
 
 ## Verified reference feature set
 

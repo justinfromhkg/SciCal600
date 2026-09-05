@@ -130,12 +130,25 @@
     Object.assign(ui[language], dictionary);
   });
 
+  Object.entries(window.SciCalLinearTranslations || {}).forEach(([language, dictionary]) => {
+    if (ui[language]) Object.assign(ui[language], dictionary);
+  });
+
   Object.entries(window.SciCalComputerTranslations || {}).forEach(([language, dictionary]) => {
     if (ui[language]) Object.assign(ui[language], dictionary);
   });
 
   Object.entries(window.SciCalEconomicsTranslations || {}).forEach(([language, dictionary]) => {
     if (ui[language]) Object.assign(ui[language], dictionary);
+  });
+
+  Object.entries(window.SciCalAdditionalLocales || {}).forEach(([language, locale]) => {
+    const { fallback = "en-GB", ...dictionary } = locale;
+    ui[language] = { ...ui[fallback], ...dictionary };
+  });
+
+  Object.values(ui).forEach((dictionary) => {
+    if (dictionary.aboutTitle) dictionary.aboutTitle = dictionary.aboutTitle.replace(/[,.，。،]/g, "");
   });
 
   const manuals = {
@@ -261,6 +274,10 @@
     ],
   };
 
+  Object.entries(window.SciCalAdditionalManuals || {}).forEach(([language, sections]) => {
+    manuals[language] = sections;
+  });
+
   const languageSelect = document.querySelector("#language-select");
   const viewport = document.querySelector("#calculator-viewport");
   const space = document.querySelector("#calculator-space");
@@ -340,6 +357,8 @@
     if (saved && ui[saved]) return saved;
     for (const rawLanguage of navigator.languages || [navigator.language]) {
       const language = String(rawLanguage || "").toLowerCase();
+      if (language.startsWith("yue")) return "yue-Hant-HK";
+      if (language.startsWith("th")) return "th";
       if (language.startsWith("zh-tw") || language.startsWith("zh-hk") || language.startsWith("zh-mo") || language.includes("hant")) return "zh-Hant";
       if (language.startsWith("zh") || language.includes("hans")) return "zh-Hans";
       if (language.startsWith("ja")) return "ja";

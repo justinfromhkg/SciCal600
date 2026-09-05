@@ -283,16 +283,20 @@ async function runFunctionalChecks(page) {
   assert.equal(await page.locator('[data-view-panel="about"]').isVisible(), true, "root platform page");
   assert.match(await page.locator('[data-view-panel="about"] h1').textContent(), /math/i);
   assert.equal(await page.locator(".home-tool-card").count(), 4, "home should show all four calculators at equal prominence");
+  assert.equal(await page.locator("#language-select option").count(), 12, "language picker should expose twelve languages");
   for (const [language, expected, direction] of [
     ["fr", /maths/i, "ltr"],
     ["de", /Mathematik/i, "ltr"],
     ["es", /Matemáticas/i, "ltr"],
     ["ar", /رياضيات/, "rtl"],
+    ["th", /คณิตศาสตร์/, "ltr"],
+    ["yue-Hant-HK", /搞掂/, "ltr"],
   ]) {
     await page.locator("#language-select").selectOption(language);
     assert.equal(await page.locator("html").getAttribute("lang"), language, `${language} language selection`);
     assert.equal(await page.locator("html").getAttribute("dir"), direction, `${language} writing direction`);
     assert.match(await page.locator('[data-view-panel="about"] h1').textContent(), expected, `${language} About translation`);
+    assert.doesNotMatch(await page.locator('[data-view-panel="about"] h1').textContent(), /[,.，。،]/, `${language} About title punctuation`);
   }
   await page.goto("/about", { waitUntil: "networkidle" });
   assert.equal(new URL(page.url()).pathname, "/about", "/about is a stable formal route");
@@ -301,14 +305,70 @@ async function runFunctionalChecks(page) {
   await page.locator('[data-view-target="linear-algebra"]').first().click();
   assert.equal(new URL(page.url()).pathname, "/linear-algebra", "linear algebra navigation path");
   assert.equal(await page.locator("#matrix-a").getAttribute("inputmode"), "text", "matrix A uses a text keyboard with spaces and Return");
+  assert.equal(await page.locator("[data-matrix-operation]").count(), 8, "all eight requested matrix operations are prominent");
+  const linearLayout = await page.evaluate(() => {
+    const buttons = [...document.querySelectorAll("#matrix-workspace button")]
+      .filter((button) => button.offsetParent && !button.hidden)
+      .map((button) => button.getBoundingClientRect().height);
+    return {
+      scrollWidth: document.documentElement.scrollWidth,
+      innerWidth: window.innerWidth,
+      minButtonHeight: Math.min(...buttons),
+    };
+  });
+  assert.ok(linearLayout.scrollWidth <= linearLayout.innerWidth, "Linear Algebra has no mobile horizontal overflow");
+  assert.ok(linearLayout.minButtonHeight >= 44, `Linear Algebra minimum touch target is ${linearLayout.minButtonHeight}`);
+  const operationShortcut = page.locator('[data-matrix-operation="multiply"]');
+  await operationShortcut.dispatchEvent("pointerdown", { pointerId: 61, pointerType: "touch", isPrimary: true, buttons: 1 });
+  assert.equal(await operationShortcut.evaluate((element) => element.classList.contains("is-pressed")), true, "matrix shortcut has immediate touch feedback");
+  await operationShortcut.dispatchEvent("pointerup", { pointerId: 61, pointerType: "touch", isPrimary: true, buttons: 0 });
+  assert.equal(await operationShortcut.evaluate((element) => element.classList.contains("is-pressed")), false, "matrix shortcut clears touch feedback");
   await page.locator("#matrix-a").fill("1 2\r\n3 4");
   await page.locator("#matrix-b").fill("5,6\n7,8");
   await page.locator("#matrix-operation").selectOption("multiply");
+  assert.equal(await operationShortcut.getAttribute("aria-pressed"), "true", "select and shortcut stay synchronized");
   await page.locator("#matrix-calculate").click();
   assert.deepEqual(await page.locator("#matrix-result td").allTextContents(), ["19", "22", "43", "50"], "matrix multiplication UI");
-  await page.locator("#matrix-operation").selectOption("determinant");
+  assert.equal(await page.locator("#matrix-result-shape").textContent(), "2 × 2", "matrix result reports its dimensions");
+  await page.locator("#matrix-swap").click();
+  assert.equal(await page.locator("#matrix-a").inputValue(), "5,6\n7,8", "swap exchanges matrix A");
+  assert.equal(await page.locator("#matrix-b").inputValue(), "1 2\n3 4", "swap exchanges matrix B");
+  await page.locator('[data-matrix-example="determinant"]').click();
+  assert.equal(await page.locator("#matrix-operation").inputValue(), "determinant", "example selects its operation");
+  assert.equal(await page.locator("#matrix-b-card").isHidden(), true, "unary operation hides matrix B");
+  assert.equal(await page.locator("#matrix-result").textContent(), "4", "determinant example calculates immediately");
+  await page.locator('[data-matrix-target="a"][data-matrix-template="identity"]').click();
+  assert.equal(await page.locator("#matrix-a").inputValue(), "1 0 0\n0 1 0\n0 0 1", "identity template follows the current square dimension");
+  assert.equal(await page.locator("#matrix-a-shape").textContent(), "3 × 3", "matrix dimension updates live");
+  await page.locator('[data-matrix-target="a"][data-matrix-template="clear"]').click();
   await page.locator("#matrix-calculate").click();
-  assert.equal(await page.locator("#matrix-result").textContent(), "-2", "determinant UI");
+  assert.equal(await page.locator("#matrix-a").getAttribute("aria-invalid"), "true", "invalid input is associated with matrix A");
+  await page.locator('[data-matrix-example="product"]').click();
+  assert.equal(await page.locator("#matrix-a-shape").textContent(), "2 × 3", "rectangular example reports matrix A dimensions");
+  assert.equal(await page.locator("#matrix-b-shape").textContent(), "3 × 2", "rectangular example reports matrix B dimensions");
+  assert.deepEqual(await page.locator("#matrix-result td").allTextContents(), ["58", "64", "139", "154"], "rectangular example calculates immediately");
+  await page.locator('[data-matrix-example="eigen"]').click();
+  assert.equal(await page.locator("#matrix-result-shape").textContent(), "2 eigenpairs", "eigen result context starts in English");
+  await page.locator("#language-select").selectOption("zh-Hans");
+  await page.evaluate(() => new Promise(requestAnimationFrame));
+  assert.equal(await page.locator('[data-matrix-operation="inverse"] span').textContent(), "逆矩阵", "matrix workspace is localized");
+  assert.equal(await page.locator("#matrix-result-shape").textContent(), "2 组特征对", "dynamic eigen context follows the selected language");
+  assert.match(await page.locator("#matrix-result-summary").textContent(), /A 2 × 2/, "language changes preserve dynamic result dimensions");
+  await page.locator("#language-select").selectOption("th");
+  assert.match(await page.locator('[data-view-panel="linear-algebra"] h1').textContent(), /เมทริกซ์/, "Thai Linear Algebra translation");
+  assert.equal(await page.locator('[data-matrix-operation="inverse"] span').textContent(), "อินเวอร์ส", "Thai matrix shortcut translation");
+  await page.locator("#language-select").selectOption("yue-Hant-HK");
+  assert.match(await page.locator('[data-view-panel="linear-algebra"] h1').textContent(), /唔使/, "Cantonese Linear Algebra translation");
+  assert.match(await page.locator(".matrix-input-hint").textContent(), /或者/, "Cantonese matrix input guidance");
+  await page.locator("#language-select").selectOption("ar");
+  const rtlHeader = await page.evaluate(() => {
+    const boxes = [".language-picker", ".app-nav-button", ".app-bar .brand"]
+      .map((selector) => document.querySelector(selector).getBoundingClientRect());
+    const overlap = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    return { overlaps: overlap(boxes[0], boxes[1]) || overlap(boxes[0], boxes[2]) };
+  });
+  assert.equal(rtlHeader.overlaps, false, "RTL Linear Algebra header controls should not overlap");
+  await page.locator("#language-select").selectOption("en-GB");
   await page.reload({ waitUntil: "networkidle" });
   assert.equal(await page.locator('[data-view-panel="linear-algebra"]').isVisible(), true, "direct /linear-algebra refresh route");
   await page.goto("/computer-calculator", { waitUntil: "networkidle" });
@@ -404,7 +464,7 @@ async function runFunctionalChecks(page) {
       if (viewport.name === "iPhone 16/17 Pro") await runFunctionalChecks(page);
       await context.close();
     }
-    console.log("PASS touch feedback, modes 02–06, direct routes, four added languages, and Linear Algebra UI");
+    console.log("PASS touch feedback, modes 02–06, direct routes, six added languages, and Linear Algebra UI");
   } finally {
     await browser.close();
     await new Promise((resolve) => server.close(resolve));

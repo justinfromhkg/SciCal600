@@ -35,6 +35,8 @@
     text = text
       .replace(/\]\s*,\s*\[/g, "\n")
       .replace(/[\[\]]/g, "")
+      .replace(/[−–—﹣－]/g, "-")
+      .replace(/＋/g, "+")
       .replace(/[;；]/g, "\n")
       .replace(/\r\n?/g, "\n");
     const rawRows = text.split("\n");
@@ -94,9 +96,17 @@
     return rows;
   }
 
+  function pivotTolerance(matrix) {
+    const scale = matrix.reduce((largest, row) => row.reduce((rowLargest, value) => (
+      Math.max(rowLargest, Math.abs(value))
+    ), largest), 0);
+    return Math.max(Number.MIN_VALUE, scale * Number.EPSILON * matrix.length * 32);
+  }
+
   function determinant(matrix) {
     const size = requireSquare(matrix);
     const working = matrix.map((row) => row.slice());
+    const tolerance = pivotTolerance(matrix);
     let sign = 1;
     let result = 1;
     for (let column = 0; column < size; column += 1) {
@@ -104,7 +114,7 @@
       for (let row = column + 1; row < size; row += 1) {
         if (Math.abs(working[row][column]) > Math.abs(working[pivot][column])) pivot = row;
       }
-      if (Math.abs(working[pivot][column]) < EPSILON) return 0;
+      if (Math.abs(working[pivot][column]) <= tolerance) return 0;
       if (pivot !== column) {
         [working[pivot], working[column]] = [working[column], working[pivot]];
         sign *= -1;
@@ -118,12 +128,12 @@
         }
       }
     }
-    const value = result * sign;
-    return Math.abs(value) < EPSILON ? 0 : value;
+    return cleanNumber(result * sign);
   }
 
   function inverse(matrix) {
     const size = requireSquare(matrix);
+    const tolerance = pivotTolerance(matrix);
     const augmented = matrix.map((row, rowIndex) => [
       ...row,
       ...Array.from({ length: size }, (_, columnIndex) => Number(rowIndex === columnIndex)),
@@ -134,7 +144,7 @@
       for (let row = column + 1; row < size; row += 1) {
         if (Math.abs(augmented[row][column]) > Math.abs(augmented[pivot][column])) pivot = row;
       }
-      if (Math.abs(augmented[pivot][column]) < EPSILON) throw new MatrixError("Matrix A is singular and has no inverse.");
+      if (Math.abs(augmented[pivot][column]) <= tolerance) throw new MatrixError("Matrix A is singular and has no inverse.");
       [augmented[pivot], augmented[column]] = [augmented[column], augmented[pivot]];
       const divisor = augmented[column][column];
       augmented[column] = augmented[column].map((value) => value / divisor);
@@ -163,9 +173,10 @@
   }
 
   function cleanNumber(value) {
-    if (Math.abs(value) < EPSILON) return 0;
+    if (value === 0 || Object.is(value, -0)) return 0;
     const rounded = Math.round(value);
-    return Math.abs(value - rounded) < EPSILON ? rounded : Number(value.toPrecision(12));
+    const roundingTolerance = Number.EPSILON * Math.max(1, Math.abs(value)) * 32;
+    return Math.abs(value - rounded) <= roundingTolerance ? rounded : Number(value.toPrecision(12));
   }
 
   function normalize(vector) {
