@@ -2,6 +2,12 @@
 
 SciCal600 is a responsive Smart Calculator platform. It combines a scientific calculator inspired by the Casio fx-50FH II workflow with Linear Algebra, Computer Calculator, and Economics Calculator workspaces.
 
+## Use it online
+
+**Production website:** [Open SciCal600](https://scical600.pages.dev/)
+
+Direct workspaces: [Scientific Calculator](https://scical600.pages.dev/scientific-calculator) · [Linear Algebra](https://scical600.pages.dev/linear-algebra) · [Computer Calculator](https://scical600.pages.dev/computer-calculator) · [Economics Calculator](https://scical600.pages.dev/economics-calculator) · [About](https://scical600.pages.dev/about)
+
 > The physical Casio fx-50FH II is listed by Casio as HKEAA-approved. This independent web simulator is not a Casio product and is not approved for use in examinations.
 
 ## Run it
