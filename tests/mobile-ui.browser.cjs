@@ -61,6 +61,8 @@ async function checkLayout(page, viewport) {
     });
     const canvas = document.querySelector("#calculator-space").getBoundingClientRect();
     const calculator = document.querySelector(".calculator").getBoundingClientRect();
+    const calculatorViewport = document.querySelector("#calculator-viewport");
+    const calculatorViewportBox = calculatorViewport.getBoundingClientRect();
     return {
       documentWidth: document.documentElement.scrollWidth,
       innerWidth: window.innerWidth,
@@ -71,10 +73,17 @@ async function checkLayout(page, viewport) {
       calculatorWidth: calculator.width,
       canvasRight: canvas.right,
       canvasLeft: canvas.left,
-      viewportWidth: document.querySelector("#calculator-viewport").clientWidth,
-      viewportScrollHeight: document.querySelector("#calculator-viewport").scrollHeight,
-      viewportClientHeight: document.querySelector("#calculator-viewport").clientHeight,
-      viewportOverflowing: document.querySelector("#calculator-viewport").classList.contains("is-overflowing"),
+      calculatorTop: calculator.top,
+      calculatorBottom: calculator.bottom,
+      viewportTop: calculatorViewportBox.top,
+      viewportBottom: calculatorViewportBox.bottom,
+      viewportWidth: calculatorViewport.clientWidth,
+      viewportScrollHeight: calculatorViewport.scrollHeight,
+      viewportClientHeight: calculatorViewport.clientHeight,
+      viewportOverflowing: calculatorViewport.classList.contains("is-overflowing"),
+      viewportFitLocked: calculatorViewport.classList.contains("is-fit-locked"),
+      hiddenDecorations: [".stage-label", ".calculator__topline", ".calculator__footer", ".keyboard-hint"]
+        .every((selector) => getComputedStyle(document.querySelector(selector)).display === "none"),
       hasViewportFit: document.querySelector('meta[name="viewport"]').content.includes("viewport-fit=cover"),
       usesSafeArea: [...document.styleSheets].some((sheet) => {
         try { return [...sheet.cssRules].some((rule) => rule.cssText.includes("safe-area-inset")); } catch { return false; }
@@ -93,20 +102,38 @@ async function checkLayout(page, viewport) {
     assert.equal(metrics.viewportOverflowing, true, `${viewport.name}: compact landscape should pan vertically`);
     assert.ok(metrics.viewportScrollHeight > metrics.viewportClientHeight, `${viewport.name}: landscape content should be scrollable`);
   } else {
-    assert.ok(metrics.calculatorWidth >= metrics.innerWidth * 0.9, `${viewport.name}: calculator should fill the phone width`);
-    assert.ok(metrics.minKeyHeight >= 48, `${viewport.name}: portrait key height ${metrics.minKeyHeight} is too small`);
-    assert.ok(metrics.minLegendFontSize >= 9.5, `${viewport.name}: upper key labels should remain readable`);
-    assert.equal(metrics.viewportOverflowing, true, `${viewport.name}: enlarged portrait calculator should scroll vertically`);
-    assert.ok(metrics.viewportScrollHeight > metrics.viewportClientHeight, `${viewport.name}: portrait calculator should have an internal vertical scroll area`);
-    await page.locator("#calculator-viewport").evaluate((element) => { element.scrollTop = element.scrollHeight; });
-    const stickyDisplay = await page.evaluate(() => {
-      const viewportBox = document.querySelector("#calculator-viewport").getBoundingClientRect();
-      const displayBox = document.querySelector(".display").getBoundingClientRect();
-      return { viewportTop: viewportBox.top, viewportBottom: viewportBox.bottom, displayTop: displayBox.top, displayBottom: displayBox.bottom };
-    });
-    assert.ok(stickyDisplay.displayTop >= stickyDisplay.viewportTop - 2, `${viewport.name}: sticky display is clipped above the viewport`);
-    assert.ok(stickyDisplay.displayBottom < stickyDisplay.viewportBottom, `${viewport.name}: sticky display is hidden by the bottom dock`);
-    await page.locator("#calculator-viewport").evaluate((element) => { element.scrollTop = 0; });
+    assert.ok(metrics.calculatorWidth >= metrics.innerWidth * 0.88, `${viewport.name}: calculator should fill the phone width`);
+    assert.ok(metrics.minKeyHeight >= 44, `${viewport.name}: portrait key height ${metrics.minKeyHeight} is too small`);
+    assert.ok(metrics.minLegendFontSize >= 9, `${viewport.name}: upper key labels should remain readable`);
+    assert.equal(metrics.hiddenDecorations, true, `${viewport.name}: nonfunctional hardware should be removed from the phone fit view`);
+    assert.equal(metrics.viewportOverflowing, false, `${viewport.name}: phone fit view should not overflow`);
+    assert.equal(metrics.viewportFitLocked, true, `${viewport.name}: phone fit view should be locked`);
+    assert.ok(metrics.viewportScrollHeight <= metrics.viewportClientHeight + 1, `${viewport.name}: phone fit view should not scroll vertically`);
+    assert.ok(metrics.calculatorTop >= metrics.viewportTop - 1, `${viewport.name}: calculator top is clipped`);
+    assert.ok(metrics.calculatorBottom <= metrics.viewportBottom + 1, `${viewport.name}: calculator bottom is hidden by the dock`);
+    await page.locator("#calculator-viewport").evaluate((element) => { element.scrollTop = 100; });
+    assert.equal(await page.locator("#calculator-viewport").evaluate((element) => element.scrollTop), 0, `${viewport.name}: locked fit view accepted programmatic scroll`);
+
+    const touchTarget = await page.locator("#calculator-viewport").boundingBox();
+    const cdp = await page.context().newCDPSession(page);
+    const touchX = touchTarget.x + 3;
+    const touchStartY = touchTarget.y + touchTarget.height * 0.68;
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: touchX, y: touchStartY }] });
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: touchX, y: touchStartY - 120 }] });
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+    assert.deepEqual(
+      await page.evaluate(() => [document.scrollingElement.scrollTop, document.querySelector("#calculator-viewport").scrollTop]),
+      [0, 0],
+      `${viewport.name}: a real touch swipe moved the locked calculator`,
+    );
+
+    if (viewport.name === "iPhone 17 Pro browser toolbar") {
+      await page.locator('[data-zoom="in"]').click();
+      await page.waitForFunction(() => document.querySelector("#calculator-viewport").classList.contains("is-overflowing"));
+      assert.equal(await page.locator("#calculator-viewport").evaluate((element) => element.classList.contains("is-fit-locked")), false, "manual zoom should unlock the viewport");
+      await page.locator('[data-zoom="out"]').click();
+      await page.waitForFunction(() => document.querySelector("#calculator-viewport").classList.contains("is-fit-locked"));
+    }
   }
   return metrics;
 }
@@ -368,8 +395,8 @@ async function runFunctionalChecks(page) {
       if (viewport.name === "iPhone 16/17 Pro") iPhone17Metrics = metrics;
       if (viewport.name === "iPhone 17 Pro browser toolbar") {
         assert.ok(iPhone17Metrics, "standard iPhone 17 Pro metrics should be available");
-        assert.ok(Math.abs(metrics.minKeyHeight - iPhone17Metrics.minKeyHeight) < 0.5, "browser toolbar height changes should not shrink calculator keys");
-        assert.ok(Math.abs(metrics.calculatorWidth - iPhone17Metrics.calculatorWidth) < 0.5, "browser toolbar height changes should not shrink the calculator body");
+        assert.ok(metrics.minKeyHeight >= 44, "browser toolbar height changes should preserve comfortable calculator keys");
+        assert.ok(metrics.calculatorWidth >= iPhone17Metrics.calculatorWidth * 0.9, "browser toolbar height changes should preserve a full-width calculator body");
         const homeMetrics = await checkCompactHome(page, viewport);
         console.log(`PASS ${viewport.name} home: ${homeMetrics.cardCount} primary calculator choices above the fold`);
       }

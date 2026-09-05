@@ -412,19 +412,24 @@
 
   function updateScale() {
     if (!canvas || !viewport.clientWidth || !viewport.clientHeight) return;
+    const phonePortrait = viewport.clientWidth <= 560 && viewport.clientHeight > viewport.clientWidth;
+    const compactPhoneHeight = phonePortrait && viewport.clientHeight <= 650;
+    viewport.classList.toggle("is-phone-portrait", phonePortrait);
+    viewport.classList.toggle("is-compact-height", compactPhoneHeight);
+
+    // The portrait classes deliberately remove decorative hardware before the
+    // natural size is measured. This keeps the useful LCD and key field large
+    // enough to fit in the live mobile viewport without an internal scroll.
     const naturalWidth = canvas.offsetWidth;
     const naturalHeight = canvas.scrollHeight;
     const horizontalGutter = viewport.clientWidth <= 560 ? 8 : 24;
     const verticalGutter = viewport.clientHeight <= 620 ? 4 : 16;
     const widthScale = (viewport.clientWidth - horizontalGutter) / naturalWidth;
     const heightScale = (viewport.clientHeight - verticalGutter) / naturalHeight;
-    const phonePortrait = viewport.clientWidth <= 560 && viewport.clientHeight > viewport.clientWidth;
     const compactLandscape = viewport.clientWidth > viewport.clientHeight * 1.25 && viewport.clientHeight < 600;
-    // Mobile browser chrome changes the visual viewport height while scrolling. In
-    // portrait, fitting against that transient height made the entire calculator
-    // pulse smaller and reduced its keys below a comfortable touch size. Fill the
-    // stable width instead and let the dedicated viewport scroll vertically.
-    const fitScale = phonePortrait || compactLandscape
+    // Landscape remains intentionally pannable. Portrait "Fit" uses both live
+    // dimensions so Safari/Chrome toolbar changes never hide the final key row.
+    const fitScale = compactLandscape
       ? Math.min(1, widthScale)
       : Math.min(1, widthScale, heightScale);
     const scale = Math.max(0.35, fitScale * zoomFactor);
@@ -435,9 +440,10 @@
     space.style.width = `${scaledWidth}px`;
     space.style.height = `${scaledHeight}px`;
     space.style.marginInline = scaledWidth <= viewport.clientWidth - horizontalGutter ? "auto" : "0";
-    const overflowing = scaledWidth > viewport.clientWidth - horizontalGutter || scaledHeight > viewport.clientHeight - verticalGutter;
-    viewport.classList.toggle("is-phone-portrait", phonePortrait);
+    const overflowing = scaledWidth > viewport.clientWidth - horizontalGutter + 1
+      || scaledHeight > viewport.clientHeight - verticalGutter + 1;
     viewport.classList.toggle("is-overflowing", overflowing);
+    viewport.classList.toggle("is-fit-locked", phonePortrait && !overflowing && zoomFactor <= 1);
     if (!overflowing) {
       viewport.scrollLeft = 0;
       viewport.scrollTop = 0;
