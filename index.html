@@ -13,6 +13,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="computer-calculator.css" />
+    <link rel="stylesheet" href="economics-calculator.css" />
   </head>
   <body class="is-about-view">
     <div class="page-glow page-glow--one" aria-hidden="true"></div>
@@ -123,6 +125,8 @@
               <div class="home-tool-grid">
                 <article class="home-tool-card"><span class="home-tool-card__number">01</span><div><h3 data-i18n="scientificToolTitle">Scientific calculator fx-50FH II</h3><button class="primary-action" type="button" data-view-target="calculator" data-i18n="openScientific">Open scientific calculator</button></div></article>
                 <article class="home-tool-card"><span class="home-tool-card__number">02</span><div><h3 data-i18n="linearToolTitle">Linear Algebra</h3><button class="primary-action" type="button" data-view-target="linear-algebra" data-i18n="openLinear">Open Linear Algebra</button></div></article>
+                <article class="home-tool-card"><span class="home-tool-card__number">03</span><div><h3 data-i18n="computerToolTitle">Computer Calculator</h3><button class="primary-action" type="button" data-view-target="computer-calculator" data-i18n="openComputer">Open Computer Calculator</button></div></article>
+                <article class="home-tool-card"><span class="home-tool-card__number">04</span><div><h3 data-i18n="economicsToolTitle">Economics Calculator</h3><button class="primary-action" type="button" data-view-target="economics-calculator" data-i18n="openEconomics">Open Economics Calculator</button></div></article>
               </div>
             </section>
 
@@ -133,15 +137,15 @@
         <section class="app-view app-view--scrollable" data-view-panel="linear-algebra" hidden>
           <div class="content-page content-page--linear">
             <div class="linear-hero">
-              <div><p class="eyebrow" data-i18n="linearEyebrow">Smart Calculator · Linear Algebra</p><h1 data-i18n="linearTitle">Matrix calculations, in one clear workspace.</h1><p class="content-page__lead" data-i18n="linearIntro">Enter rows on separate lines and values with spaces or commas. Real matrices up to 6 × 6 are supported.</p></div>
+              <div><p class="eyebrow" data-i18n="linearEyebrow">Smart Calculator · Linear Algebra</p><h1 data-i18n="linearTitle">Matrix calculations, in one clear workspace.</h1><p class="content-page__lead" data-i18n="linearIntro">Enter one matrix row per line; separate columns with spaces or commas, or use semicolons for new rows. Real matrices up to 6 × 6 are supported.</p></div>
               <button class="primary-action" type="button" data-view-target="about" data-i18n="backToTools">Back to tools</button>
             </div>
 
             <div class="matrix-workspace" id="matrix-workspace">
               <div class="matrix-inputs">
-                <label class="matrix-card"><span>Matrix A</span><textarea id="matrix-a" rows="5" spellcheck="false" inputmode="decimal">1 2
+                <label class="matrix-card"><span>Matrix A</span><textarea id="matrix-a" rows="5" spellcheck="false" inputmode="text" enterkeyhint="enter" autocapitalize="off" autocomplete="off" autocorrect="off">1 2
 3 4</textarea></label>
-                <label class="matrix-card" id="matrix-b-card"><span>Matrix B</span><textarea id="matrix-b" rows="5" spellcheck="false" inputmode="decimal">5 6
+                <label class="matrix-card" id="matrix-b-card"><span>Matrix B</span><textarea id="matrix-b" rows="5" spellcheck="false" inputmode="text" enterkeyhint="enter" autocapitalize="off" autocomplete="off" autocorrect="off">5 6
 7 8</textarea></label>
               </div>
               <div class="matrix-controls">
@@ -162,6 +166,117 @@
             </div>
 
             <footer class="content-footer"><span data-i18n="projectFooter">SciCal600 · independent educational project</span><button type="button" class="text-action" data-view-target="calculator" data-i18n="openScientific">Open scientific calculator</button></footer>
+          </div>
+        </section>
+
+        <section class="app-view app-view--scrollable" data-view-panel="computer-calculator" hidden>
+          <div class="content-page content-page--computer" id="computer-calculator">
+            <div class="computer-hero">
+              <div><p class="eyebrow" data-i18n="computerEyebrow">Smart Calculator · Computer Calculator</p><h1 data-i18n="computerTitle">Bits, floating point and computer performance—made visible.</h1><p class="content-page__lead" data-i18n="computerIntro">Explore exact number representations, follow ALU and LMC steps, and calculate practical architecture quantities.</p></div>
+              <button class="primary-action" type="button" data-view-target="about" data-i18n="backToTools">Back to tools</button>
+            </div>
+
+            <nav class="computer-quick-nav" aria-label="Computer calculator sections" data-i18n-aria="computerNavAria">
+              <button type="button" class="is-selected" data-computer-section="numbers"><span>01</span><strong data-i18n="numberSystemsTitle">Number Systems &amp; Integers</strong><small data-i18n="radixQuick">Base conversion · 8/16/32/64-bit</small></button>
+              <button type="button" data-computer-section="floating"><span>02</span><strong data-i18n="floatingTitle">Floating Point</strong><small data-i18n="ieeeQuick">IEEE 754 single &amp; double</small></button>
+              <button type="button" data-computer-section="lmc"><span>03</span><strong data-i18n="lmcTitle">ALU &amp; LMC</strong><small data-i18n="lmcQuick">Assemble · step · run</small></button>
+              <button type="button" data-computer-section="performance"><span>04</span><strong data-i18n="performanceTitle">Memory &amp; Performance</strong><small data-i18n="performanceQuick">Clock · bus · cache · disk</small></button>
+            </nav>
+
+            <section class="computer-layer is-active" data-computer-panel="numbers">
+              <header><span class="layer-number">01</span><div><h2 data-i18n="numberSystemsTitle">Number Systems &amp; Integers</h2><p data-i18n="numbersLead">Convert exact values and inspect every fixed-width interpretation.</p></div></header>
+              <div class="computer-tool-grid">
+                <article class="computer-tool-card computer-tool-card--wide">
+                  <h3 data-i18n="radixConverterTitle">Live radix converter</h3>
+                  <div class="field-grid field-grid--radix"><label><span data-i18n="inputValue">Input value</span><input id="radix-input" value="1010.101" spellcheck="false" dir="ltr" /></label><label><span data-i18n="fromBase">From base</span><input id="radix-from" type="number" min="2" max="36" value="2" /></label><label><span data-i18n="toBase">Extra target base</span><input id="radix-to" type="number" min="2" max="36" value="36" /></label></div>
+                  <label class="inline-check"><input id="radix-grouped" type="checkbox" /><span data-i18n="groupDigits">Group digits</span></label>
+                  <div class="radix-results" id="radix-results" aria-live="polite"></div>
+                </article>
+                <article class="computer-tool-card computer-tool-card--wide">
+                  <h3 data-i18n="integerTitle">Integer bit mode &amp; ALU</h3>
+                  <div class="field-grid"><label><span data-i18n="operandA">Operand A (decimal)</span><input id="integer-a" value="127" inputmode="numeric" dir="ltr" /></label><label><span data-i18n="operandB">Operand B / shift</span><input id="integer-b" value="1" inputmode="numeric" dir="ltr" /></label><label><span data-i18n="bitWidth">Bit width</span><select id="integer-width"><option>8</option><option>16</option><option selected>32</option><option>64</option></select></label><label><span data-i18n="interpretation">Interpretation</span><select id="integer-signed"><option value="false" data-i18n="unsigned">Unsigned</option><option value="true" data-i18n="signedTwos">Signed (two's complement)</option></select></label><label><span data-i18n="operation">Operation</span><select id="integer-operation"><option>ADD</option><option>SUB</option><option>MUL</option><option>DIV</option><option>NEG</option><option>AND</option><option>OR</option><option>XOR</option><option>NOT</option><option>LSL</option><option>LSR</option><option>ASR</option><option>ROL</option><option>ROR</option></select></label></div>
+                  <button class="primary-action" id="integer-calculate" type="button" data-i18n="calculate">Calculate</button>
+                  <div class="computer-result" id="integer-result" aria-live="polite"></div>
+                </article>
+                <article class="computer-tool-card"><h3 data-i18n="bcdTitle">BCD encode / decode</h3><label><span data-i18n="decimalDigits">Decimal digits</span><input id="bcd-decimal" value="2026" inputmode="numeric" dir="ltr" /></label><button type="button" id="bcd-encode" data-i18n="encode">Encode</button><label><span>BCD</span><input id="bcd-bits" value="0010 0000 0010 0110" dir="ltr" /></label><button type="button" id="bcd-decode" data-i18n="decode">Decode</button><div class="computer-result" id="bcd-result" aria-live="polite"></div></article>
+              </div>
+            </section>
+
+            <section class="computer-layer" data-computer-panel="floating" hidden>
+              <header><span class="layer-number">02</span><div><h2 data-i18n="floatingTitle">Floating Point &amp; IEEE 754</h2><p data-i18n="floatingLead">Decode sign, exponent and fraction, including special values and neighbours.</p></div></header>
+              <div class="computer-tool-grid">
+                <article class="computer-tool-card computer-tool-card--wide"><h3>IEEE 754</h3><div class="field-grid"><label><span data-i18n="inputFormat">Input format</span><select id="ieee-format"><option value="decimal" data-i18n="decimal">Decimal</option><option value="hex" data-i18n="hexadecimal">Hexadecimal</option><option value="binary" data-i18n="binary">Binary</option></select></label><label><span data-i18n="precision">Precision</span><select id="ieee-width"><option value="32">32-bit single (1·8·23)</option><option value="64">64-bit double (1·11·52)</option></select></label><label><span data-i18n="inputValue">Input value</span><input id="ieee-input" value="-13.25" dir="ltr" /></label></div><button class="primary-action" type="button" id="ieee-inspect" data-i18n="inspect">Inspect</button><div class="ieee-segments" id="ieee-segments" aria-label="IEEE 754 bit fields"></div><div class="computer-result" id="ieee-result" aria-live="polite"></div></article>
+                <article class="computer-tool-card"><h3 data-i18n="teachingFloat">Teaching format (not IEEE 754)</h3><div class="field-grid"><label><span>S/E/M bits</span><input id="custom-layout" value="1/3/4" dir="ltr" /></label><label><span>Bias</span><input id="custom-bias" type="number" value="3" /></label><label><span data-i18n="radix">Radix</span><input id="custom-radix" type="number" min="2" max="36" value="2" /></label><label><span data-i18n="inputValue">Input value</span><input id="custom-input" value="6.5" dir="ltr" /></label></div><button type="button" id="custom-encode" data-i18n="encode">Encode</button><div class="computer-result" id="custom-result" aria-live="polite"></div></article>
+                <article class="computer-tool-card"><h3 data-i18n="floatingAdd">Floating-point addition steps</h3><div class="field-grid"><label>A<input id="float-a" value="1.5" dir="ltr" /></label><label>B<input id="float-b" value="0.25" dir="ltr" /></label><label><span data-i18n="operation">Operation</span><select id="float-operation"><option value="add">+</option><option value="subtract">−</option></select></label></div><button type="button" id="float-calculate" data-i18n="showSteps">Show steps</button><div class="computer-result" id="float-result" aria-live="polite"></div></article>
+              </div>
+            </section>
+
+            <section class="computer-layer" data-computer-panel="lmc" hidden>
+              <header><span class="layer-number">03</span><div><h2 data-i18n="lmcTitle">ALU &amp; Little Man's Computer</h2><p data-i18n="lmcLead">A 100-mailbox sandbox with visible fetch-decode-execute state.</p></div></header>
+              <article class="computer-tool-card lmc-workspace"><div class="lmc-editor"><label><span data-i18n="program">Program</span><textarea id="lmc-source" rows="12" spellcheck="false" dir="ltr">INP
+STA VALUE
+LDA VALUE
+ADD VALUE
+OUT
+HLT
+VALUE DAT 0</textarea></label><label><span data-i18n="inputQueue">Input queue</span><input id="lmc-input" value="21" dir="ltr" /></label><label><span data-i18n="breakpoints">Breakpoints (addresses)</span><input id="lmc-breakpoints" placeholder="e.g. 04, 07" dir="ltr" /></label><div class="button-row"><button type="button" id="lmc-assemble" data-i18n="assemble">Assemble</button><button type="button" id="lmc-step" data-i18n="singleStep">Step</button><button type="button" id="lmc-run" class="primary-action" data-i18n="run">Run</button><button type="button" id="lmc-reset" data-i18n="reset">Reset</button></div></div><div class="lmc-machine"><div class="register-grid" id="lmc-registers"></div><div class="computer-result" id="lmc-result" aria-live="polite"></div><div class="mailbox-grid" id="lmc-memory" aria-label="LMC mailbox memory"></div></div></article>
+            </section>
+
+            <section class="computer-layer" data-computer-panel="performance" hidden>
+              <header><span class="layer-number">04</span><div><h2 data-i18n="performanceTitle">Memory, Bus &amp; Performance</h2><p data-i18n="performanceLead">Every result shows its units and assumptions.</p></div></header>
+              <div class="computer-tool-grid performance-tools">
+                <article class="computer-tool-card"><h3 data-i18n="capacityTitle">Address space</h3><label><span data-i18n="addressBits">Address bits</span><input id="perf-address" type="number" min="1" max="64" value="32" /></label><label><span data-i18n="addressUnit">Addressable bytes / location</span><input id="perf-unit" type="number" min="1" value="1" /></label><button type="button" data-performance="capacity" data-i18n="calculate">Calculate</button><div class="computer-result" id="capacity-result"></div></article>
+                <article class="computer-tool-card"><h3 data-i18n="clockTitle">Clock &amp; execution</h3><label><span data-i18n="frequencyGHz">Frequency (GHz)</span><input id="perf-frequency" type="number" min="0" step="any" value="2.5" /></label><label><span data-i18n="cycles">Cycles</span><input id="perf-cycles" type="number" min="0" step="any" value="5000000000" /></label><button type="button" data-performance="clock" data-i18n="calculate">Calculate</button><div class="computer-result" id="clock-result"></div></article>
+                <article class="computer-tool-card"><h3 data-i18n="busTitle">Bus bandwidth</h3><label><span data-i18n="busSettings">Width bits / MHz / transfers / efficiency %</span><input id="perf-bus" value="64 / 100 / 2 / 80" dir="ltr" /></label><button type="button" data-performance="bus" data-i18n="calculate">Calculate</button><div class="computer-result" id="bus-result"></div></article>
+                <article class="computer-tool-card"><h3>Cache AMAT</h3><label><span data-i18n="cacheSettings">L1 hit ns / miss %; L2 hit ns / miss %; memory ns</span><input id="perf-cache" value="1 / 5; 10 / 10; 100" dir="ltr" /></label><button type="button" data-performance="cache" data-i18n="calculate">Calculate</button><div class="computer-result" id="cache-result"></div></article>
+                <article class="computer-tool-card"><h3 data-i18n="diskTitle">Disk access</h3><label><span data-i18n="diskSettings">Seek ms / RPM / bytes / MB/s / overhead ms / queue ms</span><input id="perf-disk" value="4 / 7200 / 1000000 / 200 / 0.2 / 1" dir="ltr" /></label><button type="button" data-performance="disk" data-i18n="calculate">Calculate</button><div class="computer-result" id="disk-result"></div></article>
+                <article class="computer-tool-card"><h3>DMA</h3><label><span data-i18n="dmaSettings">Bytes / MB/s / setup ms</span><input id="perf-dma" value="1000000 / 100 / 0.1" dir="ltr" /></label><button type="button" data-performance="dma" data-i18n="calculate">Calculate</button><div class="computer-result" id="dma-result"></div></article>
+                <article class="computer-tool-card computer-tool-card--secondary"><h3 data-i18n="waferTitle">Die per wafer (approximation)</h3><label><span data-i18n="waferSettings">Diameter mm / die mm² / defects per mm²</span><input id="perf-wafer" value="300 / 100 / 0.005" dir="ltr" /></label><button type="button" data-performance="wafer" data-i18n="calculate">Calculate</button><div class="computer-result" id="wafer-result"></div></article>
+              </div>
+            </section>
+            <footer class="content-footer"><span data-i18n="computerFooter">Computer Calculator · educational architecture tools</span><button type="button" class="text-action" data-view-target="about" data-i18n="backToTools">Back to tools</button></footer>
+          </div>
+        </section>
+
+        <section class="app-view app-view--scrollable" data-view-panel="economics-calculator" hidden>
+          <div class="content-page content-page--computer content-page--economics" id="economics-calculator">
+            <div class="computer-hero economics-hero"><div><p class="eyebrow" data-i18n="economicsEyebrow">Smart Calculator · Economics Calculator</p><h1 data-i18n="economicsTitle">Reference rates and financial scenarios, with assumptions shown.</h1><p class="content-page__lead" data-i18n="economicsIntro">Convert currencies, inspect official Hong Kong rates, and model interest, loans and cash flows without hidden formulas.</p></div><button class="primary-action" type="button" data-view-target="about" data-i18n="backToTools">Back to tools</button></div>
+
+            <nav class="computer-quick-nav economics-quick-nav" aria-label="Economics calculator sections" data-i18n-aria="economicsNavAria">
+              <button type="button" class="is-selected" data-economics-section="fx"><span>01</span><strong data-i18n="fxTitle">Exchange rates</strong><small>HKD · USD · CNY · EUR · JPY</small></button>
+              <button type="button" data-economics-section="hk-rates"><span>02</span><strong data-i18n="hkRatesTitle">Hong Kong rates</strong><small>BLR · HIBOR · Base Rate</small></button>
+              <button type="button" data-economics-section="interest"><span>03</span><strong data-i18n="interestTitle">Interest tools</strong><small data-i18n="interestQuick">Simple · compound · EAR · savings</small></button>
+              <button type="button" data-economics-section="loans"><span>04</span><strong data-i18n="loansTitle">Mortgage &amp; APR</strong><small data-i18n="loansQuick">P-plan · H-plan · cash flow</small></button>
+              <button type="button" data-economics-section="planning"><span>05</span><strong data-i18n="planningTitle">Planning</strong><small data-i18n="planningQuick">Budget · savings goal · real return</small></button>
+            </nav>
+
+            <section class="computer-layer economics-layer is-active" data-economics-panel="fx">
+              <header><span class="layer-number">01</span><div><h2 data-i18n="fxTitle">Exchange rates</h2><p data-i18n="fxLead">HKD is the default base. Rates are references, not executable trading quotes.</p></div></header>
+              <article class="computer-tool-card economics-primary-card"><div class="field-grid"><label><span data-i18n="amount">Amount</span><input id="fx-amount" value="1000" inputmode="decimal" dir="ltr" /></label><label><span data-i18n="fromCurrency">From currency</span><select id="fx-base"></select></label><button type="button" id="fx-swap" class="swap-button" aria-label="Swap currencies">⇄</button><label><span data-i18n="toCurrency">To currency</span><select id="fx-quote"></select></label><label><span data-i18n="historicalDate">Historical date (optional)</span><input id="fx-date" type="date" /></label></div><div class="field-grid manual-rate-row"><label><span data-i18n="manualRate">Manual rate fallback</span><input id="fx-manual-rate" type="number" min="0" step="any" placeholder="1 base = ? quote" /></label><button type="button" id="fx-convert" class="primary-action" data-i18n="convert">Convert</button><button type="button" id="fx-refresh" data-i18n="refreshRate">Refresh reference rate</button></div><div class="data-status" id="fx-status"></div><div class="computer-result economics-result" id="fx-result" aria-live="polite"></div><p class="source-note"><span data-i18n="fxAttribution">Source: Frankfurter v2 / European Central Bank reference rates.</span> <a href="https://frankfurter.dev" target="_blank" rel="noreferrer">frankfurter.dev</a> · <span data-i18n="fxDisclaimer">Reference only; not a bank or trading quote.</span></p></article>
+            </section>
+
+            <section class="computer-layer economics-layer" data-economics-panel="hk-rates" hidden>
+              <header><span class="layer-number">02</span><div><h2 data-i18n="hkRatesTitle">Hong Kong rates</h2><p data-i18n="hkRatesLead">Latest complete dated records from official HKMA public APIs.</p></div></header>
+              <article class="computer-tool-card economics-primary-card"><div class="button-row"><button type="button" id="hk-rates-refresh" class="primary-action" data-i18n="loadOfficialRates">Load official rates</button></div><div class="data-status" id="hk-rates-status"></div><div class="rate-card-grid" id="hk-rates-result" aria-live="polite"></div><p class="source-note"><span data-i18n="hkmaAttribution">Source: Hong Kong Monetary Authority (HKMA) public API.</span> <a href="https://apidocs.hkma.gov.hk/" target="_blank" rel="noreferrer">HKMA API</a></p><p class="source-note" data-i18n="blrDisclaimer">The best lending rate series is HSBC's quoted rate; it does not represent every bank.</p></article>
+            </section>
+
+            <section class="computer-layer economics-layer" data-economics-panel="interest" hidden>
+              <header><span class="layer-number">03</span><div><h2 data-i18n="interestTitle">Interest tools</h2><p data-i18n="interestLead">Choose simple or compound interest and state the compounding/day-count basis.</p></div></header>
+              <div class="computer-tool-grid"><article class="computer-tool-card computer-tool-card--wide"><h3 data-i18n="interestCalculator">Interest &amp; deposit calculator</h3><div class="field-grid"><label><span data-i18n="principal">Principal</span><input id="interest-principal" value="100000" inputmode="decimal" /></label><label><span data-i18n="annualRate">Annual rate (%)</span><input id="interest-rate" value="3.5" inputmode="decimal" /></label><label><span data-i18n="durationYears">Duration (years)</span><input id="interest-years" value="1" inputmode="decimal" /></label><label><span data-i18n="method">Method</span><select id="interest-method"><option value="simple" data-i18n="simpleInterest">Simple interest</option><option value="compound" data-i18n="compoundInterest">Compound interest</option><option value="savings" data-i18n="monthlySavings">Monthly savings FV</option></select></label><label><span data-i18n="compounding">Compounding</span><select id="interest-periods"><option value="1">Annual</option><option value="2">Semiannual</option><option value="4">Quarterly</option><option value="12" selected>Monthly</option><option value="365">Daily / 365</option><option value="366">Daily / 366</option></select></label><label><span data-i18n="dayBasis">Day-count basis</span><select id="interest-day-basis"><option value="365">Actual/365</option><option value="366">Actual/366</option></select></label></div><button type="button" id="interest-calculate" class="primary-action" data-i18n="calculate">Calculate</button><div class="computer-result" id="interest-result"></div><p class="source-note" data-i18n="dayBasisDisclaimer">Hong Kong products do not all use one universal algorithm; check the contract's simple/compound and ordinary/leap-year basis.</p></article><article class="computer-tool-card"><h3>Nominal ↔ EAR</h3><div class="field-grid"><label><span data-i18n="nominalRate">Nominal rate (%)</span><input id="ear-nominal" value="12" /></label><label><span>EAR (%)</span><input id="ear-effective" value="12.6825" /></label></div><div class="button-row"><button type="button" id="ear-from-nominal">Nominal → EAR</button><button type="button" id="nominal-from-ear">EAR → Nominal</button></div><div class="computer-result" id="ear-result"></div></article></div>
+            </section>
+
+            <section class="computer-layer economics-layer" data-economics-panel="loans" hidden>
+              <header><span class="layer-number">04</span><div><h2 data-i18n="loansTitle">Mortgage &amp; APR</h2><p data-i18n="loansLead">Educational scenarios only—not a bank approval or quotation.</p></div></header>
+              <div class="computer-tool-grid"><article class="computer-tool-card computer-tool-card--wide"><h3 data-i18n="mortgageCompare">Hong Kong P-plan / H-plan comparison</h3><div class="field-grid"><label><span data-i18n="loanAmount">Loan amount</span><input id="loan-principal" value="5000000" /></label><label><span data-i18n="termYears">Term (years)</span><input id="loan-years" value="25" /></label><label>P rate (%)<input id="loan-p-rate" value="5.25" /></label><label><span data-i18n="pAdjustment">P adjustment (%)</span><input id="loan-p-adjustment" value="-2.25" /></label><label>HIBOR (%)<input id="loan-hibor" value="4.2" /></label><label><span data-i18n="hSpread">H spread (%)</span><input id="loan-h-spread" value="1.3" /></label><label><span data-i18n="capAdjustment">P-rate cap adjustment (%)</span><input id="loan-cap-adjustment" value="-2" /></label><label><span data-i18n="monthlyIncome">Monthly income</span><input id="loan-income" value="80000" /></label><label><span data-i18n="earlyFee">Early repayment fee</span><input id="loan-fee" value="0" /></label><label><span data-i18n="cashRebate">Cash rebate</span><input id="loan-rebate" value="0" /></label></div><button type="button" id="loan-calculate" class="primary-action" data-i18n="compare">Compare</button><div class="computer-result" id="loan-result"></div><details><summary data-i18n="amortizationPreview">First 12 months amortization</summary><div class="table-scroll"><table class="finance-table" id="loan-schedule"></table></div></details></article><article class="computer-tool-card"><h3 data-i18n="aprTitle">Fee-aware APR estimate</h3><div class="field-grid"><label><span data-i18n="principal">Principal</span><input id="apr-principal" value="100000" /></label><label><span data-i18n="annualRate">Annual rate (%)</span><input id="apr-rate" value="4" /></label><label><span data-i18n="termMonths">Term (months)</span><input id="apr-months" value="24" /></label><label><span data-i18n="fees">Upfront/service fees</span><input id="apr-fees" value="2000" /></label></div><button type="button" id="apr-calculate" data-i18n="estimate">Estimate</button><div class="computer-result" id="apr-result"></div><p class="source-note" data-i18n="aprDisclaimer">Educational fee-aware IRR estimate, not a formal APR calculated under every HKAB rule.</p></article></div>
+            </section>
+
+            <section class="computer-layer economics-layer" data-economics-panel="planning" hidden>
+              <header><span class="layer-number">05</span><div><h2 data-i18n="planningTitle">Planning</h2><p data-i18n="planningLead">Secondary tools for budgets, savings goals and real returns.</p></div></header>
+              <div class="computer-tool-grid"><article class="computer-tool-card"><h3 data-i18n="budgetTitle">Budget summary</h3><label><span data-i18n="monthlyIncome">Monthly income</span><input id="budget-income" value="30000" /></label><label><span data-i18n="categories">Categories (name: amount, one per line)</span><textarea id="budget-categories" rows="6">Housing: 10000
+Food: 4000
+Transport: 1500</textarea></label><button type="button" id="budget-calculate" data-i18n="calculate">Calculate</button><div class="computer-result" id="budget-result"></div></article><article class="computer-tool-card"><h3 data-i18n="realReturnTitle">Real return &amp; percentage change</h3><div class="field-grid"><label><span data-i18n="nominalReturn">Nominal return (%)</span><input id="real-nominal" value="5" /></label><label><span data-i18n="inflation">Inflation (%)</span><input id="real-inflation" value="2" /></label><label><span data-i18n="oldValue">Old value</span><input id="change-old" value="100" /></label><label><span data-i18n="newValue">New value</span><input id="change-new" value="125" /></label></div><button type="button" id="real-calculate" data-i18n="calculate">Calculate</button><div class="computer-result" id="real-result"></div></article></div>
+            </section>
+            <footer class="content-footer"><span data-i18n="economicsFooter">Economics Calculator · educational reference tools</span><button type="button" class="text-action" data-view-target="about" data-i18n="backToTools">Back to tools</button></footer>
           </div>
         </section>
 
@@ -219,6 +334,6 @@
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="calculator-core.js"></script><script src="calculator-data.js"></script><script src="linear-algebra-core.js"></script><script src="app.js"></script><script src="linear-algebra.js"></script><script src="site-ui.js"></script>
+    <script src="calculator-core.js"></script><script src="calculator-data.js"></script><script src="linear-algebra-core.js"></script><script src="computer-core.js"></script><script src="economics-core.js"></script><script src="computer-i18n.js"></script><script src="economics-i18n.js"></script><script src="app.js"></script><script src="linear-algebra.js"></script><script src="site-ui.js"></script><script src="computer-calculator.js"></script><script src="economics-calculator.js"></script>
   </body>
 </html>

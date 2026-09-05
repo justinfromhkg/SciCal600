@@ -28,12 +28,23 @@
   }
 
   function parseMatrix(source, name = "Matrix") {
-    const rows = String(source || "")
-      .trim()
-      .split(/\r?\n/)
-      .map((row) => row.trim())
-      .filter(Boolean)
-      .map((row) => row.split(/[\s,]+/).filter(Boolean).map(Number));
+    let text = String(source ?? "").trim();
+    if (!text) throw new MatrixError(`${name} must contain at least one row and one column.`);
+    // Accept common spreadsheet/mobile paste forms without treating ordinary
+    // spaces as row separators.  A boundary such as "],[" denotes a new row.
+    text = text
+      .replace(/\]\s*,\s*\[/g, "\n")
+      .replace(/[\[\]]/g, "")
+      .replace(/[;；]/g, "\n")
+      .replace(/\r\n?/g, "\n");
+    const rawRows = text.split("\n");
+    if (rawRows.some((row) => !row.trim())) throw new MatrixError(`${name} contains an empty row.`);
+    const numericToken = /^[+-]?(?:(?:\d+(?:\.\d*)?)|(?:\.\d+))(?:[eE][+-]?\d+)?$/;
+    const rows = rawRows.map((row) => {
+      const tokens = row.trim().split(/[\t \u00A0,，]+/).filter(Boolean);
+      if (!tokens.length || tokens.some((token) => !numericToken.test(token))) throw new MatrixError(`${name} contains an invalid number.`);
+      return tokens.map((token) => Number(token));
+    });
     assertMatrix(rows, name);
     return rows;
   }

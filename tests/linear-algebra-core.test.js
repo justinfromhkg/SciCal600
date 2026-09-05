@@ -10,8 +10,15 @@ function closeTo(actual, expected, tolerance = 1e-8) {
 
 test("parses rectangular matrices and rejects malformed input", () => {
   assert.deepEqual(matrix.parseMatrix("1 2\n3,4"), [[1, 2], [3, 4]]);
+  assert.deepEqual(matrix.parseMatrix("1\t  2\r\n3\u00a04"), [[1, 2], [3, 4]]);
+  assert.deepEqual(matrix.parseMatrix("1,2;3,4"), [[1, 2], [3, 4]]);
+  assert.deepEqual(matrix.parseMatrix("[[1, 2], [3, 4]]"), [[1, 2], [3, 4]]);
+  assert.deepEqual(matrix.parseMatrix("[ -1.5，2e2 ]；[ +.25，-4E-1 ]"), [[-1.5, 200], [0.25, -0.4]]);
   assert.throws(() => matrix.parseMatrix("1 2\n3"), matrix.MatrixError);
   assert.throws(() => matrix.parseMatrix("1 nope"), matrix.MatrixError);
+  assert.throws(() => matrix.parseMatrix("1 2\n\n3 4"), matrix.MatrixError);
+  assert.throws(() => matrix.parseMatrix("1 Infinity"), matrix.MatrixError);
+  assert.throws(() => matrix.parseMatrix("1; ;2"), matrix.MatrixError);
 });
 
 test("adds, subtracts and multiplies compatible matrices", () => {

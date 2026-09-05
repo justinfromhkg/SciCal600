@@ -34,7 +34,8 @@
 
           chooseMode("CMPLX");
           key(35); key(19); key(37); key(36); key(19); key(43);
-          check(doc.querySelector("#result").textContent === "5i", "complex keypad calculation");
+          const complexResult = doc.querySelector("#result").textContent;
+          check(complexResult === "5i", `complex keypad calculation (got ${JSON.stringify(complexResult)}, expression ${JSON.stringify(doc.querySelector("#expression").textContent)}, mode ${JSON.stringify(doc.querySelector("#mode-indicator").textContent)})`);
           check(doc.querySelector("#mode-workbench h2").textContent === "Complex numbers", "complex workbench");
 
           chooseMode("BASE");
@@ -49,7 +50,7 @@
             form.elements.freq.value = freq;
             form.requestSubmit();
           }
-          check(doc.querySelector(".result-grid strong").textContent === "3", "weighted statistics entry");
+          check(doc.querySelector("#mode-workbench .result-grid strong").textContent === "3", "weighted statistics entry");
 
           chooseMode("REG");
           for (const [x, y] of [[1, 3], [2, 5], [3, 7]]) {
@@ -59,7 +60,7 @@
             form.elements.freq.value = 1;
             form.requestSubmit();
           }
-          const coefficients = [...doc.querySelectorAll(".result-grid strong")].map((item) => item.textContent);
+          const coefficients = [...doc.querySelectorAll("#mode-workbench .result-grid strong")].map((item) => item.textContent);
           check(coefficients[0] === "1" && coefficients[1] === "2", "linear regression fit");
 
           chooseMode("PRGM");

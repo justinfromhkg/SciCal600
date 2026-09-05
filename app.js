@@ -1361,6 +1361,7 @@
   });
 
   document.addEventListener("keydown", (event) => {
+    if (!document.body.classList.contains("is-calculator-view")) return;
     if (document.querySelector("dialog[open]")) return;
     if (event.target.matches("input, textarea, select")) return;
     const keyMap = {

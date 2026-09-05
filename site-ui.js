@@ -130,6 +130,14 @@
     Object.assign(ui[language], dictionary);
   });
 
+  Object.entries(window.SciCalComputerTranslations || {}).forEach(([language, dictionary]) => {
+    if (ui[language]) Object.assign(ui[language], dictionary);
+  });
+
+  Object.entries(window.SciCalEconomicsTranslations || {}).forEach(([language, dictionary]) => {
+    if (ui[language]) Object.assign(ui[language], dictionary);
+  });
+
   const manuals = {
     "en-GB": [
       ["Quick start", ["Press MODE and choose COMP for ordinary scientific calculations.", "Enter an expression with the keypad, then press EXE. Use DEL to remove one character and AC to clear the current entry.", "SHIFT selects the orange label above a key; ALPHA selects the red letter or symbol."]],
@@ -262,7 +270,7 @@
   const batteryFill = document.querySelector("#battery-fill");
   const batteryText = document.querySelector("#battery-text");
   const views = [...document.querySelectorAll("[data-view-panel]")];
-  const allowedViews = new Set(["calculator", "about", "manual", "linear-algebra"]);
+  const allowedViews = new Set(["calculator", "about", "manual", "linear-algebra", "computer-calculator", "economics-calculator"]);
   let zoomFactor = 1;
   let currentView = "about";
   let batteryState = { available: false, charging: false, level: null };
@@ -459,7 +467,7 @@
   }
 
   function pathForView(view) {
-    if (view === "about") return "/";
+    if (view === "about") return location.pathname === "/" ? "/" : "/about";
     if (view === "calculator") return "/scientific-calculator";
     return `/${view}`;
   }
@@ -470,6 +478,8 @@
     if (path === "/scientific-calculator" || path === "/calculator") return "calculator";
     if (path === "/manual") return "manual";
     if (path === "/linear-algebra") return "linear-algebra";
+    if (path === "/computer-calculator") return "computer-calculator";
+    if (path === "/economics-calculator") return "economics-calculator";
     return "about";
   }
 

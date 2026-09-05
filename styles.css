@@ -2253,7 +2253,11 @@ body.is-calculator-view {
 .is-about-view .interface-mode-toggle,
 .is-manual-view .interface-mode-toggle,
 .is-linear-algebra-view .interface-mode-toggle,
-.is-linear-algebra-view .zoom-controls {
+.is-linear-algebra-view .zoom-controls,
+.is-computer-calculator-view .interface-mode-toggle,
+.is-computer-calculator-view .zoom-controls,
+.is-economics-calculator-view .interface-mode-toggle,
+.is-economics-calculator-view .zoom-controls {
   visibility: hidden;
 }
 

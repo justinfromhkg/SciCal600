@@ -127,9 +127,9 @@ async function checkCompactHome(page, viewport) {
       removedCopyCount: document.querySelectorAll(".reference-model-banner, .feature-pills, .exam-note, .tool-card--future").length,
     };
   });
-  assert.equal(metrics.cardCount, 2, `${viewport.name}: both calculator choices should be present`);
-  assert.equal(metrics.buttonCount, 2, `${viewport.name}: both calculator choices should have direct actions`);
-  assert.ok(metrics.cardBottoms.every((bottom) => bottom <= metrics.innerHeight), `${viewport.name}: both calculator choices should be visible without scrolling`);
+  assert.equal(metrics.cardCount, 4, `${viewport.name}: all four calculator choices should be present`);
+  assert.equal(metrics.buttonCount, 4, `${viewport.name}: all four calculator choices should have direct actions`);
+  assert.ok(metrics.cardBottoms.every((bottom) => bottom <= metrics.innerHeight), `${viewport.name}: all four calculator choices should be visible without scrolling`);
   assert.ok(metrics.buttonHeights.every((height) => height >= 44), `${viewport.name}: home actions should have mobile touch targets`);
   assert.ok(metrics.documentWidth <= metrics.innerWidth, `${viewport.name}: home page horizontal overflow`);
   assert.equal(metrics.removedCopyCount, 0, `${viewport.name}: redundant home-page copy should be removed`);
@@ -255,7 +255,7 @@ async function runFunctionalChecks(page) {
   await page.goto("/", { waitUntil: "networkidle" });
   assert.equal(await page.locator('[data-view-panel="about"]').isVisible(), true, "root platform page");
   assert.match(await page.locator('[data-view-panel="about"] h1').textContent(), /math/i);
-  assert.equal(await page.locator(".home-tool-card").count(), 2, "home should show both calculators at equal prominence");
+  assert.equal(await page.locator(".home-tool-card").count(), 4, "home should show all four calculators at equal prominence");
   for (const [language, expected, direction] of [
     ["fr", /maths/i, "ltr"],
     ["de", /Mathematik/i, "ltr"],
@@ -268,11 +268,14 @@ async function runFunctionalChecks(page) {
     assert.match(await page.locator('[data-view-panel="about"] h1').textContent(), expected, `${language} About translation`);
   }
   await page.goto("/about", { waitUntil: "networkidle" });
-  assert.equal(new URL(page.url()).pathname, "/", "legacy /about route is canonicalized to root");
-  assert.equal(await page.locator('[data-view-panel="about"]').isVisible(), true, "legacy /about route opens platform page");
+  assert.equal(new URL(page.url()).pathname, "/about", "/about is a stable formal route");
+  assert.equal(await page.locator('[data-view-panel="about"]').isVisible(), true, "/about opens platform page");
   await page.locator("#language-select").selectOption("en-GB");
   await page.locator('[data-view-target="linear-algebra"]').first().click();
   assert.equal(new URL(page.url()).pathname, "/linear-algebra", "linear algebra navigation path");
+  assert.equal(await page.locator("#matrix-a").getAttribute("inputmode"), "text", "matrix A uses a text keyboard with spaces and Return");
+  await page.locator("#matrix-a").fill("1 2\r\n3 4");
+  await page.locator("#matrix-b").fill("5,6\n7,8");
   await page.locator("#matrix-operation").selectOption("multiply");
   await page.locator("#matrix-calculate").click();
   assert.deepEqual(await page.locator("#matrix-result td").allTextContents(), ["19", "22", "43", "50"], "matrix multiplication UI");
@@ -281,6 +284,47 @@ async function runFunctionalChecks(page) {
   assert.equal(await page.locator("#matrix-result").textContent(), "-2", "determinant UI");
   await page.reload({ waitUntil: "networkidle" });
   assert.equal(await page.locator('[data-view-panel="linear-algebra"]').isVisible(), true, "direct /linear-algebra refresh route");
+  await page.goto("/computer-calculator", { waitUntil: "networkidle" });
+  assert.equal(new URL(page.url()).pathname, "/computer-calculator", "Computer Calculator formal route");
+  assert.equal(await page.locator('[data-view-panel="computer-calculator"]').isVisible(), true, "Computer Calculator direct refresh");
+  const computerLayout = await page.evaluate(() => {
+    const buttons = [...document.querySelectorAll("#computer-calculator button")].filter((button) => button.offsetParent).map((button) => ({ id: button.id, className: button.className, height: button.getBoundingClientRect().height }));
+    return { scrollWidth: document.documentElement.scrollWidth, innerWidth: window.innerWidth, minButton: buttons.sort((a,b) => a.height-b.height)[0] };
+  });
+  assert.ok(computerLayout.scrollWidth <= computerLayout.innerWidth, "Computer Calculator has no mobile horizontal overflow");
+  assert.ok(computerLayout.minButton.height >= 44, `Computer Calculator minimum visible touch target is ${JSON.stringify(computerLayout.minButton)}`);
+  assert.equal(await page.locator("#radix-results .radix-result").count(), 5, "live radix converter renders standard and custom bases");
+  await page.locator("#integer-width").selectOption("64");
+  await page.locator("#integer-a").fill("18446744073709551615");
+  await page.locator("#integer-operation").selectOption("NOT");
+  await page.locator("#integer-calculate").click();
+  assert.match(await page.locator("#integer-result").textContent(), /0xFFFFFFFFFFFFFFFF/, "64-bit BigInt UI path");
+  await page.reload({ waitUntil: "networkidle" });
+  assert.equal(await page.locator('[data-view-panel="computer-calculator"]').isVisible(), true, "direct Computer Calculator refresh route");
+  await page.goto("/economics-calculator", { waitUntil: "domcontentloaded" });
+  await page.waitForFunction(() => window.SciCalUI && window.EconomicsCalculatorCore);
+  assert.equal(new URL(page.url()).pathname, "/economics-calculator", "Economics Calculator formal route");
+  assert.equal(await page.locator('[data-view-panel="economics-calculator"]').isVisible(), true, "Economics Calculator direct route");
+  const economicsLayout = await page.evaluate(() => {
+    const buttons = [...document.querySelectorAll("#economics-calculator button")].filter((button) => button.offsetParent).map((button) => ({ id: button.id, className: button.className, height: button.getBoundingClientRect().height }));
+    return { scrollWidth: document.documentElement.scrollWidth, innerWidth: window.innerWidth, minButton: buttons.sort((a,b) => a.height-b.height)[0] };
+  });
+  assert.ok(economicsLayout.scrollWidth <= economicsLayout.innerWidth, "Economics Calculator has no mobile horizontal overflow");
+  assert.ok(economicsLayout.minButton.height >= 44, `Economics Calculator minimum visible touch target is ${JSON.stringify(economicsLayout.minButton)}`);
+  await page.locator("#fx-manual-rate").fill("0.1282");
+  await page.locator("#fx-convert").click();
+  assert.match(await page.locator("#fx-result").textContent(), /128\.20|128,20/, "manual FX fallback calculates without network");
+  await page.locator('[data-economics-section="interest"]').click();
+  await page.locator("#interest-calculate").click();
+  assert.match(await page.locator("#interest-result").textContent(), /Future value/, "interest tool calculates");
+  await page.locator('[data-economics-section="loans"]').click();
+  await page.locator("#loan-calculate").click();
+  assert.match(await page.locator("#loan-result").textContent(), /P-plan rate/, "mortgage comparison calculates");
+  await page.locator("#language-select").selectOption("ar");
+  assert.equal(await page.locator("html").getAttribute("dir"), "rtl", "Economics Calculator supports Arabic RTL");
+  assert.match(await page.locator('[data-view-panel="economics-calculator"] h1').textContent(), /أسعار/);
+  await page.reload({ waitUntil: "domcontentloaded" });
+  assert.equal(await page.locator('[data-view-panel="economics-calculator"]').isVisible(), true, "direct Economics Calculator refresh route");
 }
 
 (async () => {

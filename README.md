@@ -1,12 +1,12 @@
 # SciCal600
 
-SciCal600 is a responsive Smart Calculator platform. Its current tools include a scientific calculator inspired by the interaction model and key grouping of the Casio fx-50FH II, plus a Linear Algebra workspace for common matrix calculations.
+SciCal600 is a responsive Smart Calculator platform. It combines a scientific calculator inspired by the Casio fx-50FH II workflow with Linear Algebra, Computer Calculator, and Economics Calculator workspaces.
 
 > The physical Casio fx-50FH II is listed by Casio as HKEAA-approved. This independent web simulator is not a Casio product and is not approved for use in examinations.
 
 ## Run it
 
-Serve the repository root with any static HTTP server and open `/`. The root is the Smart Calculator platform page. Direct tool routes include `/scientific-calculator`, `/linear-algebra`, and `/manual`; the former `/about` route redirects to `/`. The project has no browser runtime dependencies.
+Serve the repository root with any static HTTP server and open `/`. The root and the stable `/about` route present the Smart Calculator platform. Direct tool routes are `/scientific-calculator`, `/linear-algebra`, `/computer-calculator`, `/economics-calculator`, and `/manual`. The project has no browser runtime dependencies.
 
 To run the calculation-engine tests:
 
@@ -22,7 +22,7 @@ The repository uses Cloudflare Pages rather than a `workers.dev` site so the pro
 npm run deploy
 ```
 
-The build copies only public website files into `dist/`; source tests and project notes are not uploaded. Cloudflare Pages' SPA routing serves direct visits to `/scientific-calculator`, `/manual`, and `/linear-algebra`; `_redirects` canonicalizes trailing-slash variants and redirects the former `/about` address to the platform root.
+The build copies only public website files into `dist/`; source tests and project notes are not uploaded. Cloudflare Pages' SPA routing serves direct visits to every workspace and `/about`; `_redirects` only canonicalizes trailing-slash variants, so `/about` remains visible and refreshable.
 
 ### GitHub Actions connection
 
@@ -58,6 +58,13 @@ Create the API token in Cloudflare with the minimum **Account / Cloudflare Pages
 - Searchable catalogues containing 23 interactive formulas and 40 scientific constants
 - Web and simulator interaction modes for calculation modes 02–06
 - Linear Algebra matrix addition, subtraction, multiplication, inverse, transpose, adjugate, determinant, eigenvalue, and eigenvector tools
+- Mobile-friendly matrix entry with text-keyboard Return/space support and strict LF, CRLF, tab, NBSP, comma, semicolon and bracketed-paste parsing
+- Computer Calculator base 2–36 conversion, 8/16/32/64-bit `BigInt` interpretation, ALU flags, BCD, IEEE 754 single/double inspection and configurable teaching floats
+- A sandboxed 100-mailbox Little Man's Computer assembler/simulator with fetch-decode-execute state, RTL steps, breakpoints and loop limits
+- Computer architecture calculations for address capacity, clock timing, bus throughput, recursive cache AMAT, disk access, DMA and approximate wafer yield
+- Economics Calculator reference FX with Frankfurter v2 attribution, timeout/schema checks, last-success cache, stale/offline state and manual-rate fallback
+- Official HKMA public-API views for the HSBC quoted best lending rate series, HIBOR fixing tenors and Discount Window Base Rate
+- Explicit-assumption interest/EAR/savings tools, educational P-plan/H-plan mortgage scenarios, fee-aware IRR/APR estimates, amortization, budget and real-return tools
 - English, Traditional Chinese, Simplified Chinese, Japanese, Korean, Malay, French, German, Spanish, and Arabic interface support
 
 ## Verified reference feature set
@@ -76,6 +83,8 @@ The formula and constant tables are versioned study data. They use modern values
 - [HKEAA 2026 examination notes](https://www.hkeaa.edu.hk/DocLibrary/IPE/em/EM_NotesOnExam2026.pdf) — points candidates to the current permitted-calculator list
 - [HKEAA 2019 permitted-calculator list](https://www.hkeaa.edu.hk/DocLibrary/IPE/cal/CAL2019.pdf) — explicitly includes `FX-50 F/FH/FH II`
 - [8tatTV fx-50FH II calculator walkthrough](https://www.youtube.com/watch?v=K_vaEZOcUQE&list=PLZlgLmMyC71dKgWb_p1zI9ssXf85RKdVw) — chaptered Cantonese demonstration of setup, COMP input, variables, fractions, powers, trigonometry, coordinate conversion, engineering notation, constants, rounding, and angle conversion
+- [Frankfurter v2](https://frankfurter.dev/) — no-key foreign-exchange reference data; values are not executable trading quotes
+- [HKMA Open API](https://apidocs.hkma.gov.hk/) — official Hong Kong interest-rate and interbank-liquidity series
 
 ## Scope note
 
