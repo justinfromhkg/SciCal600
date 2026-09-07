@@ -124,6 +124,7 @@
   ];
 
   let toastTimer;
+  let lastResultText;
 
   try {
     const savedPrograms = JSON.parse(
@@ -281,6 +282,17 @@
 
     document.querySelector('[data-action="shift"]')?.classList.toggle("is-active", state.shift);
     document.querySelector('[data-action="alpha"]')?.classList.toggle("is-active", state.alpha);
+
+    tickResultIfChanged();
+  }
+
+  function tickResultIfChanged() {
+    const current = elements.result.textContent;
+    if (current === lastResultText) return;
+    lastResultText = current;
+    elements.result.classList.remove("is-ticking");
+    void elements.result.offsetWidth;
+    elements.result.classList.add("is-ticking");
   }
 
   function showToast(message) {

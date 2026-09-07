@@ -16,6 +16,8 @@
   --screen-ink: #142018;
   --sans: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", "Courier New", monospace;
+  --ease-spring: cubic-bezier(0.34, 1.35, 0.64, 1);
+  --ease-ios: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -1201,14 +1203,16 @@ footer {
   padding: 12px 16px;
   border: 1px solid #2b414b;
   border-radius: 10px;
-  background: #10212a;
+  background: rgba(16, 33, 42, 0.86);
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   color: #c4d0d5;
   font-size: 12px;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(10px);
-  transition: 180ms ease;
+  transform: translateY(12px);
+  transition: opacity 260ms ease, transform 420ms var(--ease-spring);
 }
 
 .toast.is-visible {
@@ -2330,8 +2334,17 @@ button.is-pressed,
   animation: view-enter 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
+.app-view--scrollable.is-entering {
+  animation: view-enter-soft 320ms var(--ease-ios) both;
+}
+
 @keyframes view-enter {
   from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes view-enter-soft {
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -3462,4 +3475,172 @@ html[dir="rtl"] .app-nav-button {
   .mode-workbench {
     inset: calc(54px + env(safe-area-inset-top)) 8px calc(54px + env(safe-area-inset-bottom));
   }
+}
+
+/* iOS-inspired motion system --------------------------------------------------- */
+
+/* Shared entrance keyframes */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes panel-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Staggered hero and card entrances; restarts with the view's is-entering class.
+   `backwards` (not `both`) so the fill releases transform after completion and
+   hover lifts keep working. */
+.app-view--scrollable.is-entering :where(.home-hero, .linear-hero, .computer-hero, .manual-hero) > * {
+  animation: rise-in 420ms var(--ease-ios) backwards;
+}
+
+.app-view--scrollable.is-entering :where(.home-hero, .linear-hero, .computer-hero, .manual-hero) > *:nth-child(2) {
+  animation-delay: 60ms;
+}
+
+.app-view--scrollable.is-entering :where(.home-hero, .linear-hero, .computer-hero, .manual-hero) > *:nth-child(3) {
+  animation-delay: 120ms;
+}
+
+.app-view--scrollable.is-entering .home-tool-card:nth-child(1) { animation: rise-in 460ms var(--ease-ios) backwards; }
+.app-view--scrollable.is-entering .home-tool-card:nth-child(2) { animation: rise-in 460ms var(--ease-ios) 60ms backwards; }
+.app-view--scrollable.is-entering .home-tool-card:nth-child(3) { animation: rise-in 460ms var(--ease-ios) 120ms backwards; }
+.app-view--scrollable.is-entering .home-tool-card:nth-child(4) { animation: rise-in 460ms var(--ease-ios) 180ms backwards; }
+
+.app-view--scrollable.is-entering .matrix-workspace {
+  animation: rise-in 460ms var(--ease-ios) 80ms backwards;
+}
+
+/* One-shot entrances when [hidden] is lifted (animations restart on display flip) */
+.mode-workbench:not([hidden]),
+[data-computer-panel]:not([hidden]),
+[data-economics-panel]:not([hidden]),
+.matrix-card:not([hidden]) {
+  animation: panel-enter 280ms var(--ease-ios) backwards;
+}
+
+/* Press spring: fast press-in, springy release (transition follows the destination state) */
+button {
+  transition: transform 300ms var(--ease-spring), filter 180ms ease;
+}
+
+.calc-key {
+  transition: transform 300ms var(--ease-spring), box-shadow 80ms ease, filter 100ms ease;
+}
+
+.interface-mode-toggle {
+  transition: transform 300ms var(--ease-spring), background 160ms ease, border-color 160ms ease, box-shadow 90ms ease;
+}
+
+.matrix-example-list button,
+.matrix-template-row button,
+.matrix-swap {
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease, transform 300ms var(--ease-spring);
+}
+
+.matrix-operation-palette button {
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease, transform 300ms var(--ease-spring), box-shadow 150ms ease;
+}
+
+button.is-pressed {
+  transition: transform 70ms ease, filter 70ms ease, box-shadow 70ms ease;
+}
+
+/* Hover lift (pointer devices only) */
+.home-tool-card {
+  transition: transform 300ms var(--ease-spring), border-color 200ms ease, box-shadow 260ms ease;
+}
+
+.computer-tool-card {
+  transition: transform 300ms var(--ease-spring), border-color 200ms ease, box-shadow 260ms ease;
+}
+
+.matrix-card {
+  transition: transform 300ms var(--ease-spring), border-color 160ms ease, box-shadow 160ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .home-tool-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(99, 230, 190, 0.45);
+    box-shadow: 0 24px 55px rgba(0, 0, 0, 0.3);
+  }
+
+  .computer-tool-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 26px 60px rgba(0, 0, 0, 0.26);
+  }
+
+  .matrix-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(99, 230, 190, 0.3);
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.22);
+  }
+
+  .primary-action:not(.is-pressed):hover,
+  .app-nav-button:not(.is-pressed):hover,
+  .zoom-controls button:not(.is-pressed):hover,
+  .calculator-dock button:not(.is-pressed):hover,
+  .interface-mode-toggle:not(.is-pressed):hover,
+  .text-action:not(.is-pressed):hover,
+  .matrix-operation-palette button:not(.is-pressed):hover,
+  .matrix-template-row button:not(.is-pressed):hover,
+  .matrix-example-list button:not(.is-pressed):hover,
+  .matrix-swap:not(.is-pressed):hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+  }
+}
+
+/* Ambient glow drift (decorative, transform only) */
+.page-glow--one { animation: glow-drift-a 28s ease-in-out infinite alternate; }
+.page-glow--two { animation: glow-drift-b 34s ease-in-out infinite alternate; }
+
+@keyframes glow-drift-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(-36px, 24px, 0) scale(1.06); }
+}
+
+@keyframes glow-drift-b {
+  from { transform: translate3d(0, 0, 0) scale(1.06); }
+  to { transform: translate3d(30px, -22px, 0) scale(1); }
+}
+
+/* Result refresh tick (re-triggered from app.js when the result text changes) */
+.display__result.is-ticking {
+  animation: result-tick 160ms ease-out;
+}
+
+@keyframes result-tick {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
+}
+
+/* Scientific calculator entrance: the whole panel rises (relative geometry stays
+   intact, so the fit-lock layout assertions keep passing), the stage fades in a
+   beat later, and the dock slides up from below. */
+.app-view--calculator.is-entering {
+  animation: calc-view-enter 380ms var(--ease-ios) both;
+}
+
+@keyframes calc-view-enter {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.app-view--calculator.is-entering .calculator-stage {
+  animation: calc-stage-fade 320ms var(--ease-ios) 70ms backwards;
+}
+
+@keyframes calc-stage-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.app-view--calculator.is-entering .calculator-dock {
+  animation: rise-in 380ms var(--ease-ios) 60ms backwards;
 }
