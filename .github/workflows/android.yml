@@ -25,7 +25,7 @@ jobs:
           java-version: '21'
       - uses: android-actions/setup-android@v3
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Unit and integration tests
         run: npm test
       - name: Web build
@@ -34,8 +34,10 @@ jobs:
         run: |
           npx playwright install --with-deps chromium
           npm run test:browser
-      - name: Prepare native project
-        run: npm run android:sync
+      - name: Prepare native project (including repeat-sync check)
+        run: |
+          npm run android:sync
+          npm run android:sync
       - name: Gradle debug build and lint
         working-directory: android
         run: |
@@ -52,7 +54,6 @@ jobs:
           sha256sum artifacts/SciCal600-debug.apk | tee artifacts/SHA256SUMS
           stat -c '%n %s bytes' artifacts/SciCal600-debug.apk | tee artifacts/size.txt
           cp package-lock.json artifacts/
-          node -e 'console.log("SCICAL_LOCK=" + JSON.stringify(require("./package-lock.json")))'
       - name: Upload installable debug APK
         uses: actions/upload-artifact@v4
         with:
@@ -105,7 +106,7 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: android-actions/setup-android@v3
-      - run: npm install --no-audit --no-fund
+      - run: npm ci --no-audit --no-fund
       - run: npm run android:sync
       - name: Build unsigned release
         env:
@@ -139,3 +140,23 @@ jobs:
         run: |
           gh release view "$RELEASE_TAG" >/dev/null 2>&1 || gh release create "$RELEASE_TAG" --verify-tag --generate-notes
           gh release upload "$RELEASE_TAG" SciCal600-Android.apk SHA256SUMS --clobber
+
+  debug-download:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/codex/android-apk'
+    needs: debug
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: SciCal600-debug
+          path: artifacts
+      - name: Publish verified debug APK for direct download
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          DEBUG_TAG="android-debug-${GITHUB_SHA:0:12}"
+          gh release view "$DEBUG_TAG" >/dev/null 2>&1 || gh release create "$DEBUG_TAG" --target "$GITHUB_SHA" --prerelease --title "SciCal600 Android debug (${GITHUB_SHA:0:12})" --notes "Installable development APK. Passed Web tests, Gradle build/signature checks and Android emulator offline checks. Uses a development signing key, not the production key."
+          gh release upload "$DEBUG_TAG" artifacts/SciCal600-debug.apk artifacts/SHA256SUMS artifacts/size.txt --clobber

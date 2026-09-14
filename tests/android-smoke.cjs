@@ -1,20 +1,13 @@
 const assert = require('node:assert/strict');
 const { execFileSync } = require('node:child_process');
-const { chromium } = require('playwright');
+const { _android: android } = require('playwright');
 const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8' });
 (async () => {
-  let socket;
-  for (let i = 0; i < 60; i++) {
-    socket = adb('shell', 'cat', '/proc/net/unix').match(/@(webview_devtools_remote[^\s]*)/)?.[1];
-    if (socket) break;
-    await new Promise(resolve => setTimeout(resolve, 1000));
-  }
-  assert.ok(socket, 'debug WebView socket exists');
-  adb('forward', 'tcp:9222', 'localabstract:' + socket);
-  const browser = await chromium.connectOverCDP('http://127.0.0.1:9222');
+  const [device] = await android.devices();
+  assert.ok(device, 'Android emulator exists');
   try {
-    const context = browser.contexts()[0];
-    const page = context.pages()[0];
+    const webview = await device.webView({ pkg: 'io.github.justinfromhkg.scical600' });
+    const page = await webview.page();
     assert.ok(page, 'offline WebView page exists');
     await page.waitForFunction(() => window.SciCalUI && document.documentElement.dataset.native === 'android');
     const external = await page.evaluate(() => [...document.querySelectorAll('script[src],link[rel="stylesheet"]')].map(e => e.src || e.href).filter(url => new URL(url).origin !== location.origin));
@@ -37,7 +30,6 @@ const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8' });
     await page.screenshot({ path: 'artifacts/android-offline.png' });
     console.log('ANDROID_SMOKE_OK: installed APK, offline four workspaces, 1+1, native Back, viewport');
   } finally {
-    await browser.close();
-    adb('forward', '--remove', 'tcp:9222');
+    await device.close();
   }
 })().catch(error => { console.error(error); process.exit(1); });

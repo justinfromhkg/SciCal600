@@ -13,6 +13,7 @@ writeFileSync('dist/index.html', html);
 cpSync('native/android', 'android', { recursive: true });
 let manifest = readFileSync('android/app/src/main/AndroidManifest.xml', 'utf8');
 manifest = manifest.replace('android:allowBackup="true"', 'android:allowBackup="false"');
+manifest = manifest.replace(/ android:usesCleartextTraffic="[^"]*"/g, '');
 manifest = manifest.replace('<application', '<application android:usesCleartextTraffic="false"');
 manifest = manifest.replace('@mipmap/ic_launcher_round', '@drawable/scical_icon').replace('@mipmap/ic_launcher', '@drawable/scical_icon');
 writeFileSync('android/app/src/main/AndroidManifest.xml', manifest);

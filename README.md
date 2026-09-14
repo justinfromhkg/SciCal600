@@ -1,3 +1,10 @@
+# Android app / Android 应用
+
+[Android download and cloud build instructions / 下载与云端构建说明](ANDROID.md)
+
+The Web app and Android app share the same calculator code. GitHub Actions produces installable debug APKs; version tags publish a production-signed `SciCal600-Android.apk` when signing secrets are configured.
+Web 与 Android 共用计算代码；Actions 生成可安装 debug APK，配置正式签名 secrets 后可通过版本标签发布正式版。
+
 # SciCal600
 
 SciCal600 is a responsive Smart Calculator platform. It combines a scientific calculator inspired by the Casio fx-50FH II workflow with Linear Algebra, Computer Calculator, and Economics Calculator workspaces.
