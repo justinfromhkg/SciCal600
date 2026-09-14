@@ -52,6 +52,7 @@ jobs:
           sha256sum artifacts/SciCal600-debug.apk | tee artifacts/SHA256SUMS
           stat -c '%n %s bytes' artifacts/SciCal600-debug.apk | tee artifacts/size.txt
           cp package-lock.json artifacts/
+          node -e 'console.log("SCICAL_LOCK=" + JSON.stringify(require("./package-lock.json")))'
       - name: Upload installable debug APK
         uses: actions/upload-artifact@v4
         with:
@@ -78,6 +79,14 @@ jobs:
             adb shell input keyevent KEYCODE_BACK
             adb shell am start -W -n io.github.justinfromhkg.scical600/.MainActivity
             adb shell pidof io.github.justinfromhkg.scical600
+            node tests/android-smoke.cjs
+      - name: Upload Android smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-smoke-evidence
+          path: artifacts/android-offline.png
+          if-no-files-found: ignore
   release:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: debug
