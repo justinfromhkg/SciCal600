@@ -49,3 +49,9 @@ After merging, push a version tag such as `v0.3.1`. The release job uses SDK zip
 
 CI records signature verification, package identity, file size and SHA-256 in the artifact and logs. The emulator check verifies installation and offline process launch; it is not a substitute for testing every UI interaction on physical devices.
 CI 输出签名、包名、大小、SHA-256，并实际安装和离线启动；该检查不代表已覆盖所有真机交互。
+
+## Verified delivery / 已验证交付
+
+[Download the verified debug APK / 下载已验证 debug APK](https://github.com/justinfromhkg/SciCal600/releases/download/android-debug-b3780b0a55fe/SciCal600-debug.apk)
+
+[Build, installation and SHA-256 report / 构建、安装与校验报告](ANDROID-PROGRESS.md)
