@@ -8,7 +8,7 @@
     "test": "node --test tests/*.test.js",
     "deploy": "npm run build && npx --yes wrangler@latest pages deploy dist --project-name scical600 --branch main",
     "android:sync": "npm run build && node scripts/prepare-android.mjs",
-    "android:debug": "npm run android:sync && cd android && ./gradlew assembleDebug",
+    "android:debug": "npm run android:sync && node scripts/build-android.mjs",
     "test:browser": "node tests/mobile-ui.browser.cjs"
   },
   "dependencies": {

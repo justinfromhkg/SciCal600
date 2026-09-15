@@ -2,7 +2,8 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync, cpSync } from 'node
 import { execFileSync } from 'node:child_process';
 import { build } from 'esbuild';
 
-const run = (...args) => execFileSync('npx', ['--no-install', 'cap', ...args], { stdio: 'inherit' });
+const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+const run = (...args) => execFileSync(npx, ['--no-install', 'cap', ...args], { stdio: 'inherit' });
 if (!existsSync('android')) run('add', 'android');
 await build({ entryPoints: ['native/android-entry.js'], bundle: true, outfile: 'dist/android.js', format: 'iife', target: 'chrome89' });
 let html = readFileSync('dist/index.html', 'utf8');
