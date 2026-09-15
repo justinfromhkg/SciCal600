@@ -1,7 +1,7 @@
 name: Android APK
 on:
   push:
-    branches: ['**']
+    branches: [main]
     tags: ['v*']
   pull_request:
   workflow_dispatch:
@@ -51,7 +51,7 @@ jobs:
           "$BUILD_TOOLS/apksigner" verify --verbose artifacts/SciCal600-debug.apk
           "$BUILD_TOOLS/aapt" dump badging artifacts/SciCal600-debug.apk > artifacts/apk-badging.txt
           grep "package: name='io.github.justinfromhkg.scical600'" artifacts/apk-badging.txt
-          sha256sum artifacts/SciCal600-debug.apk | tee artifacts/SHA256SUMS
+          (cd artifacts && sha256sum SciCal600-debug.apk > SHA256SUMS)
           stat -c '%n %s bytes' artifacts/SciCal600-debug.apk | tee artifacts/size.txt
           cp package-lock.json artifacts/
       - name: Upload installable debug APK
@@ -142,7 +142,7 @@ jobs:
           gh release upload "$RELEASE_TAG" SciCal600-Android.apk SHA256SUMS --clobber
 
   debug-download:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/codex/android-apk'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: debug
     runs-on: ubuntu-latest
     permissions:
