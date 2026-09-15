@@ -1,5 +1,7 @@
 # Android app / Android 应用
 
+[Download the verified Android APK / 下载已验证 Android APK](https://github.com/justinfromhkg/SciCal600/releases/download/android-debug-b3780b0a55fe/SciCal600-debug.apk)
+
 [Android download and cloud build instructions / 下载与云端构建说明](ANDROID.md)
 
 The Web app and Android app share the same calculator code. GitHub Actions produces installable debug APKs; version tags publish a production-signed `SciCal600-Android.apk` when signing secrets are configured.
