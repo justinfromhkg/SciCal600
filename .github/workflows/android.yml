@@ -23,7 +23,8 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - uses: android-actions/setup-android@v3
+      - name: Confirm preinstalled Android SDK
+        run: "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --version"
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
       - name: Unit and integration tests
@@ -105,7 +106,8 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - uses: android-actions/setup-android@v3
+      - name: Confirm preinstalled Android SDK
+        run: "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --version"
       - run: npm ci --no-audit --no-fund
       - run: npm run android:sync
       - name: Build unsigned release
