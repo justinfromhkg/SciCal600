@@ -9,7 +9,7 @@ const playwrightModule = process.env.SCICAL_PLAYWRIGHT_MODULE || "playwright";
 const { chromium } = require(playwrightModule);
 const projectRoot = path.resolve(__dirname, "..");
 const root = path.join(projectRoot, "dist");
-const chromePath = process.env.SCICAL_CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const chromePath = process.env.SCICAL_CHROME_PATH || chromium.executablePath();
 
 const mimeTypes = {
   ".css": "text/css; charset=utf-8",

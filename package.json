@@ -6,6 +6,19 @@
   "scripts": {
     "build": "node scripts/build-static.mjs",
     "test": "node --test tests/*.test.js",
-    "deploy": "npm run build && npx --yes wrangler@latest pages deploy dist --project-name scical600 --branch main"
+    "deploy": "npm run build && npx --yes wrangler@latest pages deploy dist --project-name scical600 --branch main",
+    "android:sync": "npm run build && node scripts/prepare-android.mjs",
+    "android:debug": "npm run android:sync && node scripts/build-android.mjs",
+    "test:browser": "node tests/mobile-ui.browser.cjs"
+  },
+  "dependencies": {
+    "@capacitor/core": "7.4.3",
+    "@capacitor/android": "7.4.3",
+    "@capacitor/app": "7.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "7.4.3",
+    "esbuild": "0.25.9",
+    "playwright": "1.55.0"
   }
 }
