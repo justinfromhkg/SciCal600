@@ -21,12 +21,17 @@ Direct workspaces: [Scientific Calculator](https://scical600.pages.dev/scientifi
 
 ## Native clients
 
-- **Android:** GitHub Actions builds and emulator-tests an installable APK.
-- **Windows:** GitHub Actions packages a portable Electron executable.
-- **macOS:** GitHub Actions packages Intel and Apple-silicon Electron app archives. Unsigned development builds may require the standard macOS manual-open flow.
-- **iOS:** GitHub Actions builds the Capacitor iOS app for the simulator and an unsigned device archive for development. A directly installable physical-device IPA requires Apple signing credentials; the web app remains installable from Safari as a Home Screen app without those credentials.
+- **Android:** GitHub Actions builds and emulator-tests an installable development APK. Android may require the user to allow installation from the browser or file manager. The development APK uses a development signing key; store-grade or stable production distribution requires the project's protected production signing key.
+- **Windows:** GitHub Actions packages a portable Electron executable. Development builds are not backed by a commercial code-signing certificate, so Microsoft SmartScreen can display an unrecognized-app warning.
+- **macOS:** GitHub Actions packages Intel and Apple-silicon Electron app archives. Development builds are not Apple Developer ID signed or notarized, so Gatekeeper can require manual approval. Trusted frictionless distribution requires an Apple Developer ID certificate and notarization credentials.
+- **iOS / iPadOS:** GitHub Actions builds a Simulator app and an unsigned device `.xcarchive` that can be signed later. A universally downloadable physical-device IPA requires Apple signing credentials and provisioning. Without them, users can use the Web app and add it to the Home Screen from Safari.
 
 All native clients reuse the same SciCal600 web calculation code and tests.
+
+### Distribution status and unavoidable signing boundaries
+
+The repository intentionally does **not** contain private signing certificates, keystores, provisioning profiles, passwords, or notarization credentials. Those secrets belong in protected GitHub Actions secrets/environments when available. Until trusted signing is configured, the native files are development distributions and operating systems may show the warnings described above. This is a distribution/trust limitation, not a calculator-engine limitation.
+
 
 ## Run it
 

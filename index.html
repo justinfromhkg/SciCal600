@@ -132,6 +132,21 @@
               </div>
             </section>
 
+
+            <section class="home-tools native-availability" aria-labelledby="native-availability-title">
+              <div class="content-page__header">
+                <p class="eyebrow">Native app availability / 原生客户端状态</p>
+                <h2 id="native-availability-title">Downloads and platform limits / 下载与平台限制</h2>
+                <p class="content-page__lead">The calculator core is shared across Web, Android, Windows, macOS and iOS. Development downloads are published from GitHub when their cloud builds pass.</p>
+              </div>
+              <div class="home-tool-grid">
+                <article class="home-tool-card"><span class="home-tool-card__number">A</span><div><h3>Android</h3><p>Verified development APK. Android may ask you to allow installation from this source. Store-grade releases require the project's production signing key.</p></div></article>
+                <article class="home-tool-card"><span class="home-tool-card__number">W</span><div><h3>Windows</h3><p>Portable development EXE. It is not commercially code-signed yet, so Microsoft SmartScreen may show a warning.</p></div></article>
+                <article class="home-tool-card"><span class="home-tool-card__number">M</span><div><h3>macOS</h3><p>Intel and Apple-silicon development archives. They are not Developer ID signed or notarized yet, so Gatekeeper may require manual approval.</p></div></article>
+                <article class="home-tool-card"><span class="home-tool-card__number">i</span><div><h3>iOS / iPadOS</h3><p>Simulator build plus an unsigned device archive for later signing. Direct physical-device IPA installation requires Apple signing and provisioning. The Web app can still be added to the Home Screen from Safari.</p></div></article>
+              </div>
+            </section>
+
             <footer class="content-footer"><span data-i18n="projectFooter">SciCal600 · independent educational project</span><button type="button" class="text-action" data-view-target="manual" data-i18n="readManual">Read the calculator manual</button></footer>
           </div>
         </section>
