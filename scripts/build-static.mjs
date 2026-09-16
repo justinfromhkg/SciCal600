@@ -27,22 +27,25 @@ const publicFiles = [
 
 const textFiles = publicFiles.filter((file) => /\.(?:html|css|js)$/.test(file));
 
-// SciCal600 ships as its own calculator product. The source tree contains some
-// historical compatibility copy, but no distributed build may present itself as
-// another manufacturer's model or depend on that model's branding.
+// SciCal600 ships as its own calculator product. Historical compatibility copy
+// may remain in development sources while it is being retired, but no distributed
+// build may present itself as another manufacturer's model or carry that branding.
 const independentBrandReplacements = [
-  [/Casio\s+fx-50FH\s+II/gi, "SciCal600 Scientific"],
-  [/fx-50FH\s+II/gi, "SciCal600 Scientific"],
-  [/fx-50F\s+PLUS/gi, "SciCal600 Scientific"],
+  [/Casio\s+fx-50\s*FH\s*II/gi, "SciCal600 Scientific"],
+  [/fx-50\s*FH\s*II/gi, "SciCal600 Scientific"],
+  [/fx-50\s*F\s*PLUS/gi, "SciCal600 Scientific"],
+  [/fx-50\s*FH/gi, "SciCal600 Scientific"],
+  [/fx-50\s*F/gi, "SciCal600 Scientific"],
   [/<strong>fx-50<span>FH<\/span>\s+II<\/strong><small>reference model · web edition<\/small>/gi,
     "<strong>SciCal<span>600</span></strong><small>independent scientific calculator</small>"],
   [/<small>fx-50FH\s+II<\/small>/gi, "<small>Scientific Calculator</small>"],
   [/SUPER\s+FX\s+·\s+WEB/gi, "SCICAL · WEB"],
+  [/\bCasio\b/gi, "third-party calculator"],
 ];
 
 const forbiddenDistributionPatterns = [
   /\bCasio\b/i,
-  /fx-50(?:FH|F)/i,
+  /fx-50\s*(?:FH|F)/i,
 ];
 
 rmSync(outputDirectory, { force: true, recursive: true });
