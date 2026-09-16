@@ -1,0 +1,337 @@
+name: iOS packages
+
+on:
+  workflow_call:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUNDLE_ID: io.github.justinfromhkg.scical600
+
+jobs:
+  unsigned-packages:
+    name: Simulator app and unsigned device IPA
+    runs-on: macos-latest
+    timeout-minutes: 40
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked web dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Test the shared application
+        run: npm test
+
+      - name: Build the offline web bundle
+        run: npm run build
+
+      - name: Prepare the Capacitor iOS project twice
+        run: |
+          node scripts/prepare-ios.mjs
+          node scripts/prepare-ios.mjs
+          git diff --exit-code -- package.json package-lock.json capacitor.config.json
+
+      - name: Record Xcode environment
+        run: |
+          mkdir -p artifacts
+          xcodebuild -version | tee artifacts/xcode-version.txt
+          xcrun --sdk iphoneos --show-sdk-version | tee artifacts/iphoneos-sdk.txt
+
+      - name: Build the iOS Simulator application
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -d ios/App/App.xcworkspace ]]; then
+            XCODE_CONTAINER=(-workspace ios/App/App.xcworkspace)
+          else
+            XCODE_CONTAINER=(-project ios/App/App.xcodeproj)
+          fi
+          xcodebuild "${XCODE_CONTAINER[@]}" \
+            -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData-Simulator" \
+            CODE_SIGNING_ALLOWED=NO \
+            PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID" \
+            MARKETING_VERSION="$(node -p 'require("./package.json").version')" \
+            CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
+            clean build
+          SIMULATOR_APP=$(find "$RUNNER_TEMP/DerivedData-Simulator/Build/Products/Release-iphonesimulator" -maxdepth 1 -name '*.app' -print -quit)
+          test -n "$SIMULATOR_APP"
+          ACTUAL_ID=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$SIMULATOR_APP/Info.plist")
+          test "$ACTUAL_ID" = "$BUNDLE_ID"
+          mkdir -p "$RUNNER_TEMP/SimulatorPackage"
+          ditto "$SIMULATOR_APP" "$RUNNER_TEMP/SimulatorPackage/SciCal600.app"
+          codesign --force --deep --sign - --timestamp=none \
+            "$RUNNER_TEMP/SimulatorPackage/SciCal600.app"
+          codesign --verify --deep --strict \
+            "$RUNNER_TEMP/SimulatorPackage/SciCal600.app"
+          ditto -c -k --sequesterRsrc --keepParent \
+            "$RUNNER_TEMP/SimulatorPackage/SciCal600.app" \
+            artifacts/SciCal600-iOS-Simulator.app.zip
+          printf 'Bundle ID: %s\nBuild: %s\nCommit: %s\n' \
+            "$ACTUAL_ID" "$GITHUB_RUN_NUMBER" "$GITHUB_SHA" \
+            > artifacts/iOS-build-info.txt
+
+      - name: Install and launch in iOS Simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEVICE_UDID=$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/ {print $2; exit}')
+          test -n "$DEVICE_UDID"
+          xcrun simctl boot "$DEVICE_UDID" >/dev/null 2>&1 || true
+          xcrun simctl bootstatus "$DEVICE_UDID" -b
+          xcrun simctl install "$DEVICE_UDID" "$RUNNER_TEMP/SimulatorPackage/SciCal600.app"
+          xcrun simctl launch --terminate-running-process "$DEVICE_UDID" "$BUNDLE_ID"
+          xcrun simctl spawn "$DEVICE_UDID" launchctl print "system" >/dev/null
+          xcrun simctl terminate "$DEVICE_UDID" "$BUNDLE_ID"
+          xcrun simctl shutdown "$DEVICE_UDID"
+
+      - name: Build and package the explicitly unsigned device IPA
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -d ios/App/App.xcworkspace ]]; then
+            XCODE_CONTAINER=(-workspace ios/App/App.xcworkspace)
+          else
+            XCODE_CONTAINER=(-project ios/App/App.xcodeproj)
+          fi
+          xcodebuild "${XCODE_CONTAINER[@]}" \
+            -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData-Device" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID" \
+            MARKETING_VERSION="$(node -p 'require("./package.json").version')" \
+            CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
+            clean build
+          DEVICE_APP=$(find "$RUNNER_TEMP/DerivedData-Device/Build/Products/Release-iphoneos" -maxdepth 1 -name '*.app' -print -quit)
+          test -n "$DEVICE_APP"
+          ACTUAL_ID=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$DEVICE_APP/Info.plist")
+          test "$ACTUAL_ID" = "$BUNDLE_ID"
+          if codesign --verify --deep --strict "$DEVICE_APP" >/dev/null 2>&1; then
+            echo "::error::The artifact expected to be unsigned unexpectedly has a valid signature."
+            exit 1
+          fi
+          mkdir -p "$RUNNER_TEMP/UnsignedIPA/Payload"
+          ditto "$DEVICE_APP" "$RUNNER_TEMP/UnsignedIPA/Payload/SciCal600.app"
+          (
+            cd "$RUNNER_TEMP/UnsignedIPA"
+            /usr/bin/zip -qry "$GITHUB_WORKSPACE/artifacts/SciCal600-iOS-UNSIGNED.ipa" Payload
+          )
+          printf '%s\n' \
+            'UNSIGNED: This IPA cannot be installed on a normal iPhone or iPad.' \
+            'It is provided for inspection and downstream signing only.' \
+            > artifacts/UNSIGNED-IPA-NOTICE.txt
+          (
+            cd artifacts
+            shasum -a 256 \
+              SciCal600-iOS-Simulator.app.zip \
+              SciCal600-iOS-UNSIGNED.ipa \
+              > SHA256SUMS-iOS.txt
+          )
+
+      - name: Upload iOS build artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: SciCal600-iOS-unsigned-${{ github.sha }}
+          path: artifacts/
+          retention-days: 90
+
+  signed-release:
+    name: Production-signed iOS release
+    if: startsWith(github.ref, 'refs/tags/v') && vars.IOS_SIGNED_RELEASE_ENABLED == 'true'
+    runs-on: macos-latest
+    timeout-minutes: 40
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+    environment: ios-release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies and prepare iOS
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          node scripts/prepare-ios.mjs
+
+      - name: Import the Apple distribution identity and profile
+        id: signing
+        env:
+          CERTIFICATE_P12_BASE64: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_P12_BASE64 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_PASSWORD }}
+          PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$CERTIFICATE_P12_BASE64"
+          test -n "$CERTIFICATE_PASSWORD"
+          test -n "$PROVISIONING_PROFILE_BASE64"
+          test -n "$TEAM_ID"
+
+          CERTIFICATE_PATH="$RUNNER_TEMP/distribution.p12"
+          PROFILE_PATH="$RUNNER_TEMP/distribution.mobileprovision"
+          PROFILE_PLIST="$RUNNER_TEMP/distribution-profile.plist"
+          KEYCHAIN_PATH="$RUNNER_TEMP/scical-signing.keychain-db"
+          KEYCHAIN_PASSWORD=$(openssl rand -hex 24)
+
+          printf '%s' "$CERTIFICATE_P12_BASE64" | openssl base64 -d -A -out "$CERTIFICATE_PATH"
+          printf '%s' "$PROVISIONING_PROFILE_BASE64" | openssl base64 -d -A -out "$PROFILE_PATH"
+          security cms -D -i "$PROFILE_PATH" > "$PROFILE_PLIST"
+
+          PROFILE_UUID=$(/usr/libexec/PlistBuddy -c 'Print :UUID' "$PROFILE_PLIST")
+          PROFILE_TEAM=$(/usr/libexec/PlistBuddy -c 'Print :TeamIdentifier:0' "$PROFILE_PLIST")
+          PROFILE_APP_ID=$(/usr/libexec/PlistBuddy -c 'Print :Entitlements:application-identifier' "$PROFILE_PLIST")
+          test "$PROFILE_TEAM" = "$TEAM_ID"
+          test "$PROFILE_APP_ID" = "$TEAM_ID.$BUNDLE_ID"
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$CERTIFICATE_PATH" \
+            -P "$CERTIFICATE_PASSWORD" \
+            -A \
+            -t cert \
+            -f pkcs12 \
+            -k "$KEYCHAIN_PATH"
+          security set-key-partition-list \
+            -S apple-tool:,apple: \
+            -k "$KEYCHAIN_PASSWORD" \
+            "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH"
+
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          cp "$PROFILE_PATH" "$HOME/Library/MobileDevice/Provisioning Profiles/$PROFILE_UUID.mobileprovision"
+          chmod 600 "$CERTIFICATE_PATH" "$PROFILE_PATH" "$KEYCHAIN_PATH"
+
+          echo "profile_uuid=$PROFILE_UUID" >> "$GITHUB_OUTPUT"
+          echo "keychain_path=$KEYCHAIN_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Archive and export the signed IPA
+        env:
+          TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
+          PROFILE_UUID: ${{ steps.signing.outputs.profile_uuid }}
+          KEYCHAIN_PATH: ${{ steps.signing.outputs.keychain_path }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -d ios/App/App.xcworkspace ]]; then
+            XCODE_CONTAINER=(-workspace ios/App/App.xcworkspace)
+          else
+            XCODE_CONTAINER=(-project ios/App/App.xcodeproj)
+          fi
+          VERSION="${GITHUB_REF_NAME#v}"
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          xcodebuild "${XCODE_CONTAINER[@]}" \
+            -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/SciCal600.xcarchive" \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY='Apple Distribution' \
+            DEVELOPMENT_TEAM="$TEAM_ID" \
+            PROVISIONING_PROFILE_SPECIFIER="$PROFILE_UUID" \
+            PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID" \
+            MARKETING_VERSION="$VERSION" \
+            CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
+            OTHER_CODE_SIGN_FLAGS="--keychain $KEYCHAIN_PATH" \
+            clean archive
+
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>signingStyle</key><string>manual</string>
+            <key>teamID</key><string>$TEAM_ID</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>$BUNDLE_ID</key><string>$PROFILE_UUID</string>
+            </dict>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+            <key>stripSwiftSymbols</key><true/>
+            <key>uploadSymbols</key><false/>
+          </dict>
+          </plist>
+          PLIST
+
+          mkdir -p artifacts "$RUNNER_TEMP/SignedExport"
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/SciCal600.xcarchive" \
+            -exportPath "$RUNNER_TEMP/SignedExport" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist"
+          EXPORTED_IPA=$(find "$RUNNER_TEMP/SignedExport" -maxdepth 1 -name '*.ipa' -print -quit)
+          test -n "$EXPORTED_IPA"
+          cp "$EXPORTED_IPA" artifacts/SciCal600-iOS.ipa
+          (
+            cd artifacts
+            shasum -a 256 SciCal600-iOS.ipa > SHA256SUMS-iOS.txt
+          )
+
+      - name: Verify the signed application
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/VerifyIPA"
+          unzip -q artifacts/SciCal600-iOS.ipa -d "$RUNNER_TEMP/VerifyIPA"
+          SIGNED_APP=$(find "$RUNNER_TEMP/VerifyIPA/Payload" -maxdepth 1 -name '*.app' -print -quit)
+          test -n "$SIGNED_APP"
+          codesign --verify --deep --strict --verbose=2 "$SIGNED_APP"
+          ACTUAL_ID=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$SIGNED_APP/Info.plist")
+          test "$ACTUAL_ID" = "$BUNDLE_ID"
+
+      - name: Upload production-signed IPA to the tagged Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" --verify-tag --generate-notes || true
+            gh release view "$GITHUB_REF_NAME" >/dev/null
+          fi
+          gh release upload "$GITHUB_REF_NAME" \
+            artifacts/SciCal600-iOS.ipa \
+            artifacts/SHA256SUMS-iOS.txt \
+            --clobber
+
+      - name: Remove imported signing material
+        if: always()
+        env:
+          KEYCHAIN_PATH: ${{ steps.signing.outputs.keychain_path }}
+        shell: bash
+        run: |
+          if [[ -n "${KEYCHAIN_PATH:-}" ]]; then
+            security delete-keychain "$KEYCHAIN_PATH" || true
+          fi
+          rm -f "$RUNNER_TEMP/distribution.p12" \
+            "$RUNNER_TEMP/distribution.mobileprovision" \
+            "$RUNNER_TEMP/distribution-profile.plist"

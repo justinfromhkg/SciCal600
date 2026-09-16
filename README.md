@@ -1,11 +1,11 @@
-# Android app / Android 应用
+# SciCal600 multi-platform / 多端应用
 
-[Download the verified Android APK / 下载已验证 Android APK](https://github.com/justinfromhkg/SciCal600/releases/download/android-debug-b3780b0a55fe/SciCal600-debug.apk)
+[Download Android, Windows, macOS and iOS builds / 下载多端安装包](https://github.com/justinfromhkg/SciCal600/releases)
 
-[Android download and cloud build instructions / 下载与云端构建说明](ANDROID.md)
+[Platform and signing guide / 多端与签名说明](MULTIPLATFORM.md) · [Android](ANDROID.md) · [Windows and macOS](DESKTOP.md) · [iOS](IOS.md)
 
-The Web app and Android app share the same calculator code. GitHub Actions produces installable debug APKs; version tags publish a production-signed `SciCal600-Android.apk` when signing secrets are configured.
-Web 与 Android 共用计算代码；Actions 生成可安装 debug APK，配置正式签名 secrets 后可通过版本标签发布正式版。
+The Web, Android, Windows, macOS and iOS editions share the same calculator code. GitHub Actions builds and tests all preview downloads in the cloud. Preview signing limitations are stated on each Release; production signing requires the owner's private platform credentials.
+网页、Android、Windows、macOS 与 iOS 共用计算代码，并由 GitHub Actions 在云端构建测试。预览包的签名限制会在 Release 中明确标注；正式签名必须使用项目所有者的私密凭证。
 
 # SciCal600
 

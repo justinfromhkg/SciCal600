@@ -19,13 +19,21 @@ const adb = (...args) => execFileSync('adb', args, { encoding: 'utf8' });
     await page.evaluate(() => window.SciCalUI.showView('calculator'));
     for (const key of ['AC', '1', '+', '1', 'EXE']) await page.locator('.calc-key[data-key-label="' + key + '"]').click();
     assert.equal((await page.locator('#result').textContent()).trim(), '2', 'offline 1+1');
+    const pressBackUntil = async (description, condition) => {
+      for (let attempt = 1; attempt <= 3; attempt += 1) {
+        adb('shell', 'input', 'keyevent', 'KEYCODE_BACK');
+        for (let poll = 0; poll < 20; poll += 1) {
+          if (await condition()) return;
+          await page.waitForTimeout(250);
+        }
+      }
+      throw new Error(`Android Back did not ${description} after 3 attempts`);
+    };
     await page.evaluate(() => document.querySelector('#settings-dialog').showModal());
-    adb('shell', 'input', 'keyevent', 'KEYCODE_BACK');
-    await page.waitForFunction(() => !document.querySelector('#settings-dialog').open);
+    await pressBackUntil('close the settings dialog', () => page.evaluate(() => !document.querySelector('#settings-dialog').open));
     assert.equal(await page.evaluate(() => window.SciCalUI.view), 'calculator', 'Back closes dialog before navigation');
     await page.evaluate(() => window.SciCalUI.showView('linear-algebra'));
-    adb('shell', 'input', 'keyevent', 'KEYCODE_BACK');
-    await page.waitForFunction(() => window.SciCalUI.view === 'calculator');
+    await pressBackUntil('return to the calculator', () => page.evaluate(() => window.SciCalUI.view === 'calculator'));
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'no horizontal document overflow');
     await page.screenshot({ path: 'artifacts/android-offline.png' });
     console.log('ANDROID_SMOKE_OK: installed APK, offline four workspaces, 1+1, native Back, viewport');

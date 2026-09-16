@@ -1,6 +1,9 @@
 node_modules/
 dist/
 android/
+ios/
+release/
+.cache/
 *.jks
 *.keystore
 *.apk
