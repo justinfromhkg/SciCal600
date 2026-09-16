@@ -9,7 +9,7 @@ Web 与 Android 共用计算代码；Actions 生成可安装 debug APK，配置�
 
 # SciCal600
 
-SciCal600 is a responsive Smart Calculator platform. It combines a scientific calculator inspired by the Casio fx-50FH II workflow with Linear Algebra, Computer Calculator, and Economics Calculator workspaces.
+SciCal600 is an independent responsive Smart Calculator platform. Its scientific calculator, Linear Algebra, Computer Calculator, and Economics Calculator workspaces are designed and maintained as SciCal600 products without relying on another calculator brand or model identity.
 
 ## Use it online
 
@@ -17,7 +17,16 @@ SciCal600 is a responsive Smart Calculator platform. It combines a scientific ca
 
 Direct workspaces: [Scientific Calculator](https://scical600.pages.dev/scientific-calculator) · [Linear Algebra](https://scical600.pages.dev/linear-algebra) · [Computer Calculator](https://scical600.pages.dev/computer-calculator) · [Economics Calculator](https://scical600.pages.dev/economics-calculator) · [About](https://scical600.pages.dev/about)
 
-> The physical Casio fx-50FH II is listed by Casio as HKEAA-approved. This independent web simulator is not a Casio product and is not approved for use in examinations.
+> SciCal600 is an independent educational calculator suite. Examination approval is not claimed; users should follow the rules that apply to their own institution or examination.
+
+## Native clients
+
+- **Android:** GitHub Actions builds and emulator-tests an installable APK.
+- **Windows:** GitHub Actions packages a portable Electron executable.
+- **macOS:** GitHub Actions packages Intel and Apple-silicon Electron app archives. Unsigned development builds may require the standard macOS manual-open flow.
+- **iOS:** GitHub Actions builds the Capacitor iOS app for the simulator and an unsigned device archive for development. A directly installable physical-device IPA requires Apple signing credentials; the web app remains installable from Safari as a Home Screen app without those credentials.
+
+All native clients reuse the same SciCal600 web calculation code and tests.
 
 ## Run it
 
@@ -62,7 +71,7 @@ Create the API token in Cloudflare with the minimum **Account / Cloudflare Pages
 - A locked, full-screen calculator view with automatic fit and button-controlled zoom
 - Live device-battery percentage and charging state when the browser exposes the Battery Status API
 - Panning only when the enlarged calculator exceeds the available viewport
-- A prominent fx-50FH II model identity and a twelve-language Manual designed for both physical-calculator and web-simulator users
+- A distinctive SciCal600 scientific-calculator identity and a twelve-language manual for the web and native apps
 - Automatic system-language selection plus a persistent twelve-language picker, including Thai and Hong Kong Cantonese
 - Keyboard input and responsive phone/desktop layouts
 - A parser written without JavaScript `eval`
@@ -82,25 +91,19 @@ Create the API token in Cloudflare with the minimum **Account / Cloudflare Pages
 - Explicit-assumption interest/EAR/savings tools, educational P-plan/H-plan mortgage scenarios, fee-aware IRR/APR estimates, amortization, budget and real-return tools
 - English, Traditional Chinese, Simplified Chinese, Japanese, Korean, Malay, French, German, Spanish, Arabic, Thai, and Hong Kong Cantonese interface support
 
-## Verified reference feature set
+## Scientific calculator feature set
 
-Casio describes the fx-50FH II as a programmable, non-graphing model with 406 functions, a 10+2 digit two-line dot-matrix display, four program areas and 680 bytes of program memory. Its published functions include complex calculations, 23 built-in formulas, 40 scientific constants, fraction calculations, standard-deviation and regression statistics, base-n conversion, logical operations, combination/permutation, coordinate conversion, random numbers and summation.
+The scientific calculator implements a broad programmable, non-graphing study workflow entirely within SciCal600. It includes complex calculations, built-in educational formulas and scientific constants, fractions, statistics and regression, base-n conversion, logical operations, combinations and permutations, coordinate conversion, random numbers, summation, replay history, independent memory, and four persistent program areas.
 
-The calculator exposes six working modes: `COMP`, `CMPLX`, `BASE`, `SD`, `REG`, and `PRGM`. Web mode keeps the direct mode dialog and specialist workbenches. Simulator mode reproduces the two-page numbered MODE menu on the LCD; BASE uses the green `DEC`, `HEX`, `BIN`, `OCT`, `LOGIC`, and `A`–`F` markings on their shared physical keys. `FMLA` opens the interactive formula catalogue; `SHIFT` + `7` opens scientific constants.
+The calculator exposes six working modes: `COMP`, `CMPLX`, `BASE`, `SD`, `REG`, and `PRGM`. Web mode keeps the direct mode dialog and specialist workbenches. Simulator mode provides a compact numbered MODE menu on the LCD; BASE exposes `DEC`, `HEX`, `BIN`, `OCT`, `LOGIC`, and `A`–`F` controls. `FMLA` opens the interactive formula catalogue; `SHIFT` + `7` opens scientific constants.
 
-The formula and constant tables are versioned study data. They use modern values and common educational formulas; they do not claim to reproduce the exact internal table or rounding of a particular physical calculator revision.
+The formula and constant tables are versioned SciCal600 study data using modern values and common educational formulas.
 
 ## References
 
-- [Casio fx-50FH II product page](https://www.casio.com/intl/scientific-calculators/product.FX-50FHII/)
-- [Casio 2025 general calculator catalogue](https://www.casio.com/content/dam/casio/global/calculator/scientific-calculators/catalog/2025-general-catalog.pdf)
-- [Casio fx-50F PLUS English user guide](https://support.casio.com/pdf/004/fx-50F_PLUS_E.pdf) — the official guide for the closely matching fx-50F family workflow and six modes
 - [HKEAA 2026 examination notes](https://www.hkeaa.edu.hk/DocLibrary/IPE/em/EM_NotesOnExam2026.pdf) — points candidates to the current permitted-calculator list
-- [HKEAA 2019 permitted-calculator list](https://www.hkeaa.edu.hk/DocLibrary/IPE/cal/CAL2019.pdf) — explicitly includes `FX-50 F/FH/FH II`
-- [8tatTV fx-50FH II calculator walkthrough](https://www.youtube.com/watch?v=K_vaEZOcUQE&list=PLZlgLmMyC71dKgWb_p1zI9ssXf85RKdVw) — chaptered Cantonese demonstration of setup, COMP input, variables, fractions, powers, trigonometry, coordinate conversion, engineering notation, constants, rounding, and angle conversion
 - [Frankfurter v2](https://frankfurter.dev/) — no-key foreign-exchange reference data; values are not executable trading quotes
 - [HKMA Open API](https://apidocs.hkma.gov.hk/) — official Hong Kong interest-rate and interbank-liquidity series
 
 ## Scope note
 
-This remains an independent educational simulator. It does not claim complete parity with all “406 functions,” examination approval, or byte-for-byte compatibility with Casio programs.

@@ -39,7 +39,7 @@
     aboutTitle: "คณิตศาสตร์ที่เข้าใจง่าย",
     aboutIntro: "เครื่องมือคำนวณที่ชัดเจนและเชื่อถือได้สำหรับโทรศัพท์และคอมพิวเตอร์",
     toolsTitle: "เลือกพื้นที่ทำงานที่เหมาะสม",
-    scientificToolTitle: "เครื่องคิดเลขวิทยาศาสตร์ fx-50FH II",
+    scientificToolTitle: "เครื่องคิดเลขวิทยาศาสตร์ SciCal600 Scientific",
     openScientific: "เปิดเครื่องคิดเลขวิทยาศาสตร์",
     linearToolTitle: "พีชคณิตเชิงเส้น",
     openLinear: "เปิดพีชคณิตเชิงเส้น",
@@ -115,11 +115,11 @@
     planningTitle: "การวางแผนการเงิน",
     economicsFooter: "เครื่องคิดเลขเศรษฐศาสตร์ · เครื่องมืออ้างอิงเพื่อการศึกษา",
     manualEyebrow: "คู่มือเครื่องจริงและเว็บ",
-    manualTitle: "คู่มือเครื่องคิดเลข fx-50FH II",
-    manualIntro: "คู่มือสำหรับเครื่อง fx-50FH II และตัวจำลองบนเว็บ",
+    manualTitle: "คู่มือเครื่องคิดเลข SciCal600 Scientific",
+    manualIntro: "คู่มือสำหรับเครื่อง SciCal600 Scientific และตัวจำลองบนเว็บ",
     manualAudience: "สำหรับเครื่องคิดเลขจริงและตัวจำลองบนเว็บ",
     manualCaveat: "ใช้ชื่อปุ่มและโหมดเดียวกันบนเครื่องจริง ส่วนตัวควบคุมเฉพาะเว็บจะระบุไว้ต่างหาก",
-    manualFooter: "fx-50FH II · คู่มือ SciCal600",
+    manualFooter: "SciCal600 Scientific · คู่มือ SciCal600",
   };
 
   const yue = {
@@ -160,7 +160,7 @@
     aboutTitle: "實用數學 簡單搞掂",
     aboutIntro: "畀手機同電腦用嘅清晰可靠計算工具",
     toolsTitle: "揀啱你需要嘅計算工具",
-    scientificToolTitle: "科學計數機 fx-50FH II",
+    scientificToolTitle: "科學計數機 SciCal600 Scientific",
     openScientific: "開啟科學計數機",
     linearToolTitle: "線性代數",
     openLinear: "開啟線性代數",
@@ -196,11 +196,11 @@
     matrixErrorGuidance: "請檢查矩陣數值同維度再試",
     matrixNote: "計算只會喺瀏覽器入面進行；特徵對支援所有實數 2 × 2 矩陣，同埋最大 6 × 6 實對稱矩陣",
     manualEyebrow: "實體機 + 網頁指南",
-    manualTitle: "fx-50FH II 計數機說明書",
-    manualIntro: "畀 fx-50FH II 實體機同網頁模擬器用嘅實用指南",
+    manualTitle: "SciCal600 Scientific 計數機說明書",
+    manualIntro: "畀 SciCal600 Scientific 實體機同網頁模擬器用嘅實用指南",
     manualAudience: "適用於實體計數機同網頁模擬器",
     manualCaveat: "實體機可以跟返相同嘅按鍵同模式名稱；網頁先有嘅控制會另外標明",
-    manualFooter: "fx-50FH II · SciCal600 學習指南",
+    manualFooter: "SciCal600 Scientific · SciCal600 學習指南",
   };
 
   root.SciCalAdditionalLocales = Object.freeze({

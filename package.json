@@ -2,23 +2,29 @@
   "name": "scical600",
   "version": "0.3.0",
   "private": true,
-  "description": "A browser scientific calculator inspired by the fx-50FH II workflow.",
+  "description": "An independent cross-platform scientific and smart calculator suite.",
   "scripts": {
     "build": "node scripts/build-static.mjs",
     "test": "node --test tests/*.test.js",
     "deploy": "npm run build && npx --yes wrangler@latest pages deploy dist --project-name scical600 --branch main",
     "android:sync": "npm run build && node scripts/prepare-android.mjs",
     "android:debug": "npm run android:sync && node scripts/build-android.mjs",
-    "test:browser": "node tests/mobile-ui.browser.cjs"
+    "test:browser": "node tests/mobile-ui.browser.cjs",
+    "desktop:pack": "npm run build && electron-builder --config electron-builder.yml",
+    "ios:sync": "npm run build && node scripts/prepare-ios.mjs"
   },
   "dependencies": {
-    "@capacitor/core": "7.4.3",
     "@capacitor/android": "7.4.3",
-    "@capacitor/app": "7.0.1"
+    "@capacitor/app": "7.0.1",
+    "@capacitor/core": "7.4.3"
   },
   "devDependencies": {
     "@capacitor/cli": "7.4.3",
+    "@capacitor/ios": "^7.4.3",
+    "electron": "^44.3.0",
+    "electron-builder": "^26.0.12",
     "esbuild": "0.25.9",
     "playwright": "1.55.0"
-  }
+  },
+  "main": "desktop/main.cjs"
 }
