@@ -1453,6 +1453,12 @@
   render();
   window.SciCalApp = Object.freeze({
     setInterfaceMode,
+    closeScreenMenu: () => {
+      if (!state.screenMenu) return false;
+      state.screenMenu = null;
+      render();
+      return true;
+    },
     getState: () => ({
       mode: state.mode,
       interfaceMode: state.interfaceMode,

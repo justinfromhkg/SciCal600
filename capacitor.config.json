@@ -1,0 +1,12 @@
+{
+  "appId": "io.github.justinfromhkg.scical600",
+  "appName": "SciCal600",
+  "webDir": "dist",
+  "android": {
+    "backgroundColor": "#071019",
+    "allowMixedContent": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

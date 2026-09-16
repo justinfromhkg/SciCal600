@@ -5,6 +5,7 @@ const outputDirectory = resolve("dist");
 const publicFiles = [
   "index.html",
   "styles.css",
+  "android-download.css",
   "calculator-core.js",
   "calculator-data.js",
   "linear-algebra-core.js",
