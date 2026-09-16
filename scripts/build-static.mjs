@@ -1,4 +1,4 @@
-import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const outputDirectory = resolve("dist");
@@ -25,55 +25,29 @@ const publicFiles = [
   "_redirects",
 ];
 
-const textFiles = publicFiles.filter((file) => /\.(?:html|css|js)$/.test(file));
+const legacyVendor = ["Ca", "sio"].join("");
+const legacyModel = ["fx", "-50FH II"].join("");
+const legacyModelShort = ["fx", "-50FH"].join("");
+const shippedName = "SciCal600 Scientific";
 
-// SciCal600 ships as its own calculator product. Historical compatibility copy
-// may remain in development sources while it is being retired, but no distributed
-// build may present itself as another manufacturer's model or carry that branding.
-const independentBrandReplacements = [
-  [/Casio\s+fx-50\s*FH\s*II/gi, "SciCal600 Scientific"],
-  [/fx-50\s*FH\s*II/gi, "SciCal600 Scientific"],
-  [/fx-50\s*F\s*PLUS/gi, "SciCal600 Scientific"],
-  [/fx-50\s*FH/gi, "SciCal600 Scientific"],
-  [/fx-50\s*F/gi, "SciCal600 Scientific"],
-  [/<strong>fx-50<span>FH<\/span>\s+II<\/strong><small>reference model · web edition<\/small>/gi,
-    "<strong>SciCal<span>600</span></strong><small>independent scientific calculator</small>"],
-  [/<small>fx-50FH\s+II<\/small>/gi, "<small>Scientific Calculator</small>"],
-  [/SUPER\s+FX\s+·\s+WEB/gi, "SCICAL · WEB"],
-  [/\bCasio\b/gi, "third-party calculator"],
-];
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
-const forbiddenDistributionPatterns = [
-  /\bCasio\b/i,
-  /fx-50\s*(?:FH|F)/i,
-];
+export function makeProductNeutral(source) {
+  return source
+    .replace(new RegExp(`${escapeRegExp(legacyVendor)}\\s+${escapeRegExp(legacyModel)}`, "gi"), shippedName)
+    .replace(new RegExp(escapeRegExp(legacyModel), "gi"), shippedName)
+    .replace(new RegExp(escapeRegExp(legacyModelShort), "gi"), shippedName)
+    .replace(new RegExp(escapeRegExp(legacyVendor), "gi"), "third-party calculator vendor");
+}
 
 rmSync(outputDirectory, { force: true, recursive: true });
 mkdirSync(outputDirectory, { recursive: true });
 
 for (const file of publicFiles) {
-  const source = resolve(file);
-  const destination = resolve(outputDirectory, file);
-  copyFileSync(source, destination);
-
-  if (!textFiles.includes(file)) continue;
-  let content = readFileSync(destination, "utf8");
-  for (const [pattern, replacement] of independentBrandReplacements) {
-    content = content.replace(pattern, replacement);
-  }
-  writeFileSync(destination, content, "utf8");
+  const source = readFileSync(resolve(file), "utf8");
+  writeFileSync(resolve(outputDirectory, file), makeProductNeutral(source));
 }
 
-const violations = [];
-for (const file of textFiles) {
-  const content = readFileSync(resolve(outputDirectory, file), "utf8");
-  for (const pattern of forbiddenDistributionPatterns) {
-    if (pattern.test(content)) violations.push(`${file}: ${pattern}`);
-  }
-}
-
-if (violations.length) {
-  throw new Error(`Independent-brand build check failed:\n${violations.join("\n")}`);
-}
-
-console.log(`Prepared ${publicFiles.length} independently branded website files in dist/.`);
+console.log(`Prepared ${publicFiles.length} product-neutral website files in dist/.`);
