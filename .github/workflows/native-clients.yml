@@ -1,0 +1,116 @@
+name: Native clients
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: native-clients-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  migrate-and-test:
+    runs-on: ubuntu-latest
+    outputs:
+      branch-sha: ${{ steps.sha.outputs.value }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply independence migration
+        run: node scripts/project-migration.mjs
+      - name: Add native build dependencies
+        run: npm install --save-dev --package-lock-only electron@44.3.0 electron-builder@26.0.12 @capacitor/ios@7.4.3
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Verify brand independence
+        run: |
+          ! grep -RIn --exclude-dir=.git --exclude=package-lock.json -e 'Casio' -e 'fx-50FH' -e 'FX-50 F' README.md index.html additional-locales.js package.json
+      - name: Unit tests
+        run: npm test
+      - name: Web build
+        run: npm run build
+      - id: sha
+        run: echo "value=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+  windows:
+    needs: migrate-and-test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/project-migration.mjs
+      - run: npm install --save-dev --package-lock-only electron@44.3.0 electron-builder@26.0.12 @capacitor/ios@7.4.3
+      - run: npm ci --no-audit --no-fund
+      - run: npm run desktop:pack -- --win portable --x64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SciCal600-Windows
+          path: release/*.exe
+          retention-days: 90
+
+  macos:
+    needs: migrate-and-test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/project-migration.mjs
+      - run: npm install --save-dev --package-lock-only electron@44.3.0 electron-builder@26.0.12 @capacitor/ios@7.4.3
+      - run: npm ci --no-audit --no-fund
+      - run: npm run desktop:pack -- --mac zip --x64 --arm64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SciCal600-macOS
+          path: release/*.zip
+          retention-days: 90
+
+  ios:
+    needs: migrate-and-test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/project-migration.mjs
+      - run: npm install --save-dev --package-lock-only electron@44.3.0 electron-builder@26.0.12 @capacitor/ios@7.4.3
+      - run: npm ci --no-audit --no-fund
+      - run: npm run ios:sync
+      - name: Build iOS simulator app
+        run: |
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -sdk iphonesimulator -derivedDataPath ios/build CODE_SIGNING_ALLOWED=NO build
+      - name: Package simulator app
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent ios/build/Build/Products/Release-iphonesimulator/App.app SciCal600-iOS-Simulator.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SciCal600-iOS-Simulator
+          path: SciCal600-iOS-Simulator.zip
+          retention-days: 90
+
+  publish-dev-downloads:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [windows, macos, ios]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Publish native development release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="native-dev-${GITHUB_SHA:0:12}"
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --target "$GITHUB_SHA" --prerelease --title "SciCal600 native development builds (${GITHUB_SHA:0:12})" --notes "Development builds for Windows, macOS and the iOS Simulator. These builds share the SciCal600 web calculation core. macOS builds are unsigned; physical-device iOS installation requires Apple signing credentials."
+          find artifacts -type f -maxdepth 2 -print0 | xargs -0 gh release upload "$TAG" --clobber
