@@ -1,0 +1,70 @@
+name: Desktop packaging
+
+on:
+  workflow_call:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desktop-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows x64
+            os: windows-latest
+            command: --win --x64
+            artifact: windows-x64
+          - name: macOS Intel
+            os: macos-15-intel
+            command: --mac --x64
+            artifact: macos-x64
+          - name: macOS Apple Silicon
+            os: macos-15
+            command: --mac --arm64
+            artifact: macos-arm64
+    env:
+      # Keep unsigned CI builds from probing the runner for signing identities.
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      CSC_FOR_PULL_REQUEST: 'true'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Prepare offline desktop assets
+        run: npm run desktop:prepare
+      - name: Build unsigned desktop packages
+        run: npx electron-builder --config electron-builder.yml ${{ matrix.command }}
+      - name: Verify package output
+        shell: bash
+        run: |
+          test -d release
+          test "$(find release -type f | wc -l)" -gt 0
+      - name: Smoke-test the packaged desktop application
+        run: npm run test:desktop
+      - name: Upload desktop packages
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: SciCal600-${{ matrix.artifact }}
+          path: |
+            release/*.exe
+            release/*.dmg
+            release/*.zip
+          if-no-files-found: error
+          retention-days: 90

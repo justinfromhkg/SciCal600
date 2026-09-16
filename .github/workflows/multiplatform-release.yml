@@ -1,0 +1,96 @@
+name: Multi-platform Release
+
+on:
+  push:
+    tags: ['multiplatform-v*-preview.*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: multiplatform-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  android:
+    name: Android audit and APK
+    uses: ./.github/workflows/android.yml
+
+  desktop:
+    name: Windows and macOS packages
+    uses: ./.github/workflows/desktop.yml
+
+  ios:
+    name: iOS packages
+    uses: ./.github/workflows/ios.yml
+
+  release:
+    name: Publish one verified preview Release
+    needs: [android, desktop, ios]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          pattern: SciCal600-*
+          path: downloaded
+          merge-multiple: true
+
+      - name: Validate and assemble release assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF_NAME" =~ ^multiplatform-v([0-9]+\.[0-9]+\.[0-9]+)-preview\.([0-9]+)$ ]]
+          RELEASE_VERSION="${BASH_REMATCH[1]}"
+          PACKAGE_VERSION=$(node -p 'require("./package.json").version')
+          test "$RELEASE_VERSION" = "$PACKAGE_VERSION"
+
+          mkdir -p publish
+          cp downloaded/SciCal600-debug.apk "publish/SciCal600-Android-${RELEASE_VERSION}-debug.apk"
+          cp downloaded/SciCal600-Windows-*.exe publish/
+          cp downloaded/SciCal600-macOS-*.dmg publish/
+          cp downloaded/SciCal600-macOS-*.zip publish/
+          cp downloaded/SciCal600-iOS-Simulator.app.zip publish/
+          cp downloaded/SciCal600-iOS-UNSIGNED.ipa publish/
+          cp downloaded/UNSIGNED-IPA-NOTICE.txt publish/
+          cp downloaded/iOS-build-info.txt publish/
+
+          test -f "publish/SciCal600-Windows-${RELEASE_VERSION}-x64-Setup.exe"
+          test -f "publish/SciCal600-Windows-${RELEASE_VERSION}-x64-Portable.exe"
+          test -f "publish/SciCal600-macOS-${RELEASE_VERSION}-x64.dmg"
+          test -f "publish/SciCal600-macOS-${RELEASE_VERSION}-x64.zip"
+          test -f "publish/SciCal600-macOS-${RELEASE_VERSION}-arm64.dmg"
+          test -f "publish/SciCal600-macOS-${RELEASE_VERSION}-arm64.zip"
+
+          cat > publish/PREVIEW-SIGNING-NOTICE.txt <<'NOTICE'
+          These are automated preview builds.
+          Android uses a development signature. Windows and macOS are unsigned, so their operating systems may show publisher warnings. The iOS device IPA is intentionally unsigned and cannot be installed on an ordinary iPhone or iPad; use the Simulator ZIP with Xcode. Production signing requires the owner's private platform credentials, which are never generated or committed by this repository.
+          NOTICE
+
+          (
+            cd publish
+            find . -maxdepth 1 -type f \( -name '*.apk' -o -name '*.exe' -o -name '*.dmg' -o -name '*.zip' -o -name '*.ipa' \) -print0 \
+              | sort -z \
+              | xargs -0 sha256sum > SHA256SUMS.txt
+          )
+          test "$(wc -l < publish/SHA256SUMS.txt)" -eq 9
+
+      - name: Publish GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p 'require("./package.json").version')
+          if ! gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" \
+              --verify-tag \
+              --prerelease \
+              --title "SciCal600 v${VERSION} multi-platform preview" \
+              --notes $'Cloud-built and tested downloads for Android, Windows, macOS and iOS.\n\nAndroid is a development-signed APK. Windows and macOS packages are unsigned previews. The iOS Simulator ZIP runs through Xcode; the clearly labelled UNSIGNED IPA is for inspection/signing workflows and is not directly installable on a normal iPhone or iPad. See PREVIEW-SIGNING-NOTICE.txt and SHA256SUMS.txt.'
+          fi
+          gh release upload "$GITHUB_REF_NAME" publish/* --clobber
