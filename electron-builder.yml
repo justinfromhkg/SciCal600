@@ -1,36 +1,25 @@
 appId: io.github.justinfromhkg.scical600
 productName: SciCal600
-asar: true
-
 directories:
   output: release
-
 files:
-  - dist/**
-  - desktop/**
+  - dist/**/*
+  - desktop/main.cjs
   - package.json
-  - '!**/*.map'
-
-extraMetadata:
-  main: desktop/main.cjs
-
+asar: true
+npmRebuild: false
+artifactName: SciCal600-${os}-${arch}.${ext}
 win:
   target:
-    - nsis
-    - portable
-nsis:
-  oneClick: true
-  perMachine: false
-  allowToChangeInstallationDirectory: false
-  artifactName: '${productName}-Windows-${version}-${arch}-Setup.${ext}'
-
-portable:
-  requestExecutionLevel: user
-  artifactName: '${productName}-Windows-${version}-${arch}-Portable.${ext}'
-
+    - target: portable
+      arch:
+        - x64
 mac:
-  category: public.app-category.education
-  artifactName: '${productName}-macOS-${version}-${arch}.${ext}'
   target:
-    - dmg
-    - zip
+    - target: zip
+      arch:
+        - x64
+        - arm64
+  category: public.app-category.education
+  hardenedRuntime: false
+  gatekeeperAssess: false

@@ -30,7 +30,7 @@
 
         <button class="brand" type="button" data-view-target="calculator" aria-label="SciCal600 calculator">
           <span class="brand__mark" aria-hidden="true">∑</span>
-          <span class="brand__identity"><span class="brand__name">SciCal<span class="brand__accent">600</span></span><small>fx-50FH II</small></span>
+          <span class="brand__identity"><span class="brand__name">SciCal<span class="brand__accent">600</span></span><small>Scientific Suite</small></span>
         </button>
 
         <div class="app-bar__actions">
@@ -62,7 +62,7 @@
                     <div class="calculator__topline">
                       <div class="maker">
                         <span class="maker__name">SCIENTIFIC</span>
-                        <span class="maker__series">SUPER FX · WEB</span>
+                        <span class="maker__series">SCICAL · WEB</span>
                       </div>
                       <div class="device-battery is-unavailable" id="device-battery" role="status" aria-live="polite">
                         <span class="device-battery__icon" aria-hidden="true">
@@ -71,7 +71,7 @@
                         </span>
                         <span class="device-battery__text" id="battery-text">--</span>
                       </div>
-                      <div class="model"><strong>fx-50<span>FH</span> II</strong><small>reference model · web edition</small></div>
+                      <div class="model"><strong>SciCal<span>600</span></strong><small>scientific · web edition</small></div>
                     </div>
 
                     <section class="display" aria-label="Calculator display">
@@ -116,7 +116,7 @@
         <section class="app-view app-view--scrollable is-active" data-view-panel="about">
           <div class="content-page content-page--home">
             <div class="content-page__header home-hero">
-              <a class="android-download" href="https://github.com/justinfromhkg/SciCal600/releases" target="_blank" rel="noopener">↓ Android · Windows · macOS · iOS downloads</a>
+              <a class="android-download" href="https://github.com/justinfromhkg/SciCal600/releases/download/android-debug-b3780b0a55fe/SciCal600-debug.apk" target="_blank" rel="noopener">↓ Android APK · 已验证测试版</a>
               <p class="eyebrow" data-i18n="aboutEyebrow">Smart Calculator platform</p>
               <h1 data-i18n="aboutTitle">Maths made simple</h1>
               <p class="content-page__lead" data-i18n="aboutIntro">Clear, reliable calculation tools for phones and computers.</p>
@@ -125,10 +125,25 @@
             <section class="home-tools" aria-labelledby="home-tools-title">
               <h2 class="sr-only" id="home-tools-title" data-i18n="toolsTitle">Choose the right workspace.</h2>
               <div class="home-tool-grid">
-                <article class="home-tool-card"><span class="home-tool-card__number">01</span><div><h3 data-i18n="scientificToolTitle">Scientific calculator fx-50FH II</h3><button class="primary-action" type="button" data-view-target="calculator" data-i18n="openScientific">Open scientific calculator</button></div></article>
+                <article class="home-tool-card"><span class="home-tool-card__number">01</span><div><h3 data-i18n="scientificToolTitle">Scientific calculator SciCal600 Scientific</h3><button class="primary-action" type="button" data-view-target="calculator" data-i18n="openScientific">Open scientific calculator</button></div></article>
                 <article class="home-tool-card"><span class="home-tool-card__number">02</span><div><h3 data-i18n="linearToolTitle">Linear Algebra</h3><button class="primary-action" type="button" data-view-target="linear-algebra" data-i18n="openLinear">Open Linear Algebra</button></div></article>
                 <article class="home-tool-card"><span class="home-tool-card__number">03</span><div><h3 data-i18n="computerToolTitle">Computer Calculator</h3><button class="primary-action" type="button" data-view-target="computer-calculator" data-i18n="openComputer">Open Computer Calculator</button></div></article>
                 <article class="home-tool-card"><span class="home-tool-card__number">04</span><div><h3 data-i18n="economicsToolTitle">Economics Calculator</h3><button class="primary-action" type="button" data-view-target="economics-calculator" data-i18n="openEconomics">Open Economics Calculator</button></div></article>
+              </div>
+            </section>
+
+
+            <section class="home-tools native-availability" aria-labelledby="native-availability-title">
+              <div class="content-page__header">
+                <p class="eyebrow">Native app availability / 原生客户端状态</p>
+                <h2 id="native-availability-title">Downloads and platform limits / 下载与平台限制</h2>
+                <p class="content-page__lead">The calculator core is shared across Web, Android, Windows, macOS and iOS. Development downloads are published from GitHub when their cloud builds pass.</p>
+              </div>
+              <div class="home-tool-grid">
+                <article class="home-tool-card"><span class="home-tool-card__number">A</span><div><h3>Android</h3><p>Verified development APK. Android may ask you to allow installation from this source. Store-grade releases require the project's production signing key.</p></div></article>
+                <article class="home-tool-card"><span class="home-tool-card__number">W</span><div><h3>Windows</h3><p>Portable development EXE. It is not commercially code-signed yet, so Microsoft SmartScreen may show a warning.</p></div></article>
+                <article class="home-tool-card"><span class="home-tool-card__number">M</span><div><h3>macOS</h3><p>Intel and Apple-silicon development archives. They are not Developer ID signed or notarized yet, so Gatekeeper may require manual approval.</p></div></article>
+                <article class="home-tool-card"><span class="home-tool-card__number">i</span><div><h3>iOS / iPadOS</h3><p>Simulator build plus an unsigned device archive for later signing. Direct physical-device IPA installation requires Apple signing and provisioning. The Web app can still be added to the Home Screen from Safari.</p></div></article>
               </div>
             </section>
 
@@ -332,8 +347,8 @@ Transport: 1500</textarea></label><button type="button" id="budget-calculate" da
             </div>
             <div class="manual-model-banner">
               <span data-i18n="manualAudience">For the physical calculator and web simulator</span>
-              <strong>fx-50FH II</strong>
-              <p data-i18n="manualCaveat">Follow the matching key and mode names on a physical fx-50FH II. Web-only screen controls are identified separately.</p>
+              <strong>SciCal600 Scientific</strong>
+              <p data-i18n="manualCaveat">Follow the matching key and mode names on a physical SciCal600 Scientific. Web-only screen controls are identified separately.</p>
             </div>
             <nav class="manual-index" id="manual-index" aria-label="Manual sections"></nav>
             <div class="manual-content" id="manual-content"></div>
