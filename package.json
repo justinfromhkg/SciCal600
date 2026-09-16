@@ -1,36 +1,27 @@
 {
   "name": "scical600",
-  "version": "0.4.0",
+  "version": "0.3.0",
   "private": true,
-  "description": "An independent multi-platform scientific and smart calculator suite.",
-  "main": "desktop/main.cjs",
-  "engines": {
-    "node": ">=22"
-  },
+  "description": "An independent browser and native scientific calculator platform.",
   "scripts": {
     "build": "node scripts/build-static.mjs",
     "test": "node --test tests/*.test.js",
+    "brand:check": "npm run build && node scripts/check-brand-independence.mjs dist",
     "deploy": "npm run build && npx --yes wrangler@latest pages deploy dist --project-name scical600 --branch main",
     "android:sync": "npm run build && node scripts/prepare-android.mjs",
     "android:debug": "npm run android:sync && node scripts/build-android.mjs",
     "ios:sync": "npm run build && node scripts/prepare-ios.mjs",
     "desktop:prepare": "npm run build && node scripts/prepare-desktop.mjs",
-    "desktop:dev": "npm run desktop:prepare && electron .",
-    "desktop:build": "npm run desktop:prepare && electron-builder --config electron-builder.yml",
-    "test:desktop": "node tests/desktop-smoke.cjs",
     "test:browser": "node tests/mobile-ui.browser.cjs"
   },
   "dependencies": {
-    "@capacitor/core": "7.6.9",
-    "@capacitor/android": "7.6.9",
-    "@capacitor/ios": "7.6.9",
-    "@capacitor/app": "7.1.2"
+    "@capacitor/core": "7.4.3",
+    "@capacitor/android": "7.4.3",
+    "@capacitor/app": "7.0.1"
   },
   "devDependencies": {
-    "@capacitor/cli": "7.6.9",
-    "electron": "44.4.1",
-    "electron-builder": "26.15.3",
-    "esbuild": "0.28.2",
-    "playwright": "1.63.0"
+    "@capacitor/cli": "7.4.3",
+    "esbuild": "0.25.9",
+    "playwright": "1.55.0"
   }
 }
