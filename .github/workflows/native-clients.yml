@@ -2,7 +2,7 @@ name: Native clients
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, chore/brand-independent-native-clients]
     tags: ['v*']
   workflow_dispatch:
 permissions:
@@ -13,8 +13,8 @@ concurrency:
 jobs:
   migrate-and-test:
     runs-on: ubuntu-latest
-    outputs:
-      branch-sha: ${{ steps.sha.outputs.value }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -24,6 +24,19 @@ jobs:
         run: node scripts/project-migration.mjs
       - name: Add native build dependencies
         run: npm install --save-dev --package-lock-only electron@44.3.0 electron-builder@26.0.12 @capacitor/ios@7.4.3
+      - name: Commit generated migration on migration branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/chore/brand-independent-native-clients'
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- README.md index.html additional-locales.js package.json package-lock.json; then
+            echo 'Migration already committed.'
+          else
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add README.md index.html additional-locales.js package.json package-lock.json
+            git commit -m 'Make SciCal600 brand-independent and add native build dependencies'
+            git push origin HEAD:chore/brand-independent-native-clients
+          fi
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
       - name: Verify brand independence
@@ -33,8 +46,6 @@ jobs:
         run: npm test
       - name: Web build
         run: npm run build
-      - id: sha
-        run: echo "value=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
   windows:
     needs: migrate-and-test
