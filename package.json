@@ -2,7 +2,7 @@
   "name": "scical600",
   "version": "0.4.0",
   "private": true,
-  "description": "A browser scientific calculator inspired by the fx-50FH II workflow.",
+  "description": "An independent multi-platform scientific and smart calculator suite.",
   "main": "desktop/main.cjs",
   "engines": {
     "node": ">=22"
