@@ -1,86 +1,109 @@
-# SciCal600 multi-platform / 多端应用
+# SciCal600
 
-[Download Android, Windows, macOS and iOS builds / 下载多端安装包](https://github.com/justinfromhkg/SciCal600/releases)
+SciCal600 is an independent Smart Calculator platform for Web, Android, iOS, macOS, and Windows. The same product-neutral calculation engines power the scientific, Linear Algebra, Computer Calculator, and Economics Calculator workspaces.
 
-[Platform and signing guide / 多端与签名说明](MULTIPLATFORM.md) · [Android](ANDROID.md) · [Windows and macOS](DESKTOP.md) · [iOS](IOS.md)
+## Download and use
 
-SciCal600 is an independent Smart Calculator platform for Web, Android, Windows, macOS and iOS. All editions share the same calculator code, and GitHub Actions builds and tests downloadable packages in the cloud. Preview signing limitations are stated on each Release; production signing requires the project owner's private platform credentials.
+- **Web:** https://scical600.pages.dev/
+- **macOS / Windows / iOS Simulator:** open this repository's **Releases** page and download the client build for the desired commit/version.
+- **Android:** install the verified APK published by the Android GitHub Actions workflow/release.
+- Detailed packaging and signing notes: [CLIENTS.md](CLIENTS.md)
 
-SciCal600 是独立开发的智能计算器平台，支持网页、Android、Windows、macOS 与 iOS。各平台共用同一套计算代码，并由 GitHub Actions 在云端完成构建与测试。预览包的签名限制会在 Release 中明确标注；正式签名使用项目所有者自己的平台凭证。
-
-## Use it online
-
-**Production website:** [Open SciCal600](https://scical600.pages.dev/)
-
-Direct workspaces: [Scientific Calculator](https://scical600.pages.dev/scientific-calculator) · [Linear Algebra](https://scical600.pages.dev/linear-algebra) · [Computer Calculator](https://scical600.pages.dev/computer-calculator) · [Economics Calculator](https://scical600.pages.dev/economics-calculator) · [About](https://scical600.pages.dev/about)
+Main-branch client builds are automated. macOS and Windows packages are currently unsigned, so their operating systems can show publisher warnings. The iOS artifact is an unsigned Simulator build; a physical iPhone/iPad build requires Apple Developer signing credentials and provisioning.
 
 ## Product independence
 
-SciCal600 is not a simulator, clone, skin, or endorsed edition of another calculator product. Its identity, user-facing branding, distribution packages and release pipeline are SciCal600-specific. The scientific workspace implements general mathematical capabilities using project-owned source code and generic mathematical conventions.
+SciCal600 does not require a specific third-party calculator, firmware, ROM, manual, logo, product artwork, or proprietary calculator service to run. Calculation behavior is implemented in this repository. Production bundles are checked for legacy third-party product labels before native packaging.
 
-Distributed builds are checked automatically so third-party calculator brand/model names cannot appear in shipped Web or native application assets. This helps keep future commercial distribution, including advertising-supported editions, separated from third-party product identity.
+See [BRAND-INDEPENDENCE.md](BRAND-INDEPENDENCE.md) for the repository policy. This engineering policy reduces avoidable brand/copying risk but is not a substitute for legal review before commercial distribution or advertising.
 
-## Run it
+## Workspaces
 
-Serve the repository root with any static HTTP server and open `/`. The stable routes are `/scientific-calculator`, `/linear-algebra`, `/computer-calculator`, `/economics-calculator`, `/manual`, and `/about`.
+Direct Web routes:
 
-To run the calculation-engine tests:
+- `/scientific-calculator`
+- `/linear-algebra`
+- `/computer-calculator`
+- `/economics-calculator`
+- `/manual`
+- `/about`
+
+The project has no browser runtime package dependency. Native wrappers bundle the same static `dist/` application for offline use.
+
+## Test and build
 
 ```text
+npm ci
 npm test
+npm run brand:check
 ```
 
-To build the independently branded distributable Web bundle:
+`npm run brand:check` first builds `dist/`, then verifies that the shipped bundle does not contain the retired third-party model/vendor labels.
+
+Browser regression tests:
 
 ```text
-npm run build
+npx playwright install chromium
+npm run test:browser
 ```
 
-The build writes public assets to `dist/` and fails if prohibited third-party calculator branding is detected in distributable HTML, CSS, or JavaScript.
+## Native clients
 
-## Main capabilities
+Android:
 
-- Scientific expression input with editable cursor, history, memory and multiple result formats
-- Trigonometric, inverse trigonometric, hyperbolic, exponential and logarithmic functions
-- Degree, radian and grad angle units
-- Powers, roots, factorials, percentages, permutations and combinations
-- Complex arithmetic, coordinate conversion and base-N arithmetic
-- Weighted statistics and regression tools
-- Scientific constants and interactive formula catalogue
-- Four persistent programmable study areas with bounded execution
-- Linear Algebra matrix operations including inverse, determinant and eigen tools
-- Computer Calculator tools for integer bases, ALU flags, BCD and IEEE 754 inspection
-- Little Man's Computer teaching simulator and computer-architecture calculations
-- Economics Calculator tools for FX, rates, loans, savings, amortization and real returns
-- English, Traditional Chinese, Simplified Chinese, Japanese, Korean, Malay, French, German, Spanish, Arabic, Thai and Hong Kong Cantonese interfaces
-- Responsive phone/desktop layouts and keyboard input
-- Parser implemented without JavaScript `eval`
+```text
+npm run android:debug
+```
 
-## Multi-platform delivery
+Desktop staging:
 
-Android uses Capacitor and GitHub-hosted builds. Windows and macOS use Electron packaging. iOS uses Capacitor and Xcode cloud runners. See the platform-specific documentation linked above for build outputs, signing requirements and installation limitations.
+```text
+npm run desktop:prepare
+```
 
-Preview packages are intended for testing. Production Android, iOS, Windows and macOS releases require platform-appropriate signing credentials controlled by the project owner. No private signing key should be committed to this repository.
+The GitHub workflow packages the staged app with pinned Electron/electron-builder versions on native macOS and Windows runners.
 
-## Publish with Cloudflare Pages
+iOS project generation:
 
-The production site is deployed through `.github/workflows/cloudflare-pages.yml`. Configure these under **GitHub repository Settings → Secrets and variables → Actions**:
+```text
+npm install --no-save @capacitor/ios@7.4.3
+npm run ios:sync
+```
 
-- Repository secret: `CLOUDFLARE_API_TOKEN`
-- Repository variable: `CLOUDFLARE_ACCOUNT_ID`
-- Repository variable: `CLOUDFLARE_PAGES_ENABLED=true`
+The iOS GitHub job builds an unsigned Simulator app. Physical-device distribution requires Apple signing/provisioning credentials; they must be supplied through secure CI secrets rather than committed to the repository.
 
-The Cloudflare token should have only the minimum Pages permission needed for this project.
+## Implemented calculation features
 
-## External data sources
+- Two-line editable expression/result display with replay history
+- Calculation priority, brackets, implicit multiplication, percentages, powers, roots, factorial, and absolute value
+- Trigonometric, inverse/hyperbolic, exponential, logarithmic, permutation, and combination functions
+- Degree, radian, and grad angle units
+- `Ans`, independent memory, fractions/decimals, DMS, normal/fixed/scientific/engineering notation
+- Complex arithmetic in rectangular and polar form
+- BASE-N arithmetic and logical operations
+- Weighted single-variable statistics and multiple regression models
+- Four persistent program areas with safe execution controls
+- Searchable educational formula and scientific-constant catalogues
+- Linear Algebra operations including inverse, determinant, adjugate, eigenvalues, and eigenvectors
+- Computer-number-system, ALU, IEEE 754, LMC, memory, bus, cache, disk, DMA, and performance tools
+- Economics tools for FX reference data, Hong Kong public rates, interest, savings, mortgage scenarios, APR/IRR, amortization, budgeting, and real returns
+- Twelve interface languages and responsive phone/desktop layouts
+- Parser implementation without JavaScript `eval`
 
-Some Economics Calculator views use public reference data from:
+## Cloudflare Pages
 
-- [Frankfurter v2](https://frankfurter.dev/) for reference foreign-exchange data
-- [HKMA Open API](https://apidocs.hkma.gov.hk/) for Hong Kong interest-rate and interbank-liquidity series
+The production deployment workflow is `.github/workflows/cloudflare-pages.yml`. To enable automatic production deployment, configure the repository's Cloudflare credentials and `CLOUDFLARE_PAGES_ENABLED=true`; secrets must not be committed.
 
-These external data sources are informational inputs only and are not part of SciCal600's calculator branding or application identity.
+Manual deployment:
 
-## Scope
+```text
+npm run deploy
+```
 
-SciCal600 is an independent educational and general-purpose calculator project. It does not claim examination approval or compatibility with any particular physical calculator model.
+## GitHub Actions
+
+- `.github/workflows/cloudflare-pages.yml`: Web deployment
+- `.github/workflows/android.yml`: Android build, verification, emulator smoke test, APK publishing
+- `.github/workflows/clients.yml`: product-neutral validation, macOS/Windows packaging, iOS Simulator build, GitHub Release publishing
+
+The workflows are intentionally separated so a platform-specific packaging failure does not overwrite or silently replace another platform's build logic.
