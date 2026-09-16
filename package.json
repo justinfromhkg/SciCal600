@@ -2,13 +2,16 @@
   "name": "scical600",
   "version": "0.3.0",
   "private": true,
-  "description": "A browser scientific calculator inspired by the fx-50FH II workflow.",
+  "description": "An independent browser and native scientific calculator platform.",
   "scripts": {
     "build": "node scripts/build-static.mjs",
     "test": "node --test tests/*.test.js",
+    "brand:check": "npm run build && node scripts/check-brand-independence.mjs dist",
     "deploy": "npm run build && npx --yes wrangler@latest pages deploy dist --project-name scical600 --branch main",
     "android:sync": "npm run build && node scripts/prepare-android.mjs",
     "android:debug": "npm run android:sync && node scripts/build-android.mjs",
+    "ios:sync": "npm run build && node scripts/prepare-ios.mjs",
+    "desktop:prepare": "npm run build && node scripts/prepare-desktop.mjs",
     "test:browser": "node tests/mobile-ui.browser.cjs"
   },
   "dependencies": {
