@@ -1,18 +1,28 @@
-import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 
-const indexPath = resolve('dist', 'index.html');
-const rendererName = 'desktop-renderer.js';
+const stage = resolve(".desktop-build");
+const rootPackage = JSON.parse(readFileSync(resolve("package.json"), "utf8"));
 
-copyFileSync(resolve('desktop', 'renderer.js'), resolve('dist', rendererName));
+rmSync(stage, { recursive: true, force: true });
+mkdirSync(stage, { recursive: true });
+cpSync(resolve("dist"), resolve(stage, "dist"), { recursive: true });
+cpSync(resolve("native", "desktop", "main.cjs"), resolve(stage, "main.cjs"));
+cpSync(resolve("native", "desktop", "electron-builder.yml"), resolve(stage, "electron-builder.yml"));
 
-let html = readFileSync(indexPath, 'utf8');
-html = html.replace(/\s*<link\b[^>]*href=["']https:\/\/fonts\.(?:googleapis|gstatic)\.com[^>]*>\s*/gi, '\n');
-html = html.replace(/\s*<script\s+data-scical-platform=["']desktop["'][^>]*><\/script>\s*/gi, '\n');
-html = html.replace(
-  '</body>',
-  `  <script data-scical-platform="desktop" src="${rendererName}"></script>\n  </body>`,
+writeFileSync(
+  resolve(stage, "package.json"),
+  JSON.stringify(
+    {
+      name: "scical600-desktop",
+      version: rootPackage.version,
+      private: true,
+      main: "main.cjs",
+      description: "SciCal600 offline desktop calculator client",
+    },
+    null,
+    2,
+  ) + "\n",
 );
-writeFileSync(indexPath, html);
 
-console.log('Prepared offline desktop renderer assets in dist/.');
+console.log(`Prepared desktop staging directory at ${stage}.`);
