@@ -34,7 +34,7 @@ jobs:
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git add README.md index.html additional-locales.js package.json package-lock.json
-            git commit -m 'Make SciCal600 brand-independent and add native build dependencies'
+            git commit -m 'Refresh SciCal600 native availability disclosures'
             git push origin HEAD:chore/brand-independent-native-clients
           fi
       - name: Install dependencies
@@ -101,10 +101,16 @@ jobs:
       - name: Package simulator app
         run: |
           ditto -c -k --sequesterRsrc --keepParent ios/build/Build/Products/Release-iphonesimulator/App.app SciCal600-iOS-Simulator.zip
+      - name: Build unsigned physical-device archive
+        run: |
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -destination 'generic/platform=iOS' -archivePath ios/build/SciCal600.xcarchive CODE_SIGNING_ALLOWED=NO archive
+          ditto -c -k --sequesterRsrc --keepParent ios/build/SciCal600.xcarchive SciCal600-iOS-Unsigned-Device-Archive.zip
       - uses: actions/upload-artifact@v4
         with:
-          name: SciCal600-iOS-Simulator
-          path: SciCal600-iOS-Simulator.zip
+          name: SciCal600-iOS
+          path: |
+            SciCal600-iOS-Simulator.zip
+            SciCal600-iOS-Unsigned-Device-Archive.zip
           retention-days: 90
 
   publish-dev-downloads:
@@ -123,5 +129,6 @@ jobs:
         run: |
           set -euo pipefail
           TAG="native-dev-${GITHUB_SHA:0:12}"
-          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --target "$GITHUB_SHA" --prerelease --title "SciCal600 native development builds (${GITHUB_SHA:0:12})" --notes "Development builds for Windows, macOS and the iOS Simulator. These builds share the SciCal600 web calculation core. macOS builds are unsigned; physical-device iOS installation requires Apple signing credentials."
+          NOTES='Development builds sharing the SciCal600 calculation core. Windows is not commercially code-signed and may trigger SmartScreen. macOS is not Developer ID signed/notarized and may require Gatekeeper approval. iOS includes a Simulator build and an unsigned device archive; physical-device IPA installation requires Apple signing/provisioning. Android development APKs are published by the Android workflow.'
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --target "$GITHUB_SHA" --prerelease --title "SciCal600 native development builds (${GITHUB_SHA:0:12})" --notes "$NOTES"
           find artifacts -type f -maxdepth 2 -print0 | xargs -0 gh release upload "$TAG" --clobber
