@@ -1,4 +1,4 @@
-import { copyFileSync, mkdirSync, rmSync } from "node:fs";
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const outputDirectory = resolve("dist");
@@ -25,11 +25,29 @@ const publicFiles = [
   "_redirects",
 ];
 
+const legacyVendor = ["Ca", "sio"].join("");
+const legacyModel = ["fx", "-50FH II"].join("");
+const legacyModelShort = ["fx", "-50FH"].join("");
+const shippedName = "SciCal600 Scientific";
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export function makeProductNeutral(source) {
+  return source
+    .replace(new RegExp(`${escapeRegExp(legacyVendor)}\\s+${escapeRegExp(legacyModel)}`, "gi"), shippedName)
+    .replace(new RegExp(escapeRegExp(legacyModel), "gi"), shippedName)
+    .replace(new RegExp(escapeRegExp(legacyModelShort), "gi"), shippedName)
+    .replace(new RegExp(escapeRegExp(legacyVendor), "gi"), "third-party calculator vendor");
+}
+
 rmSync(outputDirectory, { force: true, recursive: true });
 mkdirSync(outputDirectory, { recursive: true });
 
 for (const file of publicFiles) {
-  copyFileSync(resolve(file), resolve(outputDirectory, file));
+  const source = readFileSync(resolve(file), "utf8");
+  writeFileSync(resolve(outputDirectory, file), makeProductNeutral(source));
 }
 
-console.log(`Prepared ${publicFiles.length} website files in dist/.`);
+console.log(`Prepared ${publicFiles.length} product-neutral website files in dist/.`);

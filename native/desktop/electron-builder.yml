@@ -1,0 +1,32 @@
+appId: io.github.justinfromhkg.scical600
+productName: SciCal600
+electronVersion: 44.4.1
+asar: true
+npmRebuild: false
+compression: normal
+directories:
+  output: ../client-artifacts/desktop
+files:
+  - dist/**/*
+  - main.cjs
+  - package.json
+artifactName: SciCal600-${version}-${os}-${arch}.${ext}
+mac:
+  category: public.app-category.education
+  hardenedRuntime: false
+  gatekeeperAssess: false
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+    - target: zip
+      arch: [x64, arm64]
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: zip
+      arch: [x64]
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
