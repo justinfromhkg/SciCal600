@@ -282,7 +282,7 @@ async function runFunctionalChecks(page) {
   await page.goto("/", { waitUntil: "networkidle" });
   assert.equal(await page.locator('[data-view-panel="about"]').isVisible(), true, "root platform page");
   assert.match(await page.locator('[data-view-panel="about"] h1').textContent(), /math/i);
-  assert.equal(await page.locator(".home-tool-card").count(), 4, "home should show all four calculators at equal prominence");
+  assert.equal(await page.locator(".home-tool-card:visible").count(), 4, "home should show all four calculators at equal prominence");
   assert.equal(await page.locator("#language-select option").count(), 12, "language picker should expose twelve languages");
   for (const [language, expected, direction] of [
     ["fr", /maths/i, "ltr"],
