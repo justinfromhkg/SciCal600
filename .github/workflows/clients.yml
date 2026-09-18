@@ -78,8 +78,12 @@ jobs:
         run: |
           rm -rf client-artifacts/ios
           mkdir -p client-artifacts/ios
-          xcodebuild \
-            -project ios/App/App.xcodeproj \
+          if [[ -d ios/App/App.xcworkspace ]]; then
+            XCODE_CONTAINER=(-workspace ios/App/App.xcworkspace)
+          else
+            XCODE_CONTAINER=(-project ios/App/App.xcodeproj)
+          fi
+          xcodebuild "${XCODE_CONTAINER[@]}" \
             -scheme App \
             -configuration Release \
             -sdk iphonesimulator \

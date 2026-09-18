@@ -98,13 +98,23 @@ jobs:
       - run: npm run ios:sync
       - name: Build iOS simulator app
         run: |
-          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -sdk iphonesimulator -derivedDataPath ios/build CODE_SIGNING_ALLOWED=NO build
+          if [[ -d ios/App/App.xcworkspace ]]; then
+            XCODE_CONTAINER=(-workspace ios/App/App.xcworkspace)
+          else
+            XCODE_CONTAINER=(-project ios/App/App.xcodeproj)
+          fi
+          xcodebuild "${XCODE_CONTAINER[@]}" -scheme App -configuration Release -sdk iphonesimulator -derivedDataPath ios/build CODE_SIGNING_ALLOWED=NO build
       - name: Package simulator app
         run: |
           ditto -c -k --sequesterRsrc --keepParent ios/build/Build/Products/Release-iphonesimulator/App.app SciCal600-iOS-Simulator.zip
       - name: Build unsigned physical-device archive
         run: |
-          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -destination 'generic/platform=iOS' -archivePath ios/build/SciCal600.xcarchive CODE_SIGNING_ALLOWED=NO archive
+          if [[ -d ios/App/App.xcworkspace ]]; then
+            XCODE_CONTAINER=(-workspace ios/App/App.xcworkspace)
+          else
+            XCODE_CONTAINER=(-project ios/App/App.xcodeproj)
+          fi
+          xcodebuild "${XCODE_CONTAINER[@]}" -scheme App -configuration Release -destination 'generic/platform=iOS' -archivePath ios/build/SciCal600.xcarchive CODE_SIGNING_ALLOWED=NO archive
           ditto -c -k --sequesterRsrc --keepParent ios/build/SciCal600.xcarchive SciCal600-iOS-Unsigned-Device-Archive.zip
       - uses: actions/upload-artifact@v4
         with:
