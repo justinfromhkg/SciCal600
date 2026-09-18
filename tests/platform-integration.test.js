@@ -57,9 +57,12 @@ test("wires formal routes, static assets and mobile-friendly matrix inputs", () 
   assert.match(html, /data-i18n="aboutTitle">Maths made simple<\/h1>/);
 });
 
-test("adds substantial Thai and Hong Kong Cantonese locale overlays", () => {
+test("adds localized Android download labels plus substantial Thai and Hong Kong Cantonese overlays", () => {
   const { locales, manuals } = loadAdditionalLocales();
-  assert.deepEqual(Object.keys(locales).sort(), ["th", "yue-Hant-HK"].sort());
+  assert.deepEqual(Object.keys(locales).sort(), ["ar","de","en-GB","es","fr","ja","ko","ms","th","yue-Hant-HK","zh-Hans","zh-Hant"].sort());
+  for (const language of Object.keys(locales)) {
+    assert.match(locales[language].androidDownload, /Android|APK/);
+  }
   assert.equal(locales.th.fallback, "en-GB");
   assert.equal(locales["yue-Hant-HK"].fallback, "zh-Hant");
   assert.match(locales.th.aboutTitle, /[\u0E00-\u0E7F]/);

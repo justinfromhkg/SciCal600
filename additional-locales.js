@@ -47,6 +47,7 @@
     openComputer: "เปิดเครื่องคิดเลขคอมพิวเตอร์",
     economicsToolTitle: "เครื่องคิดเลขเศรษฐศาสตร์",
     openEconomics: "เปิดเครื่องคิดเลขเศรษฐศาสตร์",
+    androidDownload: "↓ Android APK · รุ่นทดสอบที่ผ่านการตรวจสอบ",
     projectFooter: "SciCal600 · โครงการการศึกษาอิสระ",
     readManual: "อ่านคู่มือเครื่องคิดเลข",
     linearEyebrow: "เครื่องคิดเลขอัจฉริยะ · พีชคณิตเชิงเส้น",
@@ -168,6 +169,7 @@
     openComputer: "開啟電腦計數機",
     economicsToolTitle: "經濟計數機",
     openEconomics: "開啟經濟計數機",
+    androidDownload: "↓ Android APK · 已驗證測試版",
     projectFooter: "SciCal600 · 獨立教育項目",
     readManual: "睇計數機說明書",
     linearEyebrow: "智能計數機 · 線性代數",
@@ -204,6 +206,16 @@
   };
 
   root.SciCalAdditionalLocales = Object.freeze({
+    "en-GB": Object.freeze({ androidDownload: "↓ Android APK · Verified test build" }),
+    "zh-Hant": Object.freeze({ androidDownload: "↓ Android APK · 已驗證測試版" }),
+    "zh-Hans": Object.freeze({ androidDownload: "↓ Android APK · 已验证测试版" }),
+    ja: Object.freeze({ androidDownload: "↓ Android APK · 検証済みテスト版" }),
+    ko: Object.freeze({ androidDownload: "↓ Android APK · 검증된 테스트 빌드" }),
+    ms: Object.freeze({ androidDownload: "↓ Android APK · Binaan ujian disahkan" }),
+    fr: Object.freeze({ androidDownload: "↓ APK Android · version de test vérifiée" }),
+    de: Object.freeze({ androidDownload: "↓ Android APK · geprüfte Testversion" }),
+    es: Object.freeze({ androidDownload: "↓ APK de Android · versión de prueba verificada" }),
+    ar: Object.freeze({ androidDownload: "↓ ملف Android APK · إصدار اختباري موثّق" }),
     th: Object.freeze(th),
     "yue-Hant-HK": Object.freeze(yue),
   });
@@ -224,4 +236,12 @@
       ["手機操作", ["計數機會自動配合畫面；只有放大到超出可視範圍先需要拖動畫面"]],
     ],
   });
+
+  if (typeof document !== "undefined") {
+    const androidDownload = document.querySelector(".android-download");
+    if (androidDownload) {
+      androidDownload.dataset.i18n = "androidDownload";
+      androidDownload.href = "https://github.com/justinfromhkg/SciCal600/releases/download/android-debug-latest/SciCal600-debug.apk";
+    }
+  }
 })(window);
