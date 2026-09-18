@@ -50,7 +50,7 @@ jobs:
       - name: Prepare offline desktop assets
         run: npm run desktop:prepare
       - name: Build unsigned desktop packages
-        run: npx electron-builder --config electron-builder.yml ${{ matrix.command }}
+        run: npx electron-builder --config electron-builder.yml ${{ matrix.command }} --publish never
       - name: Verify package output
         shell: bash
         run: |

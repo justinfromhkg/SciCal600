@@ -133,3 +133,11 @@ jobs:
           gh release view "$RELEASE_TAG" >/dev/null 2>&1 || \
             gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" $PRERELEASE --title "$TITLE" --notes "Automated SciCal600 client builds. macOS and Windows packages are unsigned. The iOS asset is an unsigned Simulator build; physical iPhone/iPad installation requires Apple code signing. Android builds are published by the Android workflow."
           gh release upload "$RELEASE_TAG" release-assets/* --clobber
+
+          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
+            LATEST_TAG="client-latest"
+            LATEST_NOTES="Latest automated SciCal600 desktop and iOS test builds from main. Windows and macOS packages are unsigned. The iOS asset is for Simulator use; normal iPhone/iPad installation requires Apple code signing."
+            gh release delete "$LATEST_TAG" --cleanup-tag --yes >/dev/null 2>&1 || true
+            gh release create "$LATEST_TAG" --target "$GITHUB_SHA" --title "SciCal600 desktop & iOS · latest test builds" --notes "$LATEST_NOTES"
+            gh release upload "$LATEST_TAG" release-assets/* --clobber
+          fi
