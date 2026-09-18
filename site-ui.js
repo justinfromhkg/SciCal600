@@ -144,7 +144,7 @@
 
   Object.entries(window.SciCalAdditionalLocales || {}).forEach(([language, locale]) => {
     const { fallback = "en-GB", ...dictionary } = locale;
-    ui[language] = { ...ui[fallback], ...dictionary };
+    ui[language] = { ...ui[fallback], ...(ui[language] || {}), ...dictionary };
   });
 
   Object.values(ui).forEach((dictionary) => {
