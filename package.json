@@ -18,12 +18,12 @@
   "dependencies": {
     "@capacitor/core": "7.4.3",
     "@capacitor/android": "7.4.3",
-    "@capacitor/app": "7.0.1"
+    "@capacitor/app": "8.1.1"
   },
   "devDependencies": {
     "@capacitor/cli": "8.5.2",
-    "esbuild": "0.25.9",
-    "playwright": "1.55.0"
+    "esbuild": "0.28.2",
+    "playwright": "1.63.0"
   },
   "main": "desktop/main.cjs"
 }
