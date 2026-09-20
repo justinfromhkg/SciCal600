@@ -46,11 +46,13 @@ jobs:
           node-version: '22'
           cache: npm
       - name: Install dependencies
-        run: npm ci --no-audit --no-fund
+        run: |
+          npm ci --no-audit --no-fund
+          npm install --no-save --package-lock=false --no-audit --no-fund electron@44.3.0 electron-builder@26.15.3
       - name: Prepare offline desktop assets
         run: npm run desktop:prepare
       - name: Build unsigned desktop packages
-        run: npx electron-builder --config electron-builder.yml ${{ matrix.command }}
+        run: npx electron-builder --config electron-builder.yml ${{ matrix.command }} --publish never
       - name: Verify package output
         shell: bash
         run: |

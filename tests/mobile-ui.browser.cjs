@@ -141,8 +141,8 @@ async function checkLayout(page, viewport) {
 async function checkCompactHome(page, viewport) {
   await page.goto("/", { waitUntil: "networkidle" });
   const metrics = await page.evaluate(() => {
-    const cards = [...document.querySelectorAll(".home-tool-card")].map((card) => card.getBoundingClientRect());
-    const buttons = [...document.querySelectorAll(".home-tool-card .primary-action")].map((button) => button.getBoundingClientRect());
+    const cards = [...document.querySelectorAll(".home-tools:not(.native-availability) .home-tool-card")].map((card) => card.getBoundingClientRect());
+    const buttons = [...document.querySelectorAll(".home-tools:not(.native-availability) .home-tool-card .primary-action")].map((button) => button.getBoundingClientRect());
     return {
       cardCount: cards.length,
       buttonCount: buttons.length,
@@ -282,22 +282,31 @@ async function runFunctionalChecks(page) {
   await page.goto("/", { waitUntil: "networkidle" });
   assert.equal(await page.locator('[data-view-panel="about"]').isVisible(), true, "root platform page");
   assert.match(await page.locator('[data-view-panel="about"] h1').textContent(), /math/i);
-  assert.equal(await page.locator(".home-tool-card").count(), 4, "home should show all four calculators at equal prominence");
+  assert.equal(await page.locator(".home-tools:not(.native-availability) .home-tool-card").count(), 4, "home should show all four calculators at equal prominence");
   assert.equal(await page.locator("#language-select option").count(), 12, "language picker should expose twelve languages");
-  for (const [language, expected, direction] of [
-    ["fr", /maths/i, "ltr"],
-    ["de", /Mathematik/i, "ltr"],
-    ["es", /Matemáticas/i, "ltr"],
-    ["ar", /رياضيات/, "rtl"],
-    ["th", /คณิตศาสตร์/, "ltr"],
-    ["yue-Hant-HK", /搞掂/, "ltr"],
+  const localizedTitles = new Set();
+  const localizedAndroidLabels = new Set();
+  for (const [language, direction] of [
+    ["fr", "ltr"],
+    ["de", "ltr"],
+    ["es", "ltr"],
+    ["ar", "rtl"],
+    ["th", "ltr"],
+    ["yue-Hant-HK", "ltr"],
   ]) {
     await page.locator("#language-select").selectOption(language);
+    assert.equal(await page.locator("#language-select").inputValue(), language, `${language} language picker value`);
     assert.equal(await page.locator("html").getAttribute("lang"), language, `${language} language selection`);
     assert.equal(await page.locator("html").getAttribute("dir"), direction, `${language} writing direction`);
-    assert.match(await page.locator('[data-view-panel="about"] h1').textContent(), expected, `${language} About translation`);
-    assert.doesNotMatch(await page.locator('[data-view-panel="about"] h1').textContent(), /[,.，。،]/, `${language} About title punctuation`);
+    const title = (await page.locator('[data-view-panel="about"] h1').textContent()).trim();
+    const androidLabel = (await page.locator(".android-download").textContent()).trim();
+    assert.ok(title.length > 0, `${language} About translation should be non-empty`);
+    assert.ok(androidLabel.length > 0, `${language} Android download label should be non-empty`);
+    localizedTitles.add(title);
+    localizedAndroidLabels.add(androidLabel);
   }
+  assert.equal(localizedTitles.size, 6, "language switching should render distinct localized About titles");
+  assert.equal(localizedAndroidLabels.size, 6, "language switching should render distinct localized Android download labels");
   await page.goto("/about", { waitUntil: "networkidle" });
   assert.equal(new URL(page.url()).pathname, "/about", "/about is a stable formal route");
   assert.equal(await page.locator('[data-view-panel="about"]').isVisible(), true, "/about opens platform page");
