@@ -16,7 +16,7 @@
     "desktop:pack": "npm run build && electron-builder --config electron-builder.yml"
   },
   "dependencies": {
-    "@capacitor/core": "7.4.3",
+    "@capacitor/core": "8.5.2",
     "@capacitor/android": "7.4.3",
     "@capacitor/app": "8.1.1"
   },
