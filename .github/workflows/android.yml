@@ -22,7 +22,7 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: '22'
-      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: temurin
           java-version: '21'
@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
       - name: Dependency vulnerability gate
-        run: npm audit --audit-level=high
+        run: npm audit --omit=dev --audit-level=high
       - name: Unit and integration tests
         run: npm test
       - name: Web build
@@ -72,7 +72,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Install and launch offline on Android 15
-        uses: reactivecircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808 # v2
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2
         with:
           api-level: 35
           arch: x86_64
@@ -107,7 +107,7 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: '22'
-      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: temurin
           java-version: '21'
@@ -169,11 +169,18 @@ jobs:
         with:
           name: SciCal600-debug
           path: artifacts
-      - name: Publish verified debug APK for direct download
+      - name: Publish verified debug APK to GitHub Releases
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
           DEBUG_TAG="android-debug-${GITHUB_SHA:0:12}"
-          gh release view "$DEBUG_TAG" >/dev/null 2>&1 || gh release create "$DEBUG_TAG" --target "$GITHUB_SHA" --prerelease --title "SciCal600 Android debug (${GITHUB_SHA:0:12})" --notes "Installable development APK. Passed Web tests, Gradle build/signature checks and Android emulator offline checks. Uses a development signing key, not the production key."
+          LATEST_TAG="android-debug-latest"
+          NOTES="Installable development APK. Passed Web tests, Gradle build/signature checks and Android emulator offline checks. Uses a development signing key, not the production key."
+
+          gh release view "$DEBUG_TAG" >/dev/null 2>&1 || gh release create "$DEBUG_TAG" --target "$GITHUB_SHA" --prerelease --title "SciCal600 Android debug (${GITHUB_SHA:0:12})" --notes "$NOTES"
           gh release upload "$DEBUG_TAG" artifacts/SciCal600-debug.apk artifacts/SHA256SUMS artifacts/size.txt --clobber
+
+          gh release delete "$LATEST_TAG" --cleanup-tag --yes >/dev/null 2>&1 || true
+          gh release create "$LATEST_TAG" --target "$GITHUB_SHA" --title "SciCal600 Android APK · verified test build" --notes "$NOTES"
+          gh release upload "$LATEST_TAG" artifacts/SciCal600-debug.apk artifacts/SHA256SUMS artifacts/size.txt --clobber

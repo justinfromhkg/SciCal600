@@ -12,7 +12,8 @@
     "android:debug": "npm run android:sync && node scripts/build-android.mjs",
     "ios:sync": "npm run build && node scripts/prepare-ios.mjs",
     "desktop:prepare": "npm run build && node scripts/prepare-desktop.mjs",
-    "test:browser": "node tests/mobile-ui.browser.cjs"
+    "test:browser": "node tests/mobile-ui.browser.cjs",
+    "desktop:pack": "npm run build && electron-builder --config electron-builder.yml"
   },
   "dependencies": {
     "@capacitor/core": "7.4.3",
@@ -23,5 +24,6 @@
     "@capacitor/cli": "7.4.3",
     "esbuild": "0.25.9",
     "playwright": "1.55.0"
-  }
+  },
+  "main": "desktop/main.cjs"
 }
