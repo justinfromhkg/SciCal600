@@ -53,7 +53,7 @@ jobs:
       - name: Package desktop app
         shell: bash
         run: cd .desktop-build && npx --yes electron-builder@26.15.3 --config electron-builder.yml ${{ matrix.build_arg }} --publish never
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact }}
           path: client-artifacts/desktop/*
@@ -93,7 +93,7 @@ jobs:
           APP_PATH="client-artifacts/ios/DerivedData/Build/Products/Release-iphonesimulator/App.app"
           test -d "$APP_PATH"
           ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" client-artifacts/SciCal600-iOS-Simulator.zip
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: SciCal600-iOS-Simulator
           path: client-artifacts/SciCal600-iOS-Simulator.zip
