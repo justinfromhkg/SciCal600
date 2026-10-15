@@ -69,7 +69,7 @@ jobs:
           stat -c '%n %s bytes' artifacts/SciCal600-debug.apk | tee artifacts/size.txt
           cp package-lock.json artifacts/
       - name: Upload installable debug APK
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: SciCal600-debug
           path: artifacts/
@@ -96,7 +96,7 @@ jobs:
             node tests/android-smoke.cjs || (adb logcat -d > artifacts/android-logcat.txt; adb shell dumpsys activity activities > artifacts/android-activity.txt; exit 1)
       - name: Upload Android smoke evidence
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: Android-smoke-evidence
           path: |
