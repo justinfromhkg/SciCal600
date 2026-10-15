@@ -347,6 +347,9 @@
     themeColour?.setAttribute("content", currentTheme === "bright" ? "#eef7f6" : "#071019");
     renderThemeControl();
     if (persist) saveTheme(currentTheme);
+    document.dispatchEvent(new CustomEvent("scical600:themechange", {
+      detail: { theme: currentTheme },
+    }));
   }
 
   function readSavedLanguage() {

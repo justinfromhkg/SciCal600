@@ -25,6 +25,14 @@ const { attachStableAppPage, ensureAppWindowFocus } = require('./android-webview
     assert.ok(page, 'offline WebView page exists');
     assert.equal(await page.locator('html').getAttribute('data-android-back-ready'), 'true', 'native Back listener registered');
     await page.waitForFunction(() => document.documentElement.dataset.androidSystemBars === 'ready');
+    const initialTheme = await page.locator('html').getAttribute('data-theme');
+    const initialSystemBarsStyle = initialTheme === 'bright' ? 'LIGHT' : 'DARK';
+    assert.equal(await page.locator('html').getAttribute('data-android-system-bars-style'), initialSystemBarsStyle, 'system bars match the saved theme');
+    await page.locator('#theme-toggle').click();
+    const toggledSystemBarsStyle = initialSystemBarsStyle === 'DARK' ? 'LIGHT' : 'DARK';
+    await page.waitForFunction(style => document.documentElement.dataset.androidSystemBarsStyle === style, toggledSystemBarsStyle);
+    await page.locator('#theme-toggle').click();
+    await page.waitForFunction(style => document.documentElement.dataset.androidSystemBarsStyle === style, initialSystemBarsStyle);
     assert.ok(['ready', 'active'].includes(await page.locator('html').getAttribute('data-android-haptics')), 'native button haptics registered');
     await page.waitForFunction(() => document.documentElement.dataset.androidCopy === 'ready');
     await page.waitForFunction(() => document.documentElement.dataset.androidShare === 'ready');
@@ -67,7 +75,7 @@ const { attachStableAppPage, ensureAppWindowFocus } = require('./android-webview
     }
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'no horizontal document overflow');
     await page.screenshot({ path: 'artifacts/android-offline.png' });
-    console.log('ANDROID_SMOKE_OK: installed APK, offline four workspaces, launcher shortcut, native system bars, haptics, copy and sharing, 1+1, six native Back events, viewport');
+    console.log('ANDROID_SMOKE_OK: installed APK, offline workspaces, launcher shortcut, theme-aware native system bars, haptics, copy and sharing, 1+1, six native Back events, viewport');
   } finally {
     await device.close();
   }

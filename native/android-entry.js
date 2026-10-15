@@ -8,11 +8,11 @@ import { viewFromAndroidShortcutUrl } from './android-shortcuts.js';
 import { installResultCopy } from './copy-result.js';
 import { installButtonHaptics } from './haptics.js';
 import { installResultShare } from './share-result.js';
-import { configureAndroidSystemBars } from './system-bars.js';
+import { installAndroidSystemBars } from './system-bars.js';
 
 if (Capacitor.isNativePlatform()) {
   document.documentElement.dataset.native = 'android';
-  configureAndroidSystemBars({ document, systemBars: SystemBars, style: SystemBarsStyle.Dark });
+  installAndroidSystemBars({ document, systemBars: SystemBars, styles: SystemBarsStyle });
   installButtonHaptics({
     document,
     impact: () => Haptics.impact({ style: ImpactStyle.Light }).then(() => {

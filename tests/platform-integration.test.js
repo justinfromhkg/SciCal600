@@ -356,7 +356,7 @@ test("copies the current result through Android with localized confirmation", ()
   assert.match(read("tests/android-smoke.cjs"), /dataset\.androidCopy/);
 });
 
-test("keeps Android system-bar content legible over the edge-to-edge dark shell", () => {
+test("keeps Android system-bar content legible across saved and runtime themes", () => {
   const config = JSON.parse(read("capacitor.config.json"));
   const nativeEntry = read("native/android-entry.js");
   const systemBars = read("native/system-bars.js");
@@ -366,11 +366,15 @@ test("keeps Android system-bar content legible over the edge-to-edge dark shell"
     style: "DARK",
     hidden: false,
   });
-  assert.match(nativeEntry, /SystemBarsStyle\.Dark/);
-  assert.match(nativeEntry, /configureAndroidSystemBars/);
+  assert.match(nativeEntry, /installAndroidSystemBars/);
+  assert.match(nativeEntry, /styles: SystemBarsStyle/);
+  assert.match(systemBars, /styles\.Light/);
+  assert.match(systemBars, /styles\.Dark/);
+  assert.match(systemBars, /scical600:themechange/);
   assert.match(systemBars, /systemBars\.setStyle/);
   assert.match(systemBars, /systemBars\.show/);
-  assert.match(read("tests/android-smoke.cjs"), /dataset\.androidSystemBars/);
+  assert.match(read("site-ui.js"), /scical600:themechange/);
+  assert.match(read("tests/android-smoke.cjs"), /dataset\.androidSystemBarsStyle/);
   assert.match(read("index.html"), /viewport-fit=cover/);
   assert.match(read("styles.css"), /env\(safe-area-inset-top\)/);
 });
